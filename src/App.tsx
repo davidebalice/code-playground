@@ -4,6 +4,7 @@ import Counter from "./components/Counter";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import Todos from "./components/Todos";
+import Dropdown from "./components/Dropdown";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/counter" element={<Counter />} />
         <Route path="/todos" element={<Todos />} />
+        <Route path="/dropdown" element={<Dropdown />} />
       </Routes>
     </Router>
   );
