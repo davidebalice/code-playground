@@ -27,7 +27,6 @@ const Dropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<Option | null>(null);
 
-  // Filtra le opzioni in base al termine di ricerca
   const filteredOptions = options.filter((option) =>
     option.label.toLowerCase().includes(searchTerm.toLowerCase())
   );
