@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import classes from "../css/react.module.css";
 
-const JavascriptExcercises = () => {
+const JavascriptPlayground = () => {
   return (
     <nav >
       Javascript
@@ -20,4 +20,4 @@ const JavascriptExcercises = () => {
   );
 };
 
-export default JavascriptExcercises;
+export default JavascriptPlayground;

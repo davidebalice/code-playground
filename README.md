@@ -1,1 +1,1 @@
-# React exercise
+# Code playground

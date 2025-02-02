@@ -7,7 +7,7 @@ import { VscRunAll } from "react-icons/vsc";
 import * as ts from "typescript";
 import { exercises } from "../data/typescript";
 
-const TypescriptExercises = () => {
+const TypescriptPlayground = () => {
   const [selectedCategory, setSelectedCategory] = useState<{
     category: string;
     exercises: {
@@ -216,6 +216,7 @@ const TypescriptExercises = () => {
             value={code}
             onChange={(value) => setCode(value || "")}
             theme="vs-dark"
+            options={{ readOnly: true, padding: { top: 20 } }}
           />
            <button
               className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
@@ -246,4 +247,4 @@ const TypescriptExercises = () => {
   );
 };
 
-export default TypescriptExercises;
+export default TypescriptPlayground;
