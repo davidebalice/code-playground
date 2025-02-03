@@ -59,8 +59,13 @@ if (preg_match('/(DROP|DELETE|UPDATE|ALTER|TRUNCATE|INSERT|EXEC|CREATE)/i', $que
 }
 */
 
-if (preg_match('/(DROP|DELETE|ALTER|TRUNCATE|EXEC|CREATE)/i', $query)) {
+if (preg_match('/(DROP|DELETE|ALTER|TRUNCATE|EXEC|CREATE|INSERT|UPDATE)/i', $query)) {
     echo json_encode(["success" => false, "error" => "Query non consentita"]);
+    exit();
+}
+
+if (preg_match('/(exec|shell_exec|system|passthru|proc_open|popen|curl_exec|curl_multi_exec|file_get_contents|fopen|fwrite|unlink|delete|DROP|ALTER|INSERT|UPDATE|CREATE|DELETE)/i', $query)) {
+    echo json_encode(["success" => false, "error" => "Codice non consentito"]);
     exit();
 }
 

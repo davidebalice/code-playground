@@ -13,7 +13,11 @@ interface Exercise {
   code: string;
 }
 
-const SqlPlayground = () => {
+interface SqlPlaygroundProps {
+  demo: boolean;
+}
+
+const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
   const backend = import.meta.env.VITE_PHP_BACKEND;
 
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
@@ -227,7 +231,7 @@ const SqlPlayground = () => {
               value={code}
               onChange={(value) => setCode(value || "")}
               theme="vs-dark"
-              options={{ readOnly: true, padding: { top: 20 } }}
+              options={{ readOnly: demo, padding: { top: 20 } }}
             />
           </div>
         ) : (

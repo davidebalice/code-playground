@@ -7,7 +7,13 @@ import { VscRunAll } from "react-icons/vsc";
 import * as ts from "typescript";
 import { exercises } from "../data/typescript";
 
-const TypescriptPlayground = () => {
+interface TypescriptPlaygroundProps {
+  demo: boolean;
+}
+
+const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
+  demo,
+}) => {
   const [selectedCategory, setSelectedCategory] = useState<{
     category: string;
     exercises: {
@@ -31,6 +37,22 @@ const TypescriptPlayground = () => {
 
   const runCode = () => {
     try {
+      const bannedCommands = [
+        "window",
+        "document",
+        "fetch",
+        "XMLHttpRequest",
+        "eval",
+        "Function",
+      ];
+
+      for (const command of bannedCommands) {
+        if (code.includes(command)) {
+          setOutput(`Errore: comando proibito "${command}" trovato.`);
+          return `Errore: comando proibito "${command}" trovato.`;
+        }
+      }
+
       const transpiledCode = ts.transpileModule(code, {
         compilerOptions: { module: ts.ModuleKind.CommonJS },
       }).outputText;
@@ -216,15 +238,15 @@ const TypescriptPlayground = () => {
             value={code}
             onChange={(value) => setCode(value || "")}
             theme="vs-dark"
-            options={{ readOnly: true, padding: { top: 20 } }}
+            options={{ readOnly: demo, padding: { top: 20 } }}
           />
-           <button
-              className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-              onClick={runCode}
-            >
-              <VscRunAll />
-              <span className="text-[13px]">Run code</span>
-            </button>
+          <button
+            className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+            onClick={runCode}
+          >
+            <VscRunAll />
+            <span className="text-[13px]">Run code</span>
+          </button>
         </div>
       ) : (
         <div className="col-span-4">

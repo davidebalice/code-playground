@@ -10,18 +10,22 @@ import JavascriptPlayground from './components/JavascriptPlayground';
 import TypescriptPlayground from './components/TypescriptPlayground';
 import PhpPlayground from './components/PhpPlayground';
 import SqlPlayground from './components/SqlPlayground';
+import NodePlayground from './components/NodePlayground';
 
 function App() {
+  const [demo, setDemo] = useState(false);
+  
   return (
     <Router>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/react" element={<ReactPlayground />} />
-        <Route path="/javascript" element={<JavascriptPlayground />} />
-        <Route path="/typescript" element={<TypescriptPlayground />} />
-        <Route path="/php" element={<PhpPlayground />} />
-        <Route path="/sql" element={<SqlPlayground />} />
+        <Route path="/react" element={<ReactPlayground demo={demo}/>} />
+        <Route path="/javascript" element={<JavascriptPlayground demo={demo}/>} />
+        <Route path="/typescript" element={<TypescriptPlayground demo={demo} />} />
+        <Route path="/php" element={<PhpPlayground demo={demo}/>} />
+        <Route path="/sql" element={<SqlPlayground demo={demo}/>} />
+        <Route path="/node" element={<NodePlayground demo={demo}/>} />
         <Route path="/counter" element={<Counter />} />
         <Route path="/todos" element={<Todos />} />
         <Route path="/dropdown" element={<Dropdown />} />
@@ -31,3 +35,5 @@ function App() {
 }
 
 export default App;
+import { useState } from "react";
+

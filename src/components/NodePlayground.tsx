@@ -4,7 +4,6 @@ import { FaCode } from "react-icons/fa";
 import { IoMdArrowDropright, IoMdCodeWorking } from "react-icons/io";
 import { VscRunAll } from "react-icons/vsc";
 import { Link } from "react-router-dom";
-import classes from "../css/react.module.css";
 
 interface Exercise {
   id: string;
@@ -13,12 +12,12 @@ interface Exercise {
   code: string;
 }
 
-interface PhpPlaygroundProps {
+interface NodePlaygroundProps {
   demo: boolean;
 }
 
-const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
-  const backend = import.meta.env.VITE_PHP_BACKEND;
+const NodePlayground: React.FC<NodePlaygroundProps> = ({ demo }) => {
+  const backend = "http://localhost:8000";
 
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
     null
@@ -31,74 +30,57 @@ const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
     try {
       setMessage("Esecuzione in corso...");
 
-      const response = await fetch(`${backend}server.php`, {
+      const response = await fetch(`${backend}/run`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),
       });
 
-      const data = await response.text();
-      setOutput(data);
+      const data = await response.json();
+      setOutput(data.output);
     } catch (error: unknown) {
       setMessage("Errore nell'esecuzione: " + (error as Error).message);
     }
   };
 
-  // Esempi di esercizi PHP
   const exercises: Exercise[] = [
     {
       id: "1",
-      title: "Hello World PHP",
-      description: "Un semplice script PHP che stampa Hello, World!",
-      code: `echo "Hello, World!";`,
+      title: "Hello World",
+      description: "Stampare 'Hello, World!' in Node.js",
+      code: `console.log("Hello, World!");`,
     },
     {
       id: "2",
       title: "Somma di due numeri",
-      description: "Un semplice script PHP che somma due numeri.",
-      code: `$a = 5;
-$b = 10;
-echo "La somma è: " . ($a + $b);`,
+      description: "Somma due numeri in Node.js",
+      code: `const a = 5; const b = 10; console.log("La somma è:", a + b);`,
     },
   ];
-
-  const handleExerciseSelect = (exercise: Exercise) => {
-    setSelectedExercise(exercise);
-    setCode(exercise.code);
-    setMessage("");
-    setOutput(null);
-  };
-
-  const handleBackToExercises = () => {
-    setSelectedExercise(null);
-    setCode("");
-    setMessage("");
-    setOutput(null);
-  };
 
   return (
     <>
       <nav>
-        PHP
-        <ul className={classes.navbar}>
+        <ul className="flex gap-4 p-2 bg-gray-800 text-white">
           <li>
-            <Link to="/php">PHP Exercises</Link>
+            <Link to="/node">Node.js Playground</Link>
           </li>
         </ul>
       </nav>
+
       <div className="p-4 grid grid-cols-7 gap-4">
-        {/* Lista degli esercizi */}
+        {/* Lista esercizi */}
         <div className="col-span-2 bg-gray-100 p-4 rounded-lg">
-          <h2 className="text-[16px] font-bold">Esercizi PHP</h2>
+          <h2 className="text-[16px] font-bold">Esercizi Node.js</h2>
           <div className="border-t border-dashed border-gray-300 h-1 mt-4"></div>
           <ul className="mt-2">
             {exercises.map((exercise) => (
               <li
                 key={exercise.id}
-                onClick={() => handleExerciseSelect(exercise)}
+                onClick={() => {
+                  setSelectedExercise(exercise);
+                  setCode(exercise.code);
+                }}
                 className="cursor-pointer text-gray-700 p-1 pl-3 rounded-md text-[14px] hover:bg-gray-200"
               >
                 <h4 className="flex items-center gap-1">
@@ -109,6 +91,7 @@ echo "La somma è: " . ($a + $b);`,
           </ul>
         </div>
 
+        {/* Monaco Editor */}
         {selectedExercise ? (
           <div className="col-span-4">
             <div className="flex items-center justify-between">
@@ -119,7 +102,7 @@ echo "La somma è: " . ($a + $b);`,
                 </p>
               </div>
               <button
-                className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+                className="flex gap-2 items-center px-4 py-2 bg-blue-500 text-white rounded"
                 onClick={runCode}
               >
                 <VscRunAll />
@@ -129,7 +112,7 @@ echo "La somma è: " . ($a + $b);`,
 
             <Editor
               height="400px"
-              defaultLanguage="php"
+              defaultLanguage="javascript"
               value={code}
               onChange={(value) => setCode(value || "")}
               theme="vs-dark"
@@ -138,16 +121,16 @@ echo "La somma è: " . ($a + $b);`,
           </div>
         ) : (
           <div className="col-span-4">
-            <div className="font-bold bg-gray-200 rounded-lg p-4 min-h-[250px] flex items-center justify-center gap-3">
+            <div className="font-bold bg-gray-200 rounded-lg p-4 flex items-center justify-center gap-3">
               <FaCode className="text-blue-500 text-[24px]" />
               <span className="text-[17px] text-primary">
-                Seleziona un esercizio PHP
+                Seleziona un esercizio
               </span>
             </div>
           </div>
         )}
 
-        {/* Area Output */}
+        {/* Output */}
         <div className="col-span-1 bg-gray-900 text-white p-4 rounded-lg">
           <div className="flex items-center gap-2">
             <IoMdCodeWorking className="text-[25px] font-bold" />
@@ -161,4 +144,4 @@ echo "La somma è: " . ($a + $b);`,
   );
 };
 
-export default PhpPlayground;
+export default NodePlayground;

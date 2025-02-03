@@ -13,7 +13,11 @@ interface Exercise {
   code: string;
 }
 
-const ReactPlayground = () => {
+interface ReactPlaygroundProps {
+  demo: boolean;
+}
+
+const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
     null
   );
@@ -197,7 +201,7 @@ export const Timer = () => {
               value={code}
               onChange={(value) => setCode(value || "")}
               theme="vs-dark"
-              options={{ readOnly: true, padding: { top: 20 } }}
+              options={{ readOnly: demo, padding: { top: 20 } }}
             />
           </div>
         ) : (
