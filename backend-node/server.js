@@ -1,12 +1,20 @@
 // npm init -y
-// npm install express cors body-parser vm2
+// npm install express cors body-parser vm2 mongoose
+
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { VM } = require("vm2");
+const mongoose = require("mongoose");
 
 const app = express();
 const PORT = 8000;
+const MONGO_URI = "mongodb://localhost:27017/test_db";
+
+mongoose
+  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("✅ MongoDB Connesso"))
+  .catch((err) => console.error("❌ Errore connessione MongoDB:", err));
 
 const blacklist =
   /require|import|process|fs|child_process|global|module|constructor/gi;
@@ -17,18 +25,28 @@ function isSafeCode(code) {
 
 function runCodeSafely(code) {
   if (!isSafeCode(code)) {
-    return "Errore: codice non permesso!";
+    return "Error: code not allowed!";
   }
 
   try {
+    let output = [];
+
     const vm = new VM({
       timeout: 1000,
-      sandbox: {},
+      sandbox: {
+        console: {
+          log: (...args) => {
+            output.push(args.join(" "));
+          },
+        },
+      },
     });
 
-    return vm.run(code);
+    vm.run(code);
+
+    return output.length > 0 ? output.join("\n") : "Nessun output";
   } catch (err) {
-    return "Error execute: " + err.message;
+    return "Error: " + err.message;
   }
 }
 
@@ -39,39 +57,38 @@ app.post("/execute", (req, res) => {
   const { code } = req.body;
 
   if (!code) {
-    return res.status(400).json({ error: "Nessun codice ricevuto" });
+    return res.status(400).send("Error: No code received");
   }
 
   const result = runCodeSafely(code);
-  res.json({ output: result });
+  res.send(result);
+});
+
+// Modello MongoDB per i test
+const TestModel = mongoose.model(
+  "Test",
+  new mongoose.Schema({ name: String, age: Number })
+);
+
+// Endpoint per testare query NoSQL
+app.post("/query", async (req, res) => {
+  const { query } = req.body;
+
+  try {
+    if (!query) {
+      return res.status(400).json({ error: "Nessuna query ricevuta" });
+    }
+
+    // Solo SELECT (find), nessuna scrittura permessa
+    const safeQuery = query.replace(/insert|update|delete|remove/gi, "");
+
+    const result = await eval(`TestModel.${safeQuery}`); // Esegue la query
+    res.json({ result });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.listen(PORT, () =>
   console.log(`✅ Server run on http://localhost:${PORT}`)
 );
-
-/*
-import express from "express";
-import cors from "cors";
-import { exec } from "child_process";
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-app.post("/run", (req, res) => {
-  const { code } = req.body;
-
-  // Creiamo uno script temporaneo ed eseguiamolo
-  exec(`node -e "${code.replace(/"/g, '\\"')}"`, (error, stdout, stderr) => {
-    if (error) {
-      res.json({ output: stderr || "Errore durante l'esecuzione." });
-    } else {
-      res.json({ output: stdout });
-    }
-  });
-});
-
-app.listen(5000, () => console.log("Server avviato su http://localhost:5000"));
-
-*/

@@ -3,8 +3,9 @@ import { useState } from "react";
 import { GoCodeSquare } from "react-icons/go";
 import { IoMdArrowDropright, IoMdCodeWorking } from "react-icons/io";
 import { VscRunAll } from "react-icons/vsc";
-import php from "../assets/images/php.jpg";
+import nosql from "../assets/images/nosql.png";
 import classes from "../css/editor.module.css";
+
 interface Exercise {
   id: string;
   title: string;
@@ -12,87 +13,92 @@ interface Exercise {
   code: string;
 }
 
-interface PhpPlaygroundProps {
+const exercises: Exercise[] = [
+  {
+    id: "1",
+    title: "Ottenere tutti gli utenti",
+    description: "Recupera tutti gli utenti dalla collezione MongoDB.",
+    code: `const User = require('./models/User');\n\nasync function getAllUsers() {\n  const users = await User.find();\n  console.log(users);\n}\n\ngetAllUsers();`,
+  },
+  {
+    id: "2",
+    title: "Filtrare utenti per età superiore a 25",
+    description: "Seleziona gli utenti con un'età superiore a 25 anni.",
+    code: `async function getUsersAbove25() {\n  const users = await User.find({ age: { $gt: 25 } });\n  console.log(users);\n}\n\ngetUsersAbove25();`,
+  },
+  {
+    id: "3",
+    title: "Cercare un utente per nome",
+    description: "Trova un utente specifico cercandolo per nome.",
+    code: `async function getUserByName(name) {\n  const user = await User.findOne({ name });\n  console.log(user);\n}\n\ngetUserByName('Alice');`,
+  },
+  {
+    id: "4",
+    title: "Selezionare solo alcuni campi",
+    description: "Recupera solo i campi nome ed età degli utenti.",
+    code: `async function getUsersWithSelectedFields() {\n  const users = await User.find().select('name age');\n  console.log(users);\n}\n\ngetUsersWithSelectedFields();`,
+  },
+  {
+    id: "5",
+    title: "Ordinare utenti per età",
+    description: "Recupera gli utenti ordinandoli per età in ordine crescente.",
+    code: `async function getUsersSortedByAge() {\n  const users = await User.find().sort({ age: 1 });\n  console.log(users);\n}\n\ngetUsersSortedByAge();`,
+  },
+  {
+    id: "6",
+    title: "Conteggio utenti",
+    description: "Conta il numero totale di utenti nel database.",
+    code: `async function countUsers() {\n  const count = await User.countDocuments();\n  console.log('Numero totale di utenti:', count);\n}\n\ncountUsers();`,
+  },
+];
+
+interface NosqlPlaygroundProps {
   demo: boolean;
 }
 
-const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
-  const backend = import.meta.env.VITE_PHP_BACKEND;
-
+const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
+  const backend = import.meta.env.VITE_NODE_BACKEND;
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
     null
   );
   const [code, setCode] = useState("");
   const [output, setOutput] = useState<string | null>(null);
   const [message, setMessage] = useState("");
-
   const runCode = async () => {
     try {
       setMessage("Esecuzione in corso...");
-
-      const response = await fetch(`${backend}server.php`, {
+      const response = await fetch(`${backend}/query`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),
       });
 
       const data = await response.text();
       setOutput(data);
     } catch (error: unknown) {
-      setMessage("Errore nell'esecuzione: " + (error as Error).message);
+      setOutput("Error: " + (error as Error).message);
     }
-  };
-
-  const exercises: Exercise[] = [
-    {
-      id: "1",
-      title: "Hello World PHP",
-      description: "Un semplice script PHP che stampa Hello, World!",
-      code: `echo "Hello, World!";`,
-    },
-    {
-      id: "2",
-      title: "Somma di due numeri",
-      description: "Un semplice script PHP che somma due numeri.",
-      code: `$a = 5;
-$b = 10;
-echo "La somma è: " . ($a + $b);`,
-    },
-  ];
-
-  const handleExerciseSelect = (exercise: Exercise) => {
-    setSelectedExercise(exercise);
-    setCode(exercise.code);
-    setMessage("");
-    setOutput(null);
-  };
-
-  const handleBackToExercises = () => {
-    setSelectedExercise(null);
-    setCode("");
-    setMessage("");
-    setOutput(null);
   };
 
   return (
     <>
-      <div className="flex gap-4 p-1 bg-[#5f82ba] text-white flex items-center h-[50px]">
-        <img src={php} className="w-[70px]" />
+      <div className="flex gap-4 p-1 bg-[#0079d6] text-white flex items-center h-[50px]">
+        <img src={nosql} className="w-[122px]" />
       </div>
 
       <div className="p-4 grid grid-cols-7 gap-4">
         <div className="col-span-2 bg-gray-100 p-4 rounded-lg">
-          <h2 className="text-[16px] font-bold">Esercizi PHP</h2>
+          <h2 className="text-[16px] font-bold">Esercizi Node.js</h2>
           <div className="border-t border-dashed border-gray-300 h-1 mt-4"></div>
           <ul className="mt-2">
             {exercises.map((exercise) => (
               <li
                 key={exercise.id}
-                onClick={() => handleExerciseSelect(exercise)}
                 className="cursor-pointer text-gray-700 p-1 pl-3 rounded-md text-[14px] hover:bg-gray-200"
+                onClick={() => {
+                  setSelectedExercise(exercise);
+                  setCode(exercise.code);
+                }}
               >
                 <h4 className="flex items-center gap-1">
                   <IoMdArrowDropright /> <span>{exercise.title}</span>
@@ -102,6 +108,7 @@ echo "La somma è: " . ($a + $b);`,
           </ul>
         </div>
 
+        {/* Monaco Editor */}
         {selectedExercise ? (
           <div className="col-span-4">
             <div className="flex items-center justify-between">
@@ -112,7 +119,7 @@ echo "La somma è: " . ($a + $b);`,
                 </p>
               </div>
               <button
-                className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+                className="flex gap-2 items-center px-4 py-2 bg-blue-500 text-white rounded"
                 onClick={runCode}
               >
                 <VscRunAll />
@@ -122,7 +129,7 @@ echo "La somma è: " . ($a + $b);`,
 
             <Editor
               className={classes.editor}
-              defaultLanguage="php"
+              defaultLanguage="javascript"
               value={code}
               onChange={(value) => setCode(value || "")}
               theme="vs-dark"
@@ -138,6 +145,7 @@ echo "La somma è: " . ($a + $b);`,
           </div>
         )}
 
+        {/* Output */}
         <div className="col-span-1 bg-gray-900 text-white p-4 rounded-lg">
           <div className="flex items-center gap-2">
             <IoMdCodeWorking className="text-[25px] font-bold" />
@@ -151,4 +159,4 @@ echo "La somma è: " . ($a + $b);`,
   );
 };
 
-export default PhpPlayground;
+export default NosqlPlayground;

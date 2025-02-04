@@ -1,10 +1,10 @@
 import Editor from "@monaco-editor/react";
 import { useState } from "react";
-import { FaCode } from "react-icons/fa";
+import { GoCodeSquare } from "react-icons/go";
 import { IoMdArrowDropright, IoMdCodeWorking } from "react-icons/io";
 import { VscRunAll } from "react-icons/vsc";
-import { Link } from "react-router-dom";
-import classes from "../css/react.module.css";
+import reactWhite from "../assets/images/react-white.png";
+import classes from "../css/editor.module.css";
 
 interface Exercise {
   id: string;
@@ -143,20 +143,10 @@ export const Timer = () => {
 
   return (
     <>
-      <nav>
-        React
-        <ul className={classes.navbar}>
-          <li>
-            <Link to="/counter">Counter</Link>
-          </li>
-          <li>
-            <Link to="/todos">Todo</Link>
-          </li>
-          <li>
-            <Link to="/dropdown">Dropdown</Link>
-          </li>
-        </ul>
-      </nav>
+      <div className="flex gap-4 p-1 bg-[#17b6e9] text-white flex items-center h-[50px]">
+        <img src={reactWhite} className="w-[150px]" />
+      </div>
+
       <div className="p-4 grid grid-cols-7 gap-4">
         <div className="col-span-2 bg-gray-100 p-4 rounded-lg">
           <h2 className="text-[16px] font-bold">Esercizi</h2>
@@ -196,7 +186,7 @@ export const Timer = () => {
             </div>
 
             <Editor
-              height="400px"
+              className={classes.editor}
               defaultLanguage="javascript"
               value={code}
               onChange={(value) => setCode(value || "")}
@@ -207,10 +197,8 @@ export const Timer = () => {
         ) : (
           <div className="col-span-4">
             <div className="font-bold bg-gray-200 rounded-lg p-4 min-h-[250px] flex items-center justify-center gap-3">
-              <FaCode className="text-blue-500 text-[24px]" />
-              <span className="text-[17px] text-primary">
-                Seleziona un esercizio
-              </span>
+              <GoCodeSquare className="text-blue-500 text-[28px]" />
+              <span className="text-[18px] text-primary">Select code</span>
             </div>
           </div>
         )}

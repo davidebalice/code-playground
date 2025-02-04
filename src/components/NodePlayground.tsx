@@ -1,10 +1,10 @@
 import Editor from "@monaco-editor/react";
 import { useState } from "react";
-import { FaCode } from "react-icons/fa";
+import { GoCodeSquare } from "react-icons/go";
 import { IoMdArrowDropright, IoMdCodeWorking } from "react-icons/io";
 import { VscRunAll } from "react-icons/vsc";
-import { Link } from "react-router-dom";
-
+import nodeWhite from "../assets/images/node-white.png";
+import classes from "../css/editor.module.css";
 interface Exercise {
   id: string;
   title: string;
@@ -17,7 +17,7 @@ interface NodePlaygroundProps {
 }
 
 const NodePlayground: React.FC<NodePlaygroundProps> = ({ demo }) => {
-  const backend = "http://localhost:8000";
+  const backend = import.meta.env.VITE_NODE_BACKEND;
 
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
     null
@@ -30,16 +30,16 @@ const NodePlayground: React.FC<NodePlaygroundProps> = ({ demo }) => {
     try {
       setMessage("Esecuzione in corso...");
 
-      const response = await fetch(`${backend}/run`, {
+      const response = await fetch(`${backend}/execute`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),
       });
 
-      const data = await response.json();
-      setOutput(data.output);
+      const data = await response.text();
+      setOutput(data);
     } catch (error: unknown) {
-      setMessage("Errore nell'esecuzione: " + (error as Error).message);
+      setMessage("Error execute: " + (error as Error).message);
     }
   };
 
@@ -54,22 +54,19 @@ const NodePlayground: React.FC<NodePlaygroundProps> = ({ demo }) => {
       id: "2",
       title: "Somma di due numeri",
       description: "Somma due numeri in Node.js",
-      code: `const a = 5; const b = 10; console.log("La somma è:", a + b);`,
+      code: `const a = 5;
+const b = 10;
+console.log("La somma è:", a + b);`,
     },
   ];
 
   return (
     <>
-      <nav>
-        <ul className="flex gap-4 p-2 bg-gray-800 text-white">
-          <li>
-            <Link to="/node">Node.js Playground</Link>
-          </li>
-        </ul>
-      </nav>
+      <div className="flex gap-4 p-2 bg-[#7cb701] text-white flex items-center h-[50px]">
+        <img src={nodeWhite} className="w-[114px]" />
+      </div>
 
       <div className="p-4 grid grid-cols-7 gap-4">
-        {/* Lista esercizi */}
         <div className="col-span-2 bg-gray-100 p-4 rounded-lg">
           <h2 className="text-[16px] font-bold">Esercizi Node.js</h2>
           <div className="border-t border-dashed border-gray-300 h-1 mt-4"></div>
@@ -111,7 +108,7 @@ const NodePlayground: React.FC<NodePlaygroundProps> = ({ demo }) => {
             </div>
 
             <Editor
-              height="400px"
+              className={classes.editor}
               defaultLanguage="javascript"
               value={code}
               onChange={(value) => setCode(value || "")}
@@ -121,11 +118,9 @@ const NodePlayground: React.FC<NodePlaygroundProps> = ({ demo }) => {
           </div>
         ) : (
           <div className="col-span-4">
-            <div className="font-bold bg-gray-200 rounded-lg p-4 flex items-center justify-center gap-3">
-              <FaCode className="text-blue-500 text-[24px]" />
-              <span className="text-[17px] text-primary">
-                Seleziona un esercizio
-              </span>
+            <div className="font-bold bg-gray-200 rounded-lg p-4 min-h-[250px] flex items-center justify-center gap-3">
+              <GoCodeSquare className="text-blue-500 text-[28px]" />
+              <span className="text-[18px] text-primary">Select code</span>
             </div>
           </div>
         )}
