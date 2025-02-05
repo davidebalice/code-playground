@@ -1,3 +1,169 @@
+import { v4 as uuidv4 } from "uuid";
+
+export const exercises = [
+  {
+    category: "Hooks",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Uso di useState",
+        description:
+          "Crea un componente che utilizza useState per gestire un contatore.",
+        code: `import { useState } from 'react';
+
+ export const Counter = () => {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Contatore: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Incrementa</button>
+    </div>
+  );
+ };
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Uso di useEffect",
+        description:
+          "Crea un componente che esegue un'operazione al montaggio e aggiornamento.",
+        code: `import { useState, useEffect } from 'react';
+
+export const Timer = () => {
+  const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => setTime((t) => t + 1), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return <p>Tempo trascorso: {time}s</p>;
+}`,
+      },
+    ],
+  },
+  {
+    category: "Componenti",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Componente con props",
+        description:
+          "Crea un componente che accetta delle props per visualizzare un messaggio.",
+        code: `function Greeting({ name }) {
+  return <h1>Ciao, {name}!</h1>;
+}
+export default Greeting;`,
+      },
+      {
+        id: uuidv4(),
+        title: "Lista dinamica",
+        description:
+          "Crea un componente che riceve un array di elementi e li visualizza.",
+        code: `function List({ items }) {
+  return (
+    <ul>
+      {items.map((item, index) => (
+        <li key={index}>{item}</li>
+      ))}
+    </ul>
+  );
+}
+export default List;`,
+      },
+    ],
+  },
+  {
+    category: "Gestione dello stato",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Uso di useReducer",
+        description:
+          "Implementa un contatore utilizzando useReducer invece di useState.",
+        code: `import { useReducer } from 'react';
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      throw new Error();
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
+
+  return (
+    <div>
+      <p>Contatore: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+    </div>
+  );
+}
+export default Counter;`,
+      },
+    ],
+  },
+];
+
+/*
+
+
+
+  const exercises: Exercise[] = [
+    {
+      id: "1",
+      title: "Contatore con useState",
+      description: "Un semplice contatore che incrementa il valore al click.",
+      code: `
+import { useState } from "react";
+export const Counter = () => {
+  const [count, setCount] = useState(0);
+  return <button onClick={() => setCount(count + 1)}>Conta: {count}</button>;
+};
+      `,
+    },
+    {
+      id: "2",
+      title: "Timer con useEffect",
+      description: "Un timer che incrementa i secondi ogni secondo.",
+      code: `
+import { useState, useEffect } from "react";
+export const Timer = () => {
+  const [seconds, setSeconds] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setSeconds((s) => s + 1), 1000);
+    return () => clearInterval(interval);
+  }, []);
+  return <div>Secondi: {seconds}</div>;
+};
+      `,
+    },
+  ];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export default `
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 
@@ -81,3 +247,4 @@ export const ThemeToggle = () => {
   );
 };
 `
+*/

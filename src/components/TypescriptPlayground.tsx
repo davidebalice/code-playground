@@ -32,7 +32,6 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
   } | null>(null);
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
   const exercisesPerPage = 5;
 
@@ -171,7 +170,6 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
 
               <div className="border-t-1 border-dashed border-gray-300 h-1 mt-4"></div>
 
-              {/* Paginazione */}
               <div className="mt-4 mb-4 flex justify-between">
                 <button
                   className="bg-gray-500 text-white rounded"
@@ -198,7 +196,12 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
                 {exercisesToDisplay.map((exercise) => (
                   <li
                     key={exercise.id}
-                    onClick={() => handleExerciseSelect(exercise)}
+                    onClick={() => {
+                      handleExerciseSelect(exercise);
+                      setCode(exercise.code);
+                      setOutput("");
+                      //setMessage("");
+                    }}
                     className={`cursor-pointer text-gray-700 p-1 pl-3 rounded-md text-[13px]
                     ${
                       selectedExercise && selectedExercise.id === exercise.id
@@ -217,7 +220,6 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
           )}
         </div>
 
-        {/* Monaco Editor */}
         {selectedExercise ? (
           <div className="col-span-4">
             <div className="flex items-center justify-between">

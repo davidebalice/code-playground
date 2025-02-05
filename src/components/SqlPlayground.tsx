@@ -180,7 +180,7 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
 
   return (
     <>
-      <div className="flex gap-4 p-1 bg-[#0079d6] text-white flex items-center h-[50px]">
+      <div className="flex gap-4 p-1 bg-[#db7432] text-white flex items-center h-[50px]">
         <img src={sql} className="w-[112px]" />
       </div>
 
@@ -192,7 +192,12 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
             {exercises.map((exercise) => (
               <li
                 key={exercise.id}
-                onClick={() => handleExerciseSelect(exercise)}
+                onClick={() => {
+                  handleExerciseSelect(exercise);
+                  setCode(exercise.code);
+                  setOutput("");
+                  //setMessage("");
+                }}
                 className="cursor-pointer text-gray-700 p-1 pl-3 rounded-md text-[14px] hover:bg-gray-200"
               >
                 <h4 className="flex items-center gap-1">

@@ -171,7 +171,6 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
 
               <div className="border-t-1 border-dashed border-gray-300 h-1 mt-4"></div>
 
-              {/* Paginazione */}
               <div className="mt-4 mb-4 flex justify-between">
                 <button
                   className="bg-gray-500 text-white rounded"
@@ -198,7 +197,12 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
                 {exercisesToDisplay.map((exercise) => (
                   <li
                     key={exercise.id}
-                    onClick={() => handleExerciseSelect(exercise)}
+                    onClick={() => {
+                      handleExerciseSelect(exercise);
+                      setCode(exercise.code);
+                      setOutput("");
+                      //setMessage("");
+                    }}
                     className={`cursor-pointer text-gray-700 p-1 pl-3 rounded-md text-[13px]
                     ${
                       selectedExercise && selectedExercise.id === exercise.id

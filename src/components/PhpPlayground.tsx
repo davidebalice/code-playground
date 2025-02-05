@@ -91,7 +91,12 @@ echo "La somma è: " . ($a + $b);`,
             {exercises.map((exercise) => (
               <li
                 key={exercise.id}
-                onClick={() => handleExerciseSelect(exercise)}
+                onClick={() => {
+                  handleExerciseSelect(exercise);
+                  setCode(exercise.code);
+                  setOutput("");
+                  //setMessage("");
+                }}
                 className="cursor-pointer text-gray-700 p-1 pl-3 rounded-md text-[14px] hover:bg-gray-200"
               >
                 <h4 className="flex items-center gap-1">

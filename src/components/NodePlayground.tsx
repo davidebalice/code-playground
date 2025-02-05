@@ -77,6 +77,8 @@ console.log("La somma è:", a + b);`,
                 onClick={() => {
                   setSelectedExercise(exercise);
                   setCode(exercise.code);
+                  setOutput("");
+                  //setMessage("");
                 }}
                 className="cursor-pointer text-gray-700 p-1 pl-3 rounded-md text-[14px] hover:bg-gray-200"
               >

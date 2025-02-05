@@ -5,7 +5,7 @@ import { IoMdArrowDropright, IoMdCodeWorking } from "react-icons/io";
 import { VscRunAll } from "react-icons/vsc";
 import nosql from "../assets/images/nosql.png";
 import classes from "../css/editor.module.css";
-
+import Modal from "./Modal";
 interface Exercise {
   id: string;
   title: string;
@@ -18,13 +18,15 @@ const exercises: Exercise[] = [
     id: "1",
     title: "Ottenere tutti gli utenti",
     description: "Recupera tutti gli utenti dalla collezione MongoDB.",
-    code: `const User = require('./models/User');\n\nasync function getAllUsers() {\n  const users = await User.find();\n  console.log(users);\n}\n\ngetAllUsers();`,
+    code: `const users = await User.find();\n  console.log(users);`,
   },
+
   {
     id: "2",
     title: "Filtrare utenti per età superiore a 25",
     description: "Seleziona gli utenti con un'età superiore a 25 anni.",
-    code: `async function getUsersAbove25() {\n  const users = await User.find({ age: { $gt: 25 } });\n  console.log(users);\n}\n\ngetUsersAbove25();`,
+    code: `const users = await User.find({ age: { $gt: 25 } });
+    console.log(users);`,
   },
   {
     id: "3",
@@ -61,9 +63,11 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
     null
   );
+  const [modal, setModal] = useState(false);
   const [code, setCode] = useState("");
   const [output, setOutput] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+
   const runCode = async () => {
     try {
       setMessage("Esecuzione in corso...");
@@ -73,8 +77,35 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
         body: JSON.stringify({ code }),
       });
 
-      const data = await response.text();
-      setOutput(data);
+      const data = await response.json();
+
+      if (data.logs) {
+        const formattedLogs = data.logs.map((log: string) => {
+          //let cleanedLog = log.replace(/ObjectId\('(.+?)'\)/g, '"$1"');
+          let cleanedLog = log;
+          cleanedLog = cleanedLog
+            .trim()
+            .replace(/\n/g, " ")
+            .replace(/\\/g, "")
+            .replace(/\\n/g, " ")
+            .replace(/\\/g, " ")
+            .replace(/\\t/g, " ")
+            .replace(/\\"/g, '"')
+            .replace(/\\'/g, "'")
+            .replace(/\\+/g, "");
+
+          try {
+            return JSON.parse(cleanedLog);
+          } catch {
+            return cleanedLog;
+          }
+        });
+
+        setOutput(JSON.stringify(formattedLogs, null, 2));
+        setModal(true);
+      } else {
+        setOutput("Nessun output disponibile.");
+      }
     } catch (error: unknown) {
       setOutput("Error: " + (error as Error).message);
     }
@@ -85,7 +116,6 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
       <div className="flex gap-4 p-1 bg-[#0079d6] text-white flex items-center h-[50px]">
         <img src={nosql} className="w-[122px]" />
       </div>
-
       <div className="p-4 grid grid-cols-7 gap-4">
         <div className="col-span-2 bg-gray-100 p-4 rounded-lg">
           <h2 className="text-[16px] font-bold">Esercizi Node.js</h2>
@@ -98,6 +128,8 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
                 onClick={() => {
                   setSelectedExercise(exercise);
                   setCode(exercise.code);
+                  setOutput("");
+                  setMessage("");
                 }}
               >
                 <h4 className="flex items-center gap-1">
@@ -108,7 +140,6 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
           </ul>
         </div>
 
-        {/* Monaco Editor */}
         {selectedExercise ? (
           <div className="col-span-4">
             <div className="flex items-center justify-between">
@@ -145,7 +176,6 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
           </div>
         )}
 
-        {/* Output */}
         <div className="col-span-1 bg-gray-900 text-white p-4 rounded-lg">
           <div className="flex items-center gap-2">
             <IoMdCodeWorking className="text-[25px] font-bold" />
@@ -155,6 +185,7 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
           {output && <div>{output}</div>}
         </div>
       </div>
+      {modal && output && <Modal output={output} setModal={setModal} />}
     </>
   );
 };

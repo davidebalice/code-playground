@@ -22,8 +22,14 @@
   margin-right: 20px;
   list-style: none;
   color: #444;
+  transition: tranform 0.3s, color 0.3s;
+}
+
+.menu li a:hover {
+  transform: translateY(-40px);
+  color: #777;
 }
 
 .wrapper {
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 120px);
 }

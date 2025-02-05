@@ -1,3 +1,4 @@
+import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import logo from "../assets/images/logo_light.png";
 import classes from "../css/navbar.module.css";
@@ -40,7 +41,14 @@ const Navbar = () => {
           </li>
         </ul>
       </nav>
-      <div className="w-[290px]">icona</div>
+      <div className="w-[290px]">
+        <a
+          href="https://github.com/davidebalice/code-playground"
+          target="_blank"
+        >
+          <FaGithub className="size-[30px] float-right mr-2 text-black" />
+        </a>
+      </div>
     </header>
   );
 };

@@ -51,7 +51,7 @@ const Home = () => {
           </div>
         </Link>
 
-        <Link to="/react" className="w-full">
+        <Link to="/javascript" className="w-full">
           <div
             className={`bg-gray-100 rounded-lg shadow-md ${
               classes?.card || ""
@@ -66,7 +66,7 @@ const Home = () => {
           </div>
         </Link>
 
-        <Link to="/react" className="w-full">
+        <Link to="/typescript" className="w-full">
           <div
             className={`bg-gray-100 rounded-lg shadow-md ${
               classes?.card || ""
@@ -81,7 +81,7 @@ const Home = () => {
           </div>
         </Link>
 
-        <Link to="/react" className="w-full">
+        <Link to="/php" className="w-full">
           <div
             className={`bg-gray-100 rounded-lg shadow-md ${
               classes?.card || ""
@@ -96,7 +96,7 @@ const Home = () => {
           </div>
         </Link>
 
-        <Link to="/react" className="w-full">
+        <Link to="/sql" className="w-full">
           <div
             className={`bg-gray-100 rounded-lg shadow-md ${
               classes?.card || ""
@@ -111,7 +111,7 @@ const Home = () => {
           </div>
         </Link>
 
-        <Link to="/react" className="w-full">
+        <Link to="/node" className="w-full">
           <div
             className={`bg-gray-100 rounded-lg shadow-md ${
               classes?.card || ""
@@ -120,13 +120,13 @@ const Home = () => {
             <div></div>
             <div>
               {" "}
-              <img src={nodeIcon} style={{ width: "30%", margin: "0 auto" }} />
+              <img src={nodeIcon} style={{ width: "36%", margin: "0 auto" }} />
             </div>
             <div className={classes.title}>Node</div>
           </div>
         </Link>
 
-        <Link to="/react" className="w-full">
+        <Link to="/nosql" className="w-full">
           <div
             className={`bg-gray-100 rounded-lg shadow-md ${
               classes?.card || ""
