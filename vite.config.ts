@@ -9,7 +9,16 @@ export default defineConfig(({ mode }) => {
     define: {
       "process.env.SOME_KEY": JSON.stringify(env.SOME_KEY),
     },
+
     plugins: [tailwindcss(), react()],
   };
 });
 
+/*
+server: {
+      headers: {
+        "Cross-Origin-Opener-Policy": "same-origin",
+        "Cross-Origin-Embedder-Policy": "require-corp",
+      },
+    },
+*/

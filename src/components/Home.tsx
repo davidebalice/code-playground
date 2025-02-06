@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import jsIcon from "../assets/images/js.jpg";
 import reactIcon from "../assets/images/react.png";
 import tsIcon from "../assets/images/ts.jpg";
-
+import { HiMiniCog6Tooth } from "react-icons/hi2";
 import nodeIcon from "../assets/images/node.png";
 import nosqlIcon from "../assets/images/nosql2.png";
 import phpIcon from "../assets/images/php.png";
@@ -37,6 +37,31 @@ const Home = () => {
       </div>
 
       <div className="max-w-[1000px] m-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="w-full sm:col-span-2">
+          <div
+            className={` bg-gray-100 rounded-lg shadow-md ${
+              classes?.card2 || ""
+            }`}
+          >
+            <div>
+              <h2 className="text-m font-bold mb-2 mt-2 flex items-center justify-center gap-4 ">
+                <HiMiniCog6Tooth className="text-[24px]" /> <span className="text-[27px]">How works</span>
+              </h2>
+              <div className="border-t-[2px] border-dashed border-gray-300 h-1 mt-1"></div>
+              <p className="pl-4 pr-4 text-justify mt-2">
+                This app uses Monaco Editor (the same engine as Visual Studio
+                Code) to manage and edit code. React is compiled with Babel,
+                which transforms JSX code (used in React) into JavaScript.
+                TypeScript is transpiled into JavaScript using the
+                ts.transpileModule() function and executed in a secure
+                environment. Both PHP and Node.js communicate with their
+                respective servers and receive the results of the executed code
+                or queries.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <Link to="/react" className="w-full">
           <div
             className={` bg-gray-100 rounded-lg shadow-md ${

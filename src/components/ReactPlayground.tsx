@@ -1,13 +1,16 @@
 import Editor from "@monaco-editor/react";
 import { useRef, useState } from "react";
 import { GoCodeSquare } from "react-icons/go";
-import { IoMdArrowDropright, IoMdCodeWorking } from "react-icons/io";
+import {
+  IoMdArrowDropright,
+  IoMdCloseCircle,
+  IoMdCodeWorking,
+} from "react-icons/io";
 import { IoCaretBackCircle, IoCaretForwardCircle } from "react-icons/io5";
 import { VscRunAll } from "react-icons/vsc";
 import reactWhite from "../assets/images/react-white.png";
 import classes from "../css/editor.module.css";
 import { exercises } from "../data/react";
-
 interface ReactPlaygroundProps {
   demo: boolean;
 }
@@ -72,6 +75,11 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>Code Output</title>
+        <!-- Bootstrap CSS -->
+      <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      />
       <!-- Carica React e ReactDOM (versioni di sviluppo) -->
       <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
       <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -276,7 +284,7 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
           </div>
         ) : (
           <div className="col-span-4">
-            <div className="font-bold bg-gray-200 rounded-lg p-4 min-h-[250px] flex items-center justify-center gap-3">
+            <div className="font-bold bg-gray-200 rounded-lg p-4 min-h-[500px] flex items-center justify-center gap-3">
               <GoCodeSquare className="text-blue-500 text-[28px]" />
               <span className="text-[18px] text-primary">Select code</span>
             </div>
@@ -295,7 +303,9 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
           className={`${classes.overlay}`}
           style={{ display: modal ? "flex" : "none" }}
         >
-          <div onClick={()=>setModal(false)} className={classes.close}>close</div>
+          <div onClick={() => setModal(false)} className={classes.close}>
+            <IoMdCloseCircle />
+          </div>
           <iframe ref={iframeRef} title="Output" className={classes.output} />
         </div>
       </div>

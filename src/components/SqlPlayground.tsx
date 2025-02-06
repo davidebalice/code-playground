@@ -237,14 +237,13 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
           </div>
         ) : (
           <div className="col-span-4">
-            <div className="font-bold bg-gray-200 rounded-lg p-4 min-h-[250px] flex items-center justify-center gap-3">
+            <div className="font-bold bg-gray-200 rounded-lg p-4 min-h-[500px] flex items-center justify-center gap-3">
               <GoCodeSquare className="text-blue-500 text-[28px]" />
               <span className="text-[18px] text-primary">Select code</span>
             </div>
           </div>
         )}
 
-        {/* Area Output */}
         <div className="col-span-1 bg-gray-900 text-white p-4 rounded-lg">
           <div className="flex items-center gap-2">
             <IoMdCodeWorking className="text-[25px] font-bold" />

@@ -12,6 +12,7 @@
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
     "@tailwindcss/vite": "^4.0.1",
+    "@webcontainer/api": "^1.5.1-internal.8",
     "exercises": "file:",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

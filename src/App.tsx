@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
+import AngularPlayground from "./components/AngularPlayground";
 import Counter from "./components/Counter";
 import Dropdown from "./components/Dropdown";
 import Footer from "./components/Footer";
-import Wrapper from "./components/Wrapper";
 import Home from "./components/Home";
 import JavascriptPlayground from "./components/JavascriptPlayground";
 import Navbar from "./components/Navbar";
@@ -15,6 +15,7 @@ import ReactPlayground from "./components/ReactPlayground";
 import SqlPlayground from "./components/SqlPlayground";
 import Todos from "./components/Todos";
 import TypescriptPlayground from "./components/TypescriptPlayground";
+import Wrapper from "./components/Wrapper";
 
 function App() {
   const [demo, setDemo] = useState(false);
@@ -34,6 +35,7 @@ function App() {
             path="/typescript"
             element={<TypescriptPlayground demo={demo} />}
           />
+          <Route path="/angular" element={<AngularPlayground demo={demo} />} />
           <Route path="/php" element={<PhpPlayground demo={demo} />} />
           <Route path="/sql" element={<SqlPlayground demo={demo} />} />
           <Route path="/node" element={<NodePlayground demo={demo} />} />

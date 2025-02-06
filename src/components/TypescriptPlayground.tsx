@@ -257,7 +257,7 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
           </div>
         ) : (
           <div className="col-span-4">
-            <div className="font-bold bg-gray-200 rounded-lg p-4 min-h-[250px] flex items-center justify-center gap-3">
+            <div className="font-bold bg-gray-200 rounded-lg p-4 min-h-[500px] flex items-center justify-center gap-3">
               <GoCodeSquare className="text-blue-500 text-[28px]" />
               <span className="text-[18px] text-primary">Select code</span>
             </div>

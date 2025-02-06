@@ -11,8 +11,17 @@
 }
 
 .card:hover {
-  background: #f1f1f1;
+  background: #e1e1e1;
   transform: translateY(-8px);
+}
+
+.card2 {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  text-align: center;
 }
 
 .title {
