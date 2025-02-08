@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import AngularPlayground from "./components/AngularPlayground";
-import Counter from "./components/Counter";
 import Dropdown from "./components/Dropdown";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
@@ -40,7 +39,6 @@ function App() {
           <Route path="/sql" element={<SqlPlayground demo={demo} />} />
           <Route path="/node" element={<NodePlayground demo={demo} />} />
           <Route path="/nosql" element={<NosqlPlayground demo={demo} />} />
-          <Route path="/counter" element={<Counter />} />
           <Route path="/todos" element={<Todos />} />
           <Route path="/dropdown" element={<Dropdown />} />
         </Routes>

@@ -37,6 +37,8 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
   const exercisesPerPage = 5;
 
   const runCode = () => {
+    setOutput(`Code execution...`);
+
     try {
       const bannedCommands = [
         "window",
@@ -59,9 +61,10 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
       }).outputText;
 
       let outputData = "";
-      const log = console.log;
+      //const log = console.log;
       console.log = (...args) => {
         outputData += args.join(" ") + "\n";
+        setOutput(outputData);
       };
 
       try {
@@ -70,8 +73,8 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
         outputData += "Errore nell'esecuzione: " + (err as Error).message;
       }
 
-      console.log = log;
-      setOutput(outputData || "Nessun output");
+      //console.log = log;
+      //setOutput(outputData || "Nessun output");
     } catch (error) {
       setOutput("Errore: " + (error as Error).message);
     }
@@ -244,6 +247,7 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
               className={classes.editor}
               defaultLanguage="javascript"
               value={code}
+              height={500}
               onChange={(value) => setCode(value || "")}
               theme="vs-dark"
               options={{ readOnly: demo, padding: { top: 20 } }}

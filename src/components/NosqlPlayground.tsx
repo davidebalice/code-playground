@@ -66,11 +66,11 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
   const [modal, setModal] = useState(false);
   const [code, setCode] = useState("");
   const [output, setOutput] = useState<string | null>(null);
-  const [message, setMessage] = useState("");
 
   const runCode = async () => {
     try {
-      setMessage("Esecuzione in corso...");
+      setOutput(`Code execution...`);
+
       const response = await fetch(`${backend}/query`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -129,7 +129,6 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
                   setSelectedExercise(exercise);
                   setCode(exercise.code);
                   setOutput("");
-                  setMessage("");
                 }}
               >
                 <h4 className="flex items-center gap-1">
@@ -164,8 +163,16 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
               value={code}
               onChange={(value) => setCode(value || "")}
               theme="vs-dark"
+              height={500}
               options={{ readOnly: demo, padding: { top: 20 } }}
             />
+            <button
+              className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+              onClick={runCode}
+            >
+              <VscRunAll />
+              <span className="text-[13px]">Run code</span>
+            </button>
           </div>
         ) : (
           <div className="col-span-4">
@@ -181,7 +188,6 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
             <IoMdCodeWorking className="text-[25px] font-bold" />
             <h3 className="text-lg font-bold">Output</h3>
           </div>
-          <p className="mb-2">{message}</p>
           {output && <div>{output}</div>}
         </div>
       </div>

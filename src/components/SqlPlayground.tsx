@@ -25,11 +25,10 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
   );
   const [code, setCode] = useState("");
   const [output, setOutput] = useState<string | null>(null);
-  const [message, setMessage] = useState("");
 
   const runCode = async () => {
     try {
-      setMessage("Esecuzione in corso...");
+      setOutput(`Code execution...`);
 
       const response = await fetch(`${backend}server-db.php`, {
         method: "POST",
@@ -46,7 +45,7 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
         setOutput(JSON.stringify(data, null, 2));
       }
     } catch (error: unknown) {
-      setMessage("Errore nell'esecuzione: " + (error as Error).message);
+      setOutput("Errore nell'esecuzione: " + (error as Error).message);
     }
   };
 
@@ -167,14 +166,12 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
   const handleExerciseSelect = (exercise: Exercise) => {
     setSelectedExercise(exercise);
     setCode(exercise.code);
-    setMessage("");
     setOutput(null);
   };
 
   const handleBackToExercises = () => {
     setSelectedExercise(null);
     setCode("");
-    setMessage("");
     setOutput(null);
   };
 
@@ -230,10 +227,18 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
               className={classes.editor}
               defaultLanguage="sql"
               value={code}
+              height={500}
               onChange={(value) => setCode(value || "")}
               theme="vs-dark"
               options={{ readOnly: demo, padding: { top: 20 } }}
             />
+            <button
+              className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+              onClick={runCode}
+            >
+              <VscRunAll />
+              <span className="text-[13px]">Run code</span>
+            </button>
           </div>
         ) : (
           <div className="col-span-4">
@@ -249,7 +254,6 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
             <IoMdCodeWorking className="text-[25px] font-bold" />
             <h3 className="text-lg font-bold">Output</h3>
           </div>
-          <p className="mb-2">{message}</p>
           {output && <div>{output}</div>}
         </div>
       </div>

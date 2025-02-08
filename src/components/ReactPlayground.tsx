@@ -277,10 +277,18 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
               className={classes.editor}
               defaultLanguage="javascript"
               value={code}
+              height={500}
               onChange={(value) => setCode(value || "")}
               theme="vs-dark"
               options={{ readOnly: demo, padding: { top: 20 } }}
             />
+            <button
+              className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+              onClick={runCode}
+            >
+              <VscRunAll />
+              <span className="text-[13px]">Run code</span>
+            </button>
           </div>
         ) : (
           <div className="col-span-4">

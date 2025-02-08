@@ -36,6 +36,8 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
   const exercisesPerPage = 5;
 
   const runCode = () => {
+    setOutput(`Code execution...`);
+
     try {
       const bannedCommands = [
         "window",
@@ -58,9 +60,10 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
       }).outputText;
 
       let outputData = "";
-      const log = console.log;
+      //const log = console.log;
       console.log = (...args) => {
         outputData += args.join(" ") + "\n";
+        setOutput(outputData);
       };
 
       try {
@@ -69,8 +72,8 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
         outputData += "Errore nell'esecuzione: " + (err as Error).message;
       }
 
-      console.log = log;
-      setOutput(outputData || "Nessun output");
+      // console.log = log;
+      // setOutput(outputData || "Nessun output");
     } catch (error) {
       setOutput("Errore: " + (error as Error).message);
     }
@@ -241,6 +244,7 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
 
             <Editor
               className={classes.editor}
+              height={500}
               defaultLanguage="typescript"
               value={code}
               onChange={(value) => setCode(value || "")}

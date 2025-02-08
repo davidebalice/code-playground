@@ -1,8 +1,21 @@
 import { useState } from "react";
-import TodoItem from "../components/TodoItem.tsx";
-import todosData, { Todo } from "../data/todo.ts";
+import TodoItem from "../components/TodoItem";
 
-const Todos = () => {
+type Todo = {
+  id: number;
+  task: string;
+  completed: boolean;
+};
+
+const todosData: Todo[] = [
+  { id: 1, task: "Working", completed: false },
+  { id: 2, task: "Clean the house", completed: true },
+  { id: 3, task: "Study React", completed: false },
+  { id: 4, task: "Shopping", completed: false },
+  { id: 5, task: "Go to jim", completed: true },
+];
+
+export const Todos = () => {
   const [todos, setTodos] = useState<Todo[]>(todosData);
   const [displayForm, setDisplayForm] = useState(false);
   const [displayEditForm, setDisplayEditForm] = useState(false);
@@ -72,27 +85,58 @@ const Todos = () => {
     setDisplayEditForm(false);
   };
 
+  const formStyle = {
+    marginTop: "20px",
+    marginBottom: "20px",
+  };
+
+  const inputStyle = {
+    border: "1px solid #ddd",
+    borderRadius: "4px",
+    marginRight: "4px",
+    fontSize: "13px",
+    padding: "4px 20px",
+  };
+
+  const titleStyle = {
+    fontSize: "22px",
+    fontWeight: "bold",
+    marginTop: "20px",
+    marginBottom: "20px",
+  };
+
+  const buttonStyle = {
+    border: "1px solid #ddd",
+    borderRadius: "4px",
+    marginRight: "4px",
+    fontSize: "12px",
+    padding: "4px 20px",
+  };
+
   return (
-    <div>
-      <button onClick={showNewTodo}>New Task</button>
+    <div style={{padding:"30px"}}>
+      <button onClick={showNewTodo} style={buttonStyle}>
+        + New task
+      </button>
       {displayForm && (
         <div>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} style={formStyle}>
             <input
               type="text"
               name="task"
               value={formData.task}
               onChange={handleChange}
               placeholder="Enter a task"
+              style={inputStyle}
             />
-            <button type="submit">Add</button>
+            <button type="submit" style={buttonStyle}>Add</button>
           </form>
         </div>
       )}
 
       {displayEditForm && (
         <div>
-          <form onSubmit={handleUpdateSubmit}>
+          <form onSubmit={handleUpdateSubmit} style={formStyle}>
             <input type="hidden" name="id" value={formEditData.id} readOnly />
             <input
               type="text"
@@ -100,13 +144,14 @@ const Todos = () => {
               value={formEditData.task}
               onChange={handleEditChange}
               placeholder="Edit task"
+              style={inputStyle}
             />
-            <button type="submit">Update</button>
+            <button type="submit" style={buttonStyle}>Update</button>
           </form>
         </div>
       )}
 
-      <h1>Todo List</h1>
+      <h1 style={titleStyle}>Todo List</h1>
       {todos
         .slice()
         .sort((a, b) => b.id - a.id)

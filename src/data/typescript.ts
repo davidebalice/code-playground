@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export const exercises = [
   {
-    category: "Funzioni",
+    category: "Numbers",
     exercises: [
       {
         id: uuidv4(),
@@ -25,7 +25,7 @@ function sum(numbers: number[]): number {
       },
       {
         id: uuidv4(),
-        title: "Verifica se numero pari o dispari",
+        title: "Pari o dispari",
         description:
           "Crea una funzione che verifica se un numero è pari o dispari.",
         code: `function pariDispari(numero: number): string {
@@ -48,32 +48,12 @@ console.log(fattoriale(5));`,
       },
       {
         id: uuidv4(),
-        title: "Funzione di saluto",
-        description:
-          "Crea una funzione che restituisca un messaggio di saluto personalizzato.",
-        code: `function saluto(nome: string): string {
-  return 'Ciao, ' + nome + '!';
-}
-console.log(saluto('Mario'));`,
-      },
-      {
-        id: uuidv4(),
         title: "Moltiplicazione di due numeri",
         description: "Crea una funzione che moltiplichi due numeri.",
         code: `function moltiplica(a: number, b: number): number {
   return a * b;
 }
 console.log(moltiplica(4, 3));`,
-      },
-      {
-        id: uuidv4(),
-        title: "Verifica palindromi",
-        description:
-          "Crea una funzione che verifica se una parola è un palindromo.",
-        code: `function isPalindrome(str: string): boolean {
-  return str === str.split('').reverse().join('');
-}
-console.log(isPalindrome('radar'));`,
       },
       {
         id: uuidv4(),
@@ -103,17 +83,345 @@ console.log(numeroCasuale(1, 10));`,
 }
 console.log(sommaArray([1, 2, 3, 4]));`,
       },
+    ],
+  },
+
+  {
+    category: "Array",
+    exercises: [
       {
         id: uuidv4(),
-        title: "Funzione di concatenamento di stringhe",
-        description: "Crea una funzione che concatenai due stringhe.",
-        code: `function concatena(str1: string, str2: string): string {
-  return str1 + str2;
+        title: "Numero più grande",
+        description:
+          "Crea una funzione che prenda un array di numeri e restituisca il più grande",
+        code: `
+const numeri = [3, 7, 2, 10, 5];
+
+function trovaMassimo(numeri: number[]): number | null {
+    if (numeri.length === 0) return null;
+    return Math.max(...numeri);
 }
-console.log(concatena('Ciao', ' Mondo'));`,
+
+console.log(trovaMassimo(numeri));
+
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Somma numeri in array",
+        description: "Crea una funzione che somma tutti i numeri in array",
+        code: `
+//example 1: reduce
+function sum(numbers: number[]): number {
+  return numbers.reduce((acc, num) => acc + num, 0);
+}
+
+console.log(sum([1, 2, 3, 4]));
+
+//example2: for cycle
+function sumArray(numbers: number[]): number {
+    let sum = 0;
+    for (let i = 0; i < numbers.length; i++) {
+        sum += numbers[i];
+    }
+    return sum;
+}
+
+console.log(sumArray([1, 2, 3, 4, 5]));
+
+`,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Numero più grande",
+        description:
+          "Crea una funzione che prenda un array di numeri e restituisca il più grande",
+        code: `
+      const numeri = [3, 7, 2, 10, 5];
+      
+      function trovaMassimo(numeri: number[]): number | null {
+          if (numeri.length === 0) return null;
+          return Math.max(...numeri);
+      }
+      
+      console.log(trovaMassimo(numeri));
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Somma numeri in array",
+        description: "Crea una funzione che somma tutti i numeri in array",
+        code: `
+      function sum(numbers: number[]): number {
+        return numbers.reduce((acc, num) => acc + num, 0);
+      }
+      
+      console.log(sum([1, 2, 3, 4]));
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Filtrare numeri pari",
+        description:
+          "Crea una funzione che restituisca solo i numeri pari di un array",
+        code: `
+      function numeriPari(numbers: number[]): number[] {
+        return numbers.filter(num => num % 2 === 0);
+      }
+      
+      console.log(numeriPari([1, 2, 3, 4, 5, 6]));
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Invertire un array",
+        description: "Crea una funzione che inverta un array",
+        code: `
+      function invertiArray(arr: any[]): any[] {
+        return arr.reverse();
+      }
+      
+      console.log(invertiArray([1, 2, 3, 4, 5]));
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Prodotto dei numeri",
+        description:
+          "Crea una funzione che restituisca il prodotto di tutti i numeri in un array",
+        code: `
+      function product(numbers: number[]): number {
+        return numbers.reduce((acc, num) => acc * num, 1);
+      }
+      
+      console.log(product([1, 2, 3, 4]));
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Contare le occorrenze",
+        description:
+          "Crea una funzione che conti quante volte un valore appare in un array",
+        code: `
+      function contaOccorrenze(arr: any[], valore: any): number {
+        return arr.filter(item => item === valore).length;
+      }
+      
+      console.log(contaOccorrenze([1, 2, 3, 2, 4, 2], 2));
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Rimuovere duplicati",
+        description: "Crea una funzione che rimuova i duplicati da un array",
+        code: `
+      function rimuoviDuplicati(arr: any[]): any[] {
+        return [...new Set(arr)];
+      }
+      
+      console.log(rimuoviDuplicati([1, 2, 2, 3, 4, 4, 5]));
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Unire due array",
+        description: "Crea una funzione che unisca due array senza duplicati",
+        code: `
+      function unisciArray(arr1: any[], arr2: any[]): any[] {
+        return [...new Set([...arr1, ...arr2])];
+      }
+      
+      console.log(unisciArray([1, 2, 3], [3, 4, 5]));
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Sostituire un valore",
+        description:
+          "Crea una funzione che sostituisca un valore specifico in un array",
+        code: `
+      function sostituisciValore(arr: any[], oldVal: any, newVal: any): any[] {
+        return arr.map(item => item === oldVal ? newVal : item);
+      }
+      
+      console.log(sostituisciValore([1, 2, 3, 2, 4], 2, 99));
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Dividere un array in sotto-array",
+        description:
+          "Crea una funzione che divida un array in gruppi di dimensione specificata",
+        code: `
+      function chunkArray(arr: any[], size: number): any[][] {
+        let result = [];
+        for (let i = 0; i < arr.length; i += size) {
+          result.push(arr.slice(i, i + size));
+        }
+        return result;
+      }
+      
+      console.log(chunkArray([1, 2, 3, 4, 5, 6, 7], 3));
+            `,
       },
     ],
   },
+
+  {
+    category: "Strings",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Verifica palindromi",
+        description:
+          "Crea una funzione che verifica se una parola è un palindromo.",
+        code: `function isPalindrome(str: string): boolean {
+  return str === str.split('').reverse().join('');
+}
+console.log(isPalindrome('radar'));`,
+      },
+      {
+        id: uuidv4(),
+        title: "Count words",
+        description: "Create function that counts words in a text",
+        code: `
+  function countWords(text: string, word: string): number {
+    // If the text or word is empty, return 0
+    if (!text || !word) return 0;
+    
+    // Create a regular expression to match the exact word, case-insensitive and global search
+    const regex = new RegExp(\`\\\\b\${word}\\\\b\`, "gi");
+
+    // Find all occurrences of the word in the text
+    const match = text.match(regex);
+    
+    // Return the number of matches found, or 0 if there are none
+    return match ? match.length : 0;
+}
+
+console.log(countWords("Hello world, hello everyone!", "hello"));
+
+`,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Palindrome",
+        description: "Write a function that checks if a string is a palindrome",
+        code: `
+     function isPalindrome(str: string): boolean {
+        // Convert the string to lowercase and remove all non-alphanumeric characters
+        const cleanedStr = str.toLowerCase().replace(/[^a-z0-9]/g, "");
+        /*
+        Compare the cleaned string with its reversed version
+          split = splits the string into an array of characters
+          reverse = reverses the order of elements in the array:
+          join = recomposes the array into a string
+        */
+        return cleanedStr === cleanedStr.split("").reverse().join("");
+    }
+    
+    console.log(isPalindrome("racecar"));
+    console.log(isPalindrome("hello"));
+    console.log(isPalindrome("A man, a plan, a canal, Panama"));
+    console.log(isPalindrome("No 'x' in Nixon"));
+`,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Reverse a string",
+        description: "Write a function that reverses a string.",
+        code: `
+     function reverseString(str: string): string {
+        /*
+          split = splits the string into an array of characters
+          reverse = reverses the order of elements in the array:
+          join = recomposes the array into a string
+        */
+        str = str.split("").reverse().join("")
+        return str;
+    }
+    
+    console.log(reverseString("hello world"));
+    console.log(reverseString("typescript is a beautiful langiage"));
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Remode duplicate",
+        description: "Write a function that removes duplicates from a string.",
+        code: `
+  //example 1
+  function removeDuplicateCharacters(str: string): string {
+  let result = '';
+  //A set to keep track of characters already encountered
+  let seenChars = new Set<string>();
+  //cycle set
+  for (let char of str) {
+    if (!seenChars.has(char)) {
+      //add character to set
+      seenChars.add(char);
+      //add char to result
+      result += char;
+    }
+  }
+
+  return result;
+}
+
+console.log(removeDuplicateCharacters("programming"));
+
+
+//example 2
+let result: string = '';
+function removeDuplicateCharacters2(str: string): string {
+  let seenChars = new Set();
+  //cycle characters of string
+  for (let char of str) {
+      //add to set
+      seenChars.add(char);
+  }
+  //Array.from = convert in array
+  //join = convert array in string
+  result = Array.from(seenChars).join('');
+  return result;
+}
+
+console.log(removeDuplicateCharacters2("programmer"));
+
+
+
+`,
+      },
+
+      {
+        id: uuidv4(),
+        title: "camelCase",
+        description: "Write a function that converts a string to camelCase.",
+        code: `
+ function toCamelCase(str: string): string {
+ //toLowerCase = convert string to lowercase
+ //Regex /[^a-zA-Z0-9]+(.)/g = Search for non-alphanumeric characters followed by a letter (space + letter)
+ //(_, char) => char.toUpperCase() = Removes the separator and converts the next letter to uppercase.
+  return str
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9]+(.)/g, (_, char) => char.toUpperCase());
+}
+
+console.log(toCamelCase("hello world"));
+console.log(toCamelCase("convert THIS to camel case"));
+console.log(toCamelCase("snake_case_example"));
+console.log(toCamelCase("PascalCase Example"));
+
+
+
+`,
+      },
+    ],
+  },
+
   {
     category: "Classi",
     exercises: [
@@ -326,6 +634,241 @@ console.log(carrello.visualizzaProdotti());`,
         
         // Test
         console.log(getId({ id: 42, name: "Test" }));`,
+      },
+    ],
+  },
+
+  {
+    category: "Callback",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "callback types",
+        description: "Basic callback example",
+        code: `
+function hello(name: string, callback: (message: string) => void): void {
+  const message = \`Ciao, \${name}!\`;
+  callback(message);
+}
+
+function showMessage(message: string): void {
+  console.log(message);
+}
+
+hello("Luca", showMessage);
+`,
+      },
+
+      {
+        id: uuidv4(),
+        title: "callback async",
+        description: "Callback with asynchronous operations (setTimeout)",
+        code: `
+    function asyncOperation(callback: (risultato: number) => void): void {
+      setTimeout(() => {
+        const risultato = Math.random() * 100;
+        callback(risultato);
+      }, 2000);
+    }
+    
+    asyncOperation((number) => {
+      console.log("Risultato ottenuto:", number.toFixed(2));
+    });
+        `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "callback array",
+        description: "Callback with array operations (map)",
+        code: `
+         function modificaArray(
+        numeri: number[],
+        callback: (n: number) => number
+      ): number[] {
+        return numeri.map(callback);
+      }
+      
+      const numeri = [1, 2, 3, 4, 5];
+      
+      const quadrati = modificaArray(numeri, (n) => n * n);
+      
+      console.log(quadrati);
+        `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "callback error",
+        description: "Callback with error handling",
+        code: `
+             
+function leggiDati(callback: (errore: string | null, dati?: string) => void): void {
+  setTimeout(() => {
+    const errore = Math.random() > 0.5 ? "Errore nel caricamento" : null;
+    const dati = errore ? undefined : "Dati caricati con successo";
+    callback(errore, dati);
+  }, 1000);
+}
+
+leggiDati((errore, dati) => {
+  if (errore) {
+    console.error("Errore:", errore);
+  } else {
+    console.log("Successo:", dati);
+  }
+});
+
+      
+        `,
+      },
+    ],
+  },
+
+  {
+    category: "Promises",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Simple Promise",
+        description: "Esegui un'operazione asincrona usando una Promise.",
+        code: `
+        const myPromise = new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve("Operazione completata!");
+          }, 2000);
+        });
+
+        myPromise
+          .then(result => {
+            console.log(result);  // "Operazione completata!"
+          })
+          .catch(error => {
+            console.error(error);
+          });
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Promise with Reject",
+        description:
+          "Esegui una Promise che viene rifiutata e gestisci l'errore.",
+        code: `
+        const myPromise = new Promise((resolve, reject) => {
+          setTimeout(() => {
+            reject("Errore nell'operazione.");
+          }, 2000);
+        });
+
+        myPromise
+          .then(result => {
+            console.log(result);
+          })
+          .catch(error => {
+            console.error(error);  // "Errore nell'operazione."
+          });
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Chaining Promises",
+        description: "Collega più Promises in sequenza.",
+        code: `
+        const firstPromise = new Promise((resolve) => {
+          setTimeout(() => resolve("Prima operazione completata"), 1000);
+        });
+
+        const secondPromise = new Promise((resolve) => {
+          setTimeout(() => resolve("Seconda operazione completata"), 1000);
+        });
+
+        firstPromise
+          .then(result => {
+            console.log(result);  // "Prima operazione completata"
+            return secondPromise;
+          })
+          .then(result => {
+            console.log(result);  // "Seconda operazione completata"
+          })
+          .catch(error => {
+            console.error(error);
+          });
+        `,
+      },
+    ],
+  },
+
+  {
+    category: "async/await",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Async/Await with Promise",
+        description: "Usa async/await per semplificare l'uso di una Promise.",
+        code: `
+        async function myAsyncFunction() {
+          const myPromise = new Promise((resolve, reject) => {
+            setTimeout(() => resolve("Operazione completata!"), 2000);
+          });
+
+          try {
+            const result = await myPromise;
+            console.log(result);  // "Operazione completata!"
+          } catch (error) {
+            console.error(error);
+          }
+        }
+
+        myAsyncFunction();
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Async/Await with Try/Catch",
+        description: "Gestisci gli errori con async/await e try/catch.",
+        code: `
+        async function myAsyncFunction() {
+          const myPromise = new Promise((resolve, reject) => {
+            setTimeout(() => reject("Errore nell'operazione."), 2000);
+          });
+
+          try {
+            const result = await myPromise;
+            console.log(result);
+          } catch (error) {
+            console.error(error);  // "Errore nell'operazione."
+          }
+        }
+
+        myAsyncFunction();
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Chaining with Async/Await",
+        description: "Collega più operazioni asincrone con async/await.",
+        code: `
+        async function performOperations() {
+          const firstOperation = new Promise((resolve) => {
+            setTimeout(() => resolve("Prima operazione completata"), 1000);
+          });
+
+          const secondOperation = new Promise((resolve) => {
+            setTimeout(() => resolve("Seconda operazione completata"), 1000);
+          });
+
+          try {
+            const firstResult = await firstOperation;
+            console.log(firstResult);  // "Prima operazione completata"
+            const secondResult = await secondOperation;
+            console.log(secondResult);  // "Seconda operazione completata"
+          } catch (error) {
+            console.error(error);
+          }
+        }
+
+        performOperations();
+        `,
       },
     ],
   },

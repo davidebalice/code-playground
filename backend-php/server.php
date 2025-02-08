@@ -53,7 +53,7 @@ if (!isset($data['code'])) {
 $code = $data['code'];
 
 if (preg_match('/(exec|shell_exec|system|passthru|proc_open|popen|curl_exec|curl_multi_exec|file_get_contents|fopen|fwrite|unlink|delete|DROP|ALTER|CREATE|INSERT|UPDATE|DELETE)/i', $code)) {
-    echo json_encode(["success" => false, "error" => "Codice non consentito"]);
+    echo "Codice non consentito";
     exit();
 }
 
