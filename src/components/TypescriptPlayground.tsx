@@ -8,13 +8,17 @@ import * as ts from "typescript";
 import typescript from "../assets/images/typescript.jpg";
 import classes from "../css/editor.module.css";
 import { exercises } from "../data/typescript";
+
+// Definizione delle proprietà del componente
 interface TypescriptPlaygroundProps {
   demo: boolean;
 }
 
+// Definizione del componente principale
 const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
   demo,
 }) => {
+  // Stati del componente
   const [selectedCategory, setSelectedCategory] = useState<{
     category: string;
     exercises: {
@@ -35,10 +39,12 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const exercisesPerPage = 5;
 
+  // Funzione per eseguire il codice
   const runCode = () => {
     setOutput(`Code execution...`);
 
     try {
+      // Comandi proibiti per motivi di sicurezza
       const bannedCommands = [
         "window",
         "document",
@@ -48,6 +54,7 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
         "Function",
       ];
 
+      // Controllo dei comandi proibiti
       for (const command of bannedCommands) {
         if (code.includes(command)) {
           setOutput(`Errore: comando proibito "${command}" trovato.`);
@@ -55,6 +62,7 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
         }
       }
 
+      //Conversione del codice typeScript in javaScript
       const transpiledCode = ts.transpileModule(code, {
         compilerOptions: { module: ts.ModuleKind.CommonJS },
       }).outputText;
@@ -66,6 +74,7 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
         setOutput(outputData);
       };
 
+      //Esecuzione del codice convertito
       try {
         new Function(transpiledCode)();
       } catch (err) {
@@ -79,6 +88,7 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
     }
   };
 
+  // Interfacce per gli esercizi e le categorie
   interface Exercise {
     id: string;
     title: string;
@@ -91,6 +101,7 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
     exercises: Exercise[];
   }
 
+  // Funzione per gestire la selezione di una categoria
   const handleCategorySelect = (category: Category) => {
     setSelectedCategory(category);
     setSelectedExercise(null);
@@ -99,12 +110,14 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
     setCurrentPage(1);
   };
 
+  // Funzione per gestire la selezione di un esercizio
   const handleExerciseSelect = (exercise: Exercise) => {
     setSelectedExercise(exercise);
     setCode(exercise.code);
     setOutput("");
   };
 
+  // Funzione per tornare alla lista delle categorie
   const handleBackToCategories = () => {
     setSelectedCategory(null);
     setSelectedExercise(null);
@@ -112,6 +125,7 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
     setOutput("");
   };
 
+  // Esercizi da visualizzare nella pagina corrente
   const exercisesToDisplay = selectedCategory
     ? selectedCategory.exercises.slice(
         (currentPage - 1) * exercisesPerPage,
@@ -119,18 +133,22 @@ const TypescriptPlayground: React.FC<TypescriptPlaygroundProps> = ({
       )
     : [];
 
+  // Numero totale di pagine
   const totalPages = selectedCategory
     ? Math.ceil(selectedCategory.exercises.length / exercisesPerPage)
     : 1;
 
+  // Funzione per andare alla pagina successiva
   const goToNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
+  // Funzione per andare alla pagina precedente
   const goToPreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
+  // Render del componente
   return (
     <>
       <div className="flex p-1 gap-4 bg-[#3178c6] text-white flex items-center h-[50px]">

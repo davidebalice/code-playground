@@ -11,11 +11,14 @@ import { VscRunAll } from "react-icons/vsc";
 import reactWhite from "../assets/images/react-white.png";
 import classes from "../css/editor.module.css";
 import { exercises } from "../data/react";
+
 interface ReactPlaygroundProps {
   demo: boolean;
 }
 
+//Componente principale
 const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
+  // Stati del componente
   const [selectedCategory, setSelectedCategory] = useState<{
     category: string;
     exercises: {
@@ -38,13 +41,16 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
   const exercisesPerPage = 5;
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
+  // Funzione per eseguire il codice
   const runCode = () => {
     try {
+      // Rimuove l'iframe esistente se presente
       const existingIframe = document.getElementById("sandbox-iframe");
       if (existingIframe) {
         existingIframe.remove();
       }
 
+      // Trasforma il codice rimuovendo le importazioni e modificando l'export
       let transformedCode = code
         .replace(/import\s+.*?;[\n]?/g, "")
         .replace(/export\s+const\s+(\w+)\s*=/, "const $1 =");
@@ -63,11 +69,13 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
   root.render(<${componentName} />);
   `;
 
+      // Rimuove l'overlay esistente se presente
       const existingOverlay = document.getElementById("sandbox-overlay");
       if (existingOverlay) {
         existingOverlay.remove();
       }
 
+      // HTML per l'iframe
       const html = `
   <!DOCTYPE html>
   <html lang="en">
@@ -95,6 +103,7 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
   </html>
   `;
 
+      // Imposta il contenuto dell'iframe
       if (iframeRef.current) {
         iframeRef.current.srcdoc = html;
       }
@@ -109,6 +118,7 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
     }
   };
 
+  // Interfacce per gli esercizi e le categorie
   interface Exercise {
     id: string;
     title: string;
@@ -121,6 +131,7 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
     exercises: Exercise[];
   }
 
+  // Funzione per gestire la selezione di una categoria
   const handleCategorySelect = (category: Category) => {
     setSelectedCategory(category);
     setSelectedExercise(null);
@@ -129,12 +140,14 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
     setCurrentPage(1);
   };
 
+  // Funzione per gestire la selezione di un esercizio
   const handleExerciseSelect = (exercise: Exercise) => {
     setSelectedExercise(exercise);
     setCode(exercise.code);
     setOutput("");
   };
 
+  // Funzione per tornare alla lista delle categorie
   const handleBackToCategories = () => {
     setSelectedCategory(null);
     setSelectedExercise(null);
@@ -142,6 +155,7 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
     setOutput("");
   };
 
+  // Esercizi da visualizzare nella pagina corrente
   const exercisesToDisplay = selectedCategory
     ? selectedCategory.exercises.slice(
         (currentPage - 1) * exercisesPerPage,
@@ -149,18 +163,22 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
       )
     : [];
 
+  // Numero totale di pagine
   const totalPages = selectedCategory
     ? Math.ceil(selectedCategory.exercises.length / exercisesPerPage)
     : 1;
 
+  // Funzione per andare alla pagina successiva
   const goToNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
+  // Funzione per andare alla pagina precedente
   const goToPreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
+  // Render del componente
   return (
     <>
       <div className="flex gap-4 p-1 bg-[#17b6e9] text-white flex items-center h-[50px]">
@@ -299,6 +317,7 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
           </div>
         )}
 
+        {/* Output */}
         <div className="col-span-1 bg-gray-900 text-white p-4 rounded-lg">
           <div className="flex items-center gap-2">
             <IoMdCodeWorking className="text-[25px] font-bold" />
@@ -307,6 +326,7 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
           <pre className="mt-2 whitespace-pre-wrap">{output}</pre>
         </div>
 
+        {/* Overlay ed iframe per l'output del codice */}
         <div
           className={`${classes.overlay}`}
           style={{ display: modal ? "flex" : "none" }}

@@ -8,10 +8,13 @@ import * as ts from "typescript";
 import javascript from "../assets/images/javascript.jpg";
 import classes from "../css/editor.module.css";
 import { exercises } from "../data/javascript";
+
+// Definizione delle proprietà del componente
 interface JavascriptPlaygroundProps {
   demo: boolean;
 }
 
+// Definizione del componente principale
 const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
   demo,
 }) => {
@@ -36,10 +39,12 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const exercisesPerPage = 5;
 
+  // Funzione per eseguire il codice
   const runCode = () => {
     setOutput(`Code execution...`);
 
     try {
+      // Comandi proibiti per motivi di sicurezza
       const bannedCommands = [
         "window",
         "document",
@@ -49,6 +54,7 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
         "Function",
       ];
 
+      // Controllo dei comandi proibiti
       for (const command of bannedCommands) {
         if (code.includes(command)) {
           setOutput(`Errore: comando proibito "${command}" trovato.`);
@@ -56,6 +62,7 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
         }
       }
 
+      //Conversione del codice javaScript
       const transpiledCode = ts.transpileModule(code, {
         compilerOptions: { module: ts.ModuleKind.CommonJS },
       }).outputText;
@@ -67,6 +74,7 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
         setOutput(outputData);
       };
 
+      // Esecuzione del codice convertito
       try {
         new Function(transpiledCode)();
       } catch (err) {
@@ -80,6 +88,7 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
     }
   };
 
+  // Interfacce per gli esercizi e le categorie
   interface Exercise {
     id: string;
     title: string;
@@ -92,6 +101,7 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
     exercises: Exercise[];
   }
 
+  // Funzione per gestire la selezione di una categoria
   const handleCategorySelect = (category: Category) => {
     setSelectedCategory(category);
     setSelectedExercise(null);
@@ -100,12 +110,14 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
     setCurrentPage(1);
   };
 
+  // Funzione per gestire la selezione di un esercizio
   const handleExerciseSelect = (exercise: Exercise) => {
     setSelectedExercise(exercise);
     setCode(exercise.code);
     setOutput("");
   };
 
+  // Funzione per tornare alla lista delle categorie
   const handleBackToCategories = () => {
     setSelectedCategory(null);
     setSelectedExercise(null);
@@ -113,6 +125,7 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
     setOutput("");
   };
 
+  // Esercizi da visualizzare nella pagina corrente
   const exercisesToDisplay = selectedCategory
     ? selectedCategory.exercises.slice(
         (currentPage - 1) * exercisesPerPage,
@@ -120,14 +133,17 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
       )
     : [];
 
+  // Numero totale di pagine
   const totalPages = selectedCategory
     ? Math.ceil(selectedCategory.exercises.length / exercisesPerPage)
     : 1;
 
+  // Funzione per andare alla pagina successiva  
   const goToNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
+  // Funzione per andare alla pagina precedente
   const goToPreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };

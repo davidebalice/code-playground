@@ -7,13 +7,18 @@ import { VscRunAll } from "react-icons/vsc";
 import php from "../assets/images/php.jpg";
 import classes from "../css/editor.module.css";
 import { exercises } from "../data/php";
+
+// Definizione delle proprietà del componente
 interface PhpPlaygroundProps {
   demo: boolean;
 }
 
+// Definizione del componente principale
 const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
+  // URL del backend
   const backend = import.meta.env.VITE_PHP_BACKEND;
 
+  // Stati del componente
   const [selectedCategory, setSelectedCategory] = useState<{
     category: string;
     exercises: {
@@ -34,19 +39,21 @@ const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const exercisesPerPage = 5;
 
+  // Funzione per eseguire il codice
   const runCode = async () => {
     try {
       setOutput(`Code execution...`);
 
+      // Invio del codice al backend per l'esecuzione
       const response = await fetch(`${backend}server.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-
         body: JSON.stringify({ code }),
       });
 
+      // Ricezione dell'output dal backend
       const data = await response.text();
       setOutput(data);
     } catch (error: unknown) {
@@ -54,6 +61,7 @@ const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
     }
   };
 
+  // Interfacce per gli esercizi e le categorie
   interface Exercise {
     id: string;
     title: string;
@@ -66,6 +74,7 @@ const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
     exercises: Exercise[];
   }
 
+  // Funzione per gestire la selezione di una categoria
   const handleCategorySelect = (category: Category) => {
     setSelectedCategory(category);
     setSelectedExercise(null);
@@ -74,12 +83,14 @@ const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
     setCurrentPage(1);
   };
 
+  // Funzione per gestire la selezione di un esercizio
   const handleExerciseSelect = (exercise: Exercise) => {
     setSelectedExercise(exercise);
     setCode(exercise.code);
     setOutput("");
   };
 
+  // Funzione per tornare alla lista delle categorie
   const handleBackToCategories = () => {
     setSelectedCategory(null);
     setSelectedExercise(null);
@@ -87,6 +98,7 @@ const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
     setOutput("");
   };
 
+  // Esercizi da visualizzare nella pagina corrente
   const exercisesToDisplay = selectedCategory
     ? selectedCategory.exercises.slice(
         (currentPage - 1) * exercisesPerPage,
@@ -94,18 +106,22 @@ const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
       )
     : [];
 
+  // Numero totale di pagine
   const totalPages = selectedCategory
     ? Math.ceil(selectedCategory.exercises.length / exercisesPerPage)
     : 1;
 
+  // Funzione per andare alla pagina successiva
   const goToNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
+  // Funzione per andare alla pagina precedente
   const goToPreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
+  // Render del componente
   return (
     <>
       <div className="flex gap-4 p-1 bg-[#5f82ba] text-white flex items-center h-[50px]">
@@ -243,6 +259,7 @@ const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
           </div>
         )}
 
+        {/* Output */}
         <div className="col-span-1 bg-gray-900 text-white p-4 rounded-lg">
           <div className="flex items-center gap-2">
             <IoMdCodeWorking className="text-[25px] font-bold" />

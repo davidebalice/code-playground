@@ -2,9 +2,11 @@ import Editor from "@monaco-editor/react";
 import { useState } from "react";
 import { GoCodeSquare } from "react-icons/go";
 import { IoMdArrowDropright, IoMdCodeWorking } from "react-icons/io";
+import { IoCaretBackCircle, IoCaretForwardCircle } from "react-icons/io5";
 import { VscRunAll } from "react-icons/vsc";
 import nosql from "../assets/images/nosql.png";
 import classes from "../css/editor.module.css";
+import { exercises } from "../data/nosql";
 import Modal from "./Modal";
 interface Exercise {
   id: string;
@@ -12,47 +14,6 @@ interface Exercise {
   description: string;
   code: string;
 }
-
-const exercises: Exercise[] = [
-  {
-    id: "1",
-    title: "Ottenere tutti gli utenti",
-    description: "Recupera tutti gli utenti dalla collezione MongoDB.",
-    code: `const users = await User.find();\n  console.log(users);`,
-  },
-
-  {
-    id: "2",
-    title: "Filtrare utenti per età superiore a 25",
-    description: "Seleziona gli utenti con un'età superiore a 25 anni.",
-    code: `const users = await User.find({ age: { $gt: 25 } });
-    console.log(users);`,
-  },
-  {
-    id: "3",
-    title: "Cercare un utente per nome",
-    description: "Trova un utente specifico cercandolo per nome.",
-    code: `async function getUserByName(name) {\n  const user = await User.findOne({ name });\n  console.log(user);\n}\n\ngetUserByName('Alice');`,
-  },
-  {
-    id: "4",
-    title: "Selezionare solo alcuni campi",
-    description: "Recupera solo i campi nome ed età degli utenti.",
-    code: `async function getUsersWithSelectedFields() {\n  const users = await User.find().select('name age');\n  console.log(users);\n}\n\ngetUsersWithSelectedFields();`,
-  },
-  {
-    id: "5",
-    title: "Ordinare utenti per età",
-    description: "Recupera gli utenti ordinandoli per età in ordine crescente.",
-    code: `async function getUsersSortedByAge() {\n  const users = await User.find().sort({ age: 1 });\n  console.log(users);\n}\n\ngetUsersSortedByAge();`,
-  },
-  {
-    id: "6",
-    title: "Conteggio utenti",
-    description: "Conta il numero totale di utenti nel database.",
-    code: `async function countUsers() {\n  const count = await User.countDocuments();\n  console.log('Numero totale di utenti:', count);\n}\n\ncountUsers();`,
-  },
-];
 
 interface NosqlPlaygroundProps {
   demo: boolean;
@@ -66,7 +27,10 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
   const [modal, setModal] = useState(false);
   const [code, setCode] = useState("");
   const [output, setOutput] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const exercisesPerPage = 5;
 
+  // Funzione per eseguire il codice
   const runCode = async () => {
     try {
       setOutput(`Code execution...`);
@@ -81,7 +45,7 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
 
       if (data.logs) {
         const formattedLogs = data.logs.map((log: string) => {
-          //let cleanedLog = log.replace(/ObjectId\('(.+?)'\)/g, '"$1"');
+          // Pulizia dei log ricevuti
           let cleanedLog = log;
           cleanedLog = cleanedLog
             .trim()
@@ -111,6 +75,25 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
     }
   };
 
+  // Esercizi da visualizzare nella pagina corrente
+  const exercisesToDisplay = exercises.slice(
+    (currentPage - 1) * exercisesPerPage,
+    currentPage * exercisesPerPage
+  );
+
+  // Numero totale di pagine
+  const totalPages = Math.ceil(exercises.length / exercisesPerPage);
+
+  // Funzione per andare alla pagina successiva
+  const goToNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  // Funzione per andare alla pagina precedente
+  const goToPreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
   return (
     <>
       <div className="flex gap-4 p-1 bg-[#0079d6] text-white flex items-center h-[50px]">
@@ -118,10 +101,34 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
       </div>
       <div className="p-4 grid grid-cols-7 gap-4">
         <div className="col-span-2 bg-gray-100 p-4 rounded-lg">
-          <h2 className="text-[16px] font-bold">Esercizi Node.js</h2>
+          <h2 className="text-[16px] font-bold">Esercizi Nosql</h2>
+
+          <div className="border-t-1 border-dashed border-gray-300 h-1 mt-4"></div>
+
+          <div className="mt-4 mb-4 flex justify-between">
+            <button
+              className="bg-gray-500 text-white rounded"
+              onClick={goToPreviousPage}
+              disabled={currentPage === 1}
+            >
+              <IoCaretBackCircle className="text-[17px]" />
+            </button>
+            <span className="text-[12px]">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              className="bg-gray-500 text-white rounded"
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages}
+            >
+              <IoCaretForwardCircle className="text-[17px]" />
+            </button>
+          </div>
+
           <div className="border-t border-dashed border-gray-300 h-1 mt-4"></div>
+          
           <ul className="mt-2">
-            {exercises.map((exercise) => (
+            {exercisesToDisplay.map((exercise) => (
               <li
                 key={exercise.id}
                 className="cursor-pointer text-gray-700 p-1 pl-3 rounded-md text-[14px] hover:bg-gray-200"

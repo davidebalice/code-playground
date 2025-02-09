@@ -1,11 +1,18 @@
 import Editor from "@monaco-editor/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { GoCodeSquare } from "react-icons/go";
-import { IoMdArrowDropright, IoMdCodeWorking } from "react-icons/io";
+import {
+  IoMdArrowDropright,
+  IoMdCloseCircle,
+  IoMdCodeWorking,
+} from "react-icons/io";
+import { IoCaretBackCircle, IoCaretForwardCircle } from "react-icons/io5";
 import { VscRunAll } from "react-icons/vsc";
 import sql from "../assets/images/sql.png";
 import classes from "../css/editor.module.css";
+import { exercises } from "../data/sql";
 
+// Definizione dell'interfaccia Exercise
 interface Exercise {
   id: string;
   title: string;
@@ -13,23 +20,34 @@ interface Exercise {
   code: string;
 }
 
+// Proprietà del componente SqlPlayground
 interface SqlPlaygroundProps {
   demo: boolean;
 }
 
+//Componente principale
 const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
+  // URL del backend
   const backend = import.meta.env.VITE_PHP_BACKEND;
 
+  // Stati del componente
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
     null
   );
   const [code, setCode] = useState("");
+  const [modal, setModal] = useState(false);
   const [output, setOutput] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const exercisesPerPage = 5;
 
+  // Funzione per eseguire il codice SQL
   const runCode = async () => {
+    setModal(true);
     try {
       setOutput(`Code execution...`);
 
+      // Invio del codice SQL al backend per l'esecuzione
       const response = await fetch(`${backend}server-db.php`, {
         method: "POST",
         headers: {
@@ -38,6 +56,7 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
         body: JSON.stringify({ query: code }),
       });
 
+      // Ricezione dell'output dal backend
       const data = await response.json();
       if (data.error) {
         setOutput(`Errore: ${data.error}`);
@@ -49,132 +68,64 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
     }
   };
 
-  const exercises: Exercise[] = [
-    {
-      id: "1",
-      title: "Visualizza Ordini e Utenti",
-      description: "Mostra gli ordini insieme ai dettagli degli utenti.",
-      code: `SELECT u.user_id, u.username, o.order_id, o.order_date
-  FROM users u
-  JOIN orders o ON u.user_id = o.user_id;`,
-    },
-    {
-      id: "2",
-      title: "Dettagli Ordini Completi",
-      description:
-        "Mostra l'ordine, l'utente e i dettagli dei prodotti ordinati.",
-      code: `SELECT o.order_id, o.order_date, u.username, p.product_name, p.price, oi.quantity
-  FROM orders o
-  JOIN users u ON o.user_id = u.user_id
-  JOIN order_items oi ON o.order_id = oi.order_id
-  JOIN products p ON oi.product_id = p.product_id;`,
-    },
-    {
-      id: "3",
-      title: "Prodotti e Categorie",
-      description: "Visualizza i prodotti con le relative categorie.",
-      code: `SELECT p.product_id, p.product_name, p.price, c.category_name
-  FROM products p
-  JOIN categories c ON p.category_id = c.category_id;`,
-    },
-    {
-      id: "4",
-      title: "Valore Totale Ordine",
-      description: "Calcola il totale per ogni ordine.",
-      code: `SELECT o.order_id, SUM(p.price * oi.quantity) AS total_order_value
-  FROM orders o
-  JOIN order_items oi ON o.order_id = oi.order_id
-  JOIN products p ON oi.product_id = p.product_id
-  GROUP BY o.order_id;`,
-    },
-    {
-      id: "5",
-      title: "Dettagli Ordini Completi con Categoria",
-      description:
-        "Panoramica completa dell'ordine unendo utenti, prodotti e categorie.",
-      code: `SELECT u.username, o.order_id, o.order_date, p.product_name, c.category_name, oi.quantity, p.price, (p.price * oi.quantity) AS subtotal
-  FROM users u
-  JOIN orders o ON u.user_id = o.user_id
-  JOIN order_items oi ON o.order_id = oi.order_id
-  JOIN products p ON oi.product_id = p.product_id
-  JOIN categories c ON p.category_id = c.category_id;`,
-    },
-    {
-      id: "6",
-      title: "Top-selling Products",
-      description: "Elenca i 5 prodotti con le vendite maggiori.",
-      code: `SELECT
-    p.product_id,
-    p.product_name,
-    SUM(oi.quantity) AS total_quantity_sold,
-    SUM(oi.quantity * p.price) AS total_sales
-  FROM products p
-  JOIN order_items oi ON p.product_id = oi.product_id
-  GROUP BY p.product_id, p.product_name
-  ORDER BY total_sales DESC
-  LIMIT 5;`,
-    },
-    {
-      id: "7",
-      title: "Ranking Utenti per Spesa Totale",
-      description:
-        "Assegna un ranking agli utenti in base al totale speso negli ordini.",
-      code: `SELECT
-      u.user_id,
-      u.username,
-      SUM(p.price * oi.quantity) AS total_spent,
-      RANK() OVER (ORDER BY SUM(p.price * oi.quantity) DESC) AS user_rank
-  FROM users u
-  JOIN orders o ON u.user_id = o.user_id
-  JOIN order_items oi ON o.order_id = oi.order_id
-  JOIN products p ON oi.product_id = p.product_id
-  GROUP BY u.user_id, u.username;`,
-    },
-    {
-      id: "8",
-      title: "Performance per Categoria",
-      description:
-        "Mostra il numero di prodotti, unità vendute, prezzo medio e fatturato per categoria.",
-      code: `SELECT
-    c.category_id,
-    c.category_name,
-    COUNT(DISTINCT p.product_id) AS num_products,
-    SUM(oi.quantity) AS total_units_sold,
-    AVG(p.price) AS avg_price,
-    SUM(oi.quantity * p.price) AS total_revenue
-  FROM categories c
-  JOIN products p ON c.category_id = p.category_id
-  JOIN order_items oi ON p.product_id = oi.product_id
-  GROUP BY c.category_id, c.category_name;`,
-    },
-    {
-      id: "9",
-      title: "Prodotti Non Venduti",
-      description: "Elenca i prodotti che non sono mai stati venduti.",
-      code: `SELECT
-    p.product_id,
-    p.product_name
-  FROM products p
-  WHERE NOT EXISTS (
-      SELECT 1
-      FROM order_items oi
-      WHERE oi.product_id = p.product_id
-  );`,
-    },
-  ];
+  // Rimuove l'overlay esistente se presente
+  const existingOverlay = document.getElementById("sandbox-overlay");
+  if (existingOverlay) {
+    existingOverlay.remove();
+  }
 
+  // HTML per l'iframe
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Code Output</title>
+     <!-- Bootstrap CSS -->
+   <link
+     rel="stylesheet"
+     href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+   />
+ </head>
+ <body>
+     ${output}
+ </body>
+</html>
+`;
+
+  // Imposta il contenuto dell'iframe
+  if (iframeRef.current) {
+    iframeRef.current.srcdoc = html;
+  }
+
+  // Funzione per gestire la selezione di un esercizio
   const handleExerciseSelect = (exercise: Exercise) => {
     setSelectedExercise(exercise);
     setCode(exercise.code);
     setOutput(null);
   };
 
-  const handleBackToExercises = () => {
-    setSelectedExercise(null);
-    setCode("");
-    setOutput(null);
+  // Esercizi da visualizzare nella pagina corrente
+  const exercisesToDisplay = exercises.slice(
+    (currentPage - 1) * exercisesPerPage,
+    currentPage * exercisesPerPage
+  );
+
+  // Numero totale di pagine
+  const totalPages = Math.ceil(exercises.length / exercisesPerPage);
+
+  // Funzione per andare alla pagina successiva
+  const goToNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
+  // Funzione per andare alla pagina precedente
+  const goToPreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  // Render del componente
   return (
     <>
       <div className="flex gap-4 p-1 bg-[#db7432] text-white flex items-center h-[50px]">
@@ -184,9 +135,32 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
       <div className="p-4 grid grid-cols-7 gap-4">
         <div className="col-span-2 bg-gray-100 p-4 rounded-lg">
           <h2 className="text-[16px] font-bold">Esercizi SQL</h2>
+
+          <div className="border-t-1 border-dashed border-gray-300 h-1 mt-4"></div>
+
+          <div className="mt-4 mb-4 flex justify-between">
+            <button
+              className="bg-gray-500 text-white rounded"
+              onClick={goToPreviousPage}
+              disabled={currentPage === 1}
+            >
+              <IoCaretBackCircle className="text-[17px]" />
+            </button>
+            <span className="text-[12px]">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              className="bg-gray-500 text-white rounded"
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages}
+            >
+              <IoCaretForwardCircle className="text-[17px]" />
+            </button>
+          </div>
+
           <div className="border-t border-dashed border-gray-300 h-1 mt-4"></div>
           <ul className="mt-2">
-            {exercises.map((exercise) => (
+            {exercisesToDisplay.map((exercise) => (
               <li
                 key={exercise.id}
                 onClick={() => {
@@ -249,6 +223,7 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
           </div>
         )}
 
+        {/* Output */}
         <div className="col-span-1 bg-gray-900 text-white p-4 rounded-lg">
           <div className="flex items-center gap-2">
             <IoMdCodeWorking className="text-[25px] font-bold" />
@@ -256,6 +231,17 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
           </div>
           {output && <div>{output}</div>}
         </div>
+      </div>
+
+      {/* Overlay ed iframe per l'output del codice */}
+      <div
+        className={`${classes.overlay}`}
+        style={{ display: modal ? "flex" : "none" }}
+      >
+        <div onClick={() => setModal(false)} className={classes.close}>
+          <IoMdCloseCircle />
+        </div>
+        <iframe ref={iframeRef} title="Output" className={classes.output} />
       </div>
     </>
   );
