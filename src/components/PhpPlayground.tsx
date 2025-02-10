@@ -37,7 +37,7 @@ const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const exercisesPerPage = 5;
+  const exercisesPerPage = 12;
 
   // Funzione per eseguire il codice
   const runCode = async () => {

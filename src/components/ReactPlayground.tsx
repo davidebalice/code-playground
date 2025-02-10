@@ -38,7 +38,7 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
   const [modal, setModal] = useState(false);
   const [output, setOutput] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const exercisesPerPage = 5;
+  const exercisesPerPage = 12;
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Funzione per eseguire il codice

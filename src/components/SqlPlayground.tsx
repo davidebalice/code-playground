@@ -39,7 +39,7 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
   const [output, setOutput] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const exercisesPerPage = 5;
+  const exercisesPerPage = 12;
 
   // Funzione per eseguire il codice SQL
   const runCode = async () => {

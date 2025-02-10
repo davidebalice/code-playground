@@ -265,8 +265,505 @@ console.log(sumArray([1, 2, 3, 4, 5]));
       console.log(chunkArray([1, 2, 3, 4, 5, 6, 7], 3));
             `,
       },
+
+      {
+        id: uuidv4(),
+        title: "Usare split su una stringa",
+        description: "Dividi una stringa in un array di parole.",
+        code: `
+      const frase = "Hello world! How are you?";
+      const parole = frase.split(" ");
+      console.log(parole);
+            `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Pop - rimuovi elemento",
+        description: "Rimuove l'ultimo elemento da un array e lo restituisce.",
+        code: `
+    const numeri = [1, 2, 3, 4, 5];
+    console.log(numeri.pop());
+    console.log(numeri);
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Pop - Esempio 2",
+        description: "Rimuove l'ultimo elemento e lo salva in una variabile.",
+        code: `
+    const frutta = ["mela", "banana", "arancia"];
+    const ultimo = frutta.pop();
+    console.log(ultimo);
+    console.log(frutta);
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Pop - Esempio 3",
+        description: "Usa pop in un ciclo finché l'array non è vuoto.",
+        code: `
+    const stack = [10, 20, 30, 40];
+    while (stack.length > 0) {
+      console.log(stack.pop());
+    }
+    console.log(stack);
+    if(stack.length === 0){
+        console.log("Stack terminato");
+    }
+        `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Push - aggiungi alla fine",
+        description: "Aggiungi un elemento alla fine dell'array.",
+        code: `
+      const numeri = [1, 2, 3];
+      numeri.push(4);
+      console.log(numeri);
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Shift - rimuovi primo elemento",
+        description: "Rimuove il primo elemento da un array e lo restituisce.",
+        code: `
+    const numeri = [1, 2, 3, 4, 5];
+    console.log(numeri.shift()); // 1
+    console.log(numeri); // [2, 3, 4, 5]
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Shift - Esempio 2",
+        description: "Rimuove il primo elemento di una lista di nomi.",
+        code: `
+    const nomi = ["Alice", "Bob", "Charlie"];
+    const primo = nomi.shift();
+    console.log(primo); // "Alice"
+    console.log(nomi); // ["Bob", "Charlie"]
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Shift - Esempio 3",
+        description: "Usa shift per elaborare una coda.",
+        code: `
+    const coda = ["richiesta1", "richiesta2", "richiesta3"];
+    while (coda.length > 0) {
+      console.log("Elaborazione:", coda.shift());
+    }
+    console.log(coda);
+    if(coda.length === 0){
+        console.log("Coda terminata");
+    }
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Unshift - aggiungi ad inizio array",
+        description: "Aggiungi un elemento all'inizio di un array.",
+        code: `
+      const numeri = [2, 3, 4];
+      numeri.unshift(1);
+      console.log(numeri);
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Map - operazioni matematiche",
+        description: "Moltiplica ogni numero in un array per 2.",
+        code: `
+      const numeri = [1, 2, 3, 4];
+      const doppi = numeri.map(num => num * 2);
+      console.log(doppi);
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Filter - filtrare numeri",
+        description: "Filtra i numeri pari da un array.",
+        code: `
+      const numeri = [1, 2, 3, 4, 5, 6];
+      const pari = numeri.filter(num => num % 2 === 0);
+      console.log(pari);
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Reduce - operazioni matematiche",
+        description: "Somma tutti i numeri di un array.",
+        code: `
+      const numeri = [1, 2, 3, 4];
+      const somma = numeri.reduce((acc, num) => acc + num, 0);
+      console.log(somma);
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Usare find",
+        description: "Trova il primo numero maggiore di 10.",
+        code: `
+      const numeri = [4, 9, 12, 15];
+      const maggioreDiDieci = numeri.find(num => num > 10);
+      console.log(maggioreDiDieci);
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "FindIndex - Trova l'indice primo numero pari",
+        description: "Trova l'indice del primo numero pari.",
+        code: `
+      const numeri = [1, 3, 4, 7, 8];
+      const indicePari = numeri.findIndex(num => num % 2 === 0);
+      console.log(indicePari);
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Includes - verifica valore",
+        description: "Verifica se un array contiene un certo valore.",
+        code: `
+      const frutta = ["mela", "banana", "arancia"];
+      console.log(frutta.includes("banana"));
+      console.log(frutta.includes("uva"));
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Slice - estrarre parte array",
+        description: "Estrai una parte di un array.",
+        code: `
+      const numeri = [1, 2, 3, 4, 5];
+      const parte = numeri.slice(1, 4);
+      console.log(parte);
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Slice - copia array",
+        description: "Copia array per intero.",
+        code: `
+      const numeri = [1, 2, 3, 4, 5];
+      const numeri2 = numeri.slice();
+      console.log(numeri);
+      console.log(numeri2);
+            `,
+      },
+      {
+        id: uuidv4(),
+        title: "Splice - rimuove ed aggiunge elementi",
+        description: "Rimuovi elementi da un array e inseriscine altri.",
+        code: `
+      const numeri = [1, 2, 3, 4, 5];
+      numeri.splice(2, 1, 99);
+      console.log(numeri);
+
+      const numeri2 = [1, 2, 3, 4, 5];
+      numeri2.splice(2, 1);
+      console.log(numeri2);
+            `,
+      },
+
+      
+     
+      {
+        id: uuidv4(),
+        title: "Splice - Esempio 2",
+        description: "Sostituisce un elemento in un array.",
+        code: `
+    const colori = ["rosso", "verde", "blu"];
+    colori.splice(1, 1, "giallo");
+    console.log(colori);
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Splice - Esempio 3",
+        description: "Aggiunge elementi in una posizione specifica.",
+        code: `
+    const numeri = [1, 2, 3, 5];
+    numeri.splice(3, 0, 4);
+    console.log(numeri);
+        `,
+      },
     ],
   },
+
+  /*
+      category: "Array",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Numero più grande",
+        description:
+          "Crea una funzione che prenda un array di numeri e restituisca il più grande",
+        code: `
+const numeri = [3, 7, 2, 10, 5];
+
+function trovaMassimo(numeri: number[]): number | null {
+    if (numeri.length === 0) return null;
+    return Math.max(...numeri);
+}
+
+console.log(trovaMassimo(numeri));
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Somma numeri in array",
+        description: "Crea una funzione che somma tutti i numeri in array",
+        code: `
+function sum(numbers: number[]): number {
+  return numbers.reduce((acc, num) => acc + num, 0);
+}
+
+console.log(sum([1, 2, 3, 4]));
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Filtrare numeri pari",
+        description:
+          "Crea una funzione che restituisca solo i numeri pari di un array",
+        code: `
+function numeriPari(numbers: number[]): number[] {
+  return numbers.filter(num => num % 2 === 0);
+}
+
+console.log(numeriPari([1, 2, 3, 4, 5, 6]));
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Invertire un array",
+        description: "Crea una funzione che inverta un array",
+        code: `
+function invertiArray(arr: any[]): any[] {
+  return arr.reverse();
+}
+
+console.log(invertiArray([1, 2, 3, 4, 5]));
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Prodotto dei numeri",
+        description:
+          "Crea una funzione che restituisca il prodotto di tutti i numeri in un array",
+        code: `
+function product(numbers: number[]): number {
+  return numbers.reduce((acc, num) => acc * num, 1);
+}
+
+console.log(product([1, 2, 3, 4]));
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Mescolare un array",
+        description:
+          "Crea una funzione che mescoli casualmente gli elementi di un array",
+        code: `
+function shuffleArray(arr: any[]): any[] {
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+console.log(shuffleArray([1, 2, 3, 4, 5]));
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Rimuovere elementi falsy",
+        description:
+          "Crea una funzione che rimuova tutti i valori falsy da un array",
+        code: `
+function rimuoviFalsy(arr: any[]): any[] {
+  return arr.filter(Boolean);
+}
+
+console.log(rimuoviFalsy([0, 1, false, 2, '', 3, null, 'ciao']));
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Flatten di un array annidato",
+        description:
+          "Crea una funzione che appiattisca un array annidato di qualsiasi profondità",
+        code: `
+function flattenArray(arr: any[]): any[] {
+  return arr.flat(Infinity);
+}
+
+console.log(flattenArray([1, [2, [3, 4]], 5]));
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Trova gli elementi comuni in due array",
+        description:
+          "Crea una funzione che trovi gli elementi comuni tra due array",
+        code: `
+function trovaComuni(arr1: any[], arr2: any[]): any[] {
+  return arr1.filter(value => arr2.includes(value));
+}
+
+console.log(trovaComuni([1, 2, 3], [2, 3, 4]));
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Dividere un array in chunk",
+        description:
+          "Crea una funzione che divida un array in sotto-array di una data dimensione",
+        code: `
+function chunkArray(arr: any[], size: number): any[][] {
+  let result = [];
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+  return result;
+}
+
+console.log(chunkArray([1, 2, 3, 4, 5, 6, 7], 3));
+`,
+      },
+    ],
+
+  */
+
+  /*
+category: "Array",
+exercises: [
+  {
+    id: uuidv4(),
+    title: "Metodo pop",
+    description: "Rimuove l'ultimo elemento da un array e lo restituisce.",
+    code: `
+const numeri = [1, 2, 3, 4, 5];
+console.log(numeri.pop()); // 5
+console.log(numeri); // [1, 2, 3, 4]
+    `,
+  },
+  {
+    id: uuidv4(),
+    title: "Metodo shift",
+    description: "Rimuove il primo elemento da un array e lo restituisce.",
+    code: `
+const numeri = [1, 2, 3, 4, 5];
+console.log(numeri.shift()); // 1
+console.log(numeri); // [2, 3, 4, 5]
+    `,
+  },
+  {
+    id: uuidv4(),
+    title: "Metodo splice",
+    description: "Rimuove o sostituisce elementi in un array.",
+    code: `
+const numeri = [1, 2, 3, 4, 5];
+numeri.splice(2, 1); // Rimuove il numero in posizione 2
+console.log(numeri); // [1, 2, 4, 5]
+    `,
+  },
+  {
+    id: uuidv4(),
+    title: "Metodo push",
+    description: "Aggiunge uno o più elementi alla fine di un array.",
+    code: `
+const numeri = [1, 2, 3];
+numeri.push(4, 5);
+console.log(numeri); // [1, 2, 3, 4, 5]
+    `,
+  },
+  {
+    id: uuidv4(),
+    title: "Metodo unshift",
+    description: "Aggiunge uno o più elementi all'inizio di un array.",
+    code: `
+const numeri = [2, 3, 4];
+numeri.unshift(0, 1);
+console.log(numeri); // [0, 1, 2, 3, 4]
+    `,
+  },
+  {
+    id: uuidv4(),
+    title: "Metodo slice",
+    description: "Restituisce una porzione di un array senza modificarlo.",
+    code: `
+const numeri = [1, 2, 3, 4, 5];
+const parte = numeri.slice(1, 4);
+console.log(parte); // [2, 3, 4]
+console.log(numeri); // [1, 2, 3, 4, 5]
+    `,
+  },
+  {
+    id: uuidv4(),
+    title: "Metodo concat",
+    description: "Unisce due o più array in uno nuovo.",
+    code: `
+const arr1 = [1, 2];
+const arr2 = [3, 4];
+const arr3 = arr1.concat(arr2);
+console.log(arr3); // [1, 2, 3, 4]
+    `,
+  },
+  {
+    id: uuidv4(),
+    title: "Metodo map",
+    description: "Applica una funzione a ogni elemento dell'array restituendo un nuovo array.",
+    code: `
+const numeri = [1, 2, 3, 4];
+const quadrati = numeri.map(num => num * num);
+console.log(quadrati); // [1, 4, 9, 16]
+    `,
+  },
+  {
+    id: uuidv4(),
+    title: "Metodo filter",
+    description: "Restituisce un nuovo array contenente solo gli elementi che soddisfano una condizione.",
+    code: `
+const numeri = [1, 2, 3, 4, 5];
+const pari = numeri.filter(num => num % 2 === 0);
+console.log(pari); // [2, 4]
+    `,
+  },
+  {
+    id: uuidv4(),
+    title: "Metodo reduce",
+    description: "Riduce l'array a un singolo valore tramite una funzione di accumulo.",
+    code: `
+const numeri = [1, 2, 3, 4];
+const somma = numeri.reduce((acc, num) => acc + num, 0);
+console.log(somma); // 10
+    `,
+  },
+],
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
 
   {
     category: "Strings",
