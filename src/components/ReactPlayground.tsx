@@ -222,29 +222,33 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
 
               <div className="border-t-1 border-dashed border-gray-300 h-1 mt-4"></div>
 
-              <div className="mt-4 mb-4 flex justify-between">
-                <button
-                  className="bg-gray-500 text-white rounded"
-                  onClick={goToPreviousPage}
-                  disabled={currentPage === 1}
-                >
-                  <IoCaretBackCircle className="text-[17px]" />
-                </button>
-                <span className="text-[12px]">
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button
-                  className="bg-gray-500 text-white rounded"
-                  onClick={goToNextPage}
-                  disabled={currentPage === totalPages}
-                >
-                  <IoCaretForwardCircle className="text-[17px]" />
-                </button>
-              </div>
+              {totalPages > 1 && (
+                <>
+                  <div className="mt-4 mb-4 flex justify-between">
+                    <button
+                      className="bg-gray-500 text-white rounded"
+                      onClick={goToPreviousPage}
+                      disabled={currentPage === 1}
+                    >
+                      <IoCaretBackCircle className="text-[17px]" />
+                    </button>
+                    <span className="text-[12px]">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                      className="bg-gray-500 text-white rounded"
+                      onClick={goToNextPage}
+                      disabled={currentPage === totalPages}
+                    >
+                      <IoCaretForwardCircle className="text-[17px]" />
+                    </button>
+                  </div>
 
-              <div className="border-t-1 border-dashed border-gray-300 h-1 mt-4"></div>
+                  <div className="border-t-1 border-dashed border-gray-300 h-1 mt-4"></div>
+                </>
+              )}
 
-              <ul>
+              <ul className="mt-2">
                 {exercisesToDisplay.map((exercise) => (
                   <li
                     key={exercise.id}

@@ -37,6 +37,7 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
   const [code, setCode] = useState("");
   const [modal, setModal] = useState(false);
   const [output, setOutput] = useState<string | null>(null);
+  const [output2, setOutput2] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const exercisesPerPage = 12;
@@ -59,9 +60,11 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
       // Ricezione dell'output dal backend
       const data = await response.json();
       if (data.error) {
+        setOutput2([]);
         setOutput(`Errore: ${data.error}`);
       } else {
         setOutput(JSON.stringify(data, null, 2));
+        setOutput2(data.results);
       }
     } catch (error: unknown) {
       setOutput("Errore nell'esecuzione: " + (error as Error).message);
@@ -87,12 +90,89 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
      rel="stylesheet"
      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
    />
+   <style>
+    .border{
+      border-collapse: collapse;
+      width: 100%;
+      border:1px solid #ddd;
+    }
+   </style>
  </head>
  <body>
-     ${output}
- </body>
+  <h5>Data Output</h5>
+  <table cellpadding="4" cellspacing="4" border="1" class="border">
+    <thead>
+      <tr>
+        ${Object.keys(output2[0] || {})
+          .map((key) => `<th>${key}</th>`)
+          .join("")}
+      </tr>
+    </thead>
+    <tbody>
+      ${output2
+        .map(
+          (obj) => `
+        <tr>
+          ${Object.entries(obj)
+            .map(([key, value], i) => {
+              if (
+                typeof key === "string" &&
+                ["id", "quantity", "num_products",	"total_units_sold"].some((substring) => key.toLowerCase().includes(substring))
+              ) {
+                return `<td>${value}</td>`;
+              }
+              if (
+                typeof key === "string" &&
+                ["price", "total"].some((substring) => key.toLowerCase().includes(substring))
+              ) {
+                return `<td>€ ${value}</td>`;
+              }
+              if (typeof value === "string" && !isNaN(Date.parse(value))) {
+                return "<td>" + new Date(value).toLocaleDateString() + "</td>";
+              }
+              return `<td>${value}</td>`;
+            })
+            .join("")}
+        </tr>
+      `
+        )
+        .join("")}
+    </tbody>
+  </table>
+</body>
 </html>
 `;
+
+  /*
+{data.map((obj, index) => (
+  <tr key={index}>
+   {Object.entries(obj).map(([key, value], i) => (
+      <td key={i}>
+        {(() => {
+          // Controlliamo se la colonna si chiama 'id' per evitare conversioni errate
+          if (key.toLowerCase().includes("id")) {
+            return value;
+          }
+          
+          // Controlliamo se è un timestamp realistico (> 1970)
+          if (typeof value === "number" && value > 1000000000 && value < 9999999999999) {
+            return new Date(value).toLocaleDateString();
+          }
+
+          // Controlliamo se è una stringa che rappresenta una data
+          if (typeof value === "string" && !isNaN(Date.parse(value))) {
+            return new Date(value).toLocaleDateString();
+          }
+
+          // Se non è una data, restituiamo il valore normale
+          return value;
+        })()}
+      </td>
+    ))}
+  </tr>
+))}
+
+*/
 
   // Imposta il contenuto dell'iframe
   if (iframeRef.current) {
@@ -138,27 +218,32 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
 
           <div className="border-t-1 border-dashed border-gray-300 h-1 mt-4"></div>
 
-          <div className="mt-4 mb-4 flex justify-between">
-            <button
-              className="bg-gray-500 text-white rounded"
-              onClick={goToPreviousPage}
-              disabled={currentPage === 1}
-            >
-              <IoCaretBackCircle className="text-[17px]" />
-            </button>
-            <span className="text-[12px]">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              className="bg-gray-500 text-white rounded"
-              onClick={goToNextPage}
-              disabled={currentPage === totalPages}
-            >
-              <IoCaretForwardCircle className="text-[17px]" />
-            </button>
-          </div>
+          {totalPages > 1 && (
+            <>
+              <div className="mt-4 mb-4 flex justify-between">
+                <button
+                  className="bg-gray-500 text-white rounded"
+                  onClick={goToPreviousPage}
+                  disabled={currentPage === 1}
+                >
+                  <IoCaretBackCircle className="text-[17px]" />
+                </button>
+                <span className="text-[12px]">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  className="bg-gray-500 text-white rounded"
+                  onClick={goToNextPage}
+                  disabled={currentPage === totalPages}
+                >
+                  <IoCaretForwardCircle className="text-[17px]" />
+                </button>
+              </div>
 
-          <div className="border-t border-dashed border-gray-300 h-1 mt-4"></div>
+              <div className="border-t border-dashed border-gray-300 h-1 mt-4"></div>
+            </>
+          )}
+
           <ul className="mt-2">
             {exercisesToDisplay.map((exercise) => (
               <li

@@ -11,7 +11,7 @@ export const exercises = [
           "Crea un componente che utilizza useState per gestire un contatore.",
         code: `import { useState } from 'react';
 
- export const Counter = () => {
+export const Counter = () => {
   const [count, setCount] = useState(0);
 
   return (
@@ -20,8 +20,7 @@ export const exercises = [
       <button onClick={() => setCount(count + 1)}>Incrementa</button>
     </div>
   );
- };
-`,
+};`,
       },
       {
         id: uuidv4(),
@@ -39,7 +38,60 @@ export const Timer = () => {
   }, []);
 
   return <p>Tempo trascorso: {time}s</p>;
-}`,
+};`,
+      },
+      {
+        id: uuidv4(),
+        title: "Uso di useContext",
+        description:
+          "Crea un contesto globale per gestire lo stato di autenticazione dell'utente.",
+        code: `import { createContext, useContext, useState } from 'react';
+
+const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => useContext(AuthContext);`,
+      },
+      {
+        id: uuidv4(),
+        title: "Uso di useReducer",
+        description:
+          "Gestisci lo stato complesso usando useReducer invece di useState.",
+        code: `import { useReducer } from 'react';
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      return state;
+  }
+}
+
+export const Counter = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      <p>Contatore: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>Incrementa</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>Decrementa</button>
+    </div>
+  );
+};`,
       },
     ],
   },
@@ -264,17 +316,23 @@ export const Todos = () => {
         title: "Componente con props",
         description:
           "Crea un componente che accetta delle props per visualizzare un messaggio.",
-        code: `function Greeting({ name }) {
-  return <h1>Ciao, {name}!</h1>;
+        code: `
+const Greeting = ({ name, surname }) => {
+  return <h3>Benvenuto {name} {surname}</h3>;
 }
-export default Greeting;`,
+
+export const App = () => {
+  return <Greeting name="Mario" surname="Rossi" />;
+};`,
       },
       {
         id: uuidv4(),
         title: "Lista dinamica",
         description:
           "Crea un componente che riceve un array di elementi e li visualizza.",
-        code: `function List({ items }) {
+        code: `export const List = () => {
+  const items = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"];
+
   return (
     <ul>
       {items.map((item, index) => (
@@ -282,8 +340,7 @@ export default Greeting;`,
       ))}
     </ul>
   );
-}
-export default List;`,
+}`,
       },
     ],
   },
@@ -324,30 +381,68 @@ export const Counter = () => {
   },
 
   {
-    category: "Gestione input con state",
+    category: "Array",
     exercises: [
       {
         id: uuidv4(),
-        title: "Uso di TextInput",
-        description: "Gestione input con state",
+        title: "Estrai i dati da un array",
+        description:
+          "Estrai i dati da un array senza conoscere chiavi o valori",
         code: `
-export const TextInput = () => {
-  const [text, setText] = useState("");
-  return <input value={text} onChange={(e) => setText(e.target.value)} />;
-};
-`,
-      },
+import React from "react";
 
-      {
-        id: uuidv4(),
-        title: "Utilizzo di useRef",
-        description: "Riferimenti a elementi con useRef",
-        code: `
-export const FocusInput = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  return <button onClick={() => inputRef.current?.focus()}>Focus</button>;
-};
-`,
+
+export const ArrayCycle = () => {
+const data = [ { "user_id": "1", "username": "mariorossi", "order_id": "1", "order_date": "2025-02-01 20:27:30" }, { "user_id": "2", "username": "luigiverdi", "order_id": "2", "order_date": "2025-02-01 20:27:30" }, { "user_id": "1", "username": "mariorossi", "order_id": "3", "order_date": "2025-02-01 20:27:30" }, { "user_id": "3", "username": "giuseppeneri", "order_id": "4", "order_date": "2025-02-01 20:27:30" }, { "user_id": "4", "username": "marcobianchi", "order_id": "5", "order_date": "2025-02-01 20:27:30" } ];
+
+  if (!data || data.length === 0) {
+    return <p>Nessun dato disponibile</p>;
+  }
+
+  return (
+    <div>
+      <h2>Data Output</h2>
+      <table cellPadding="8" cellSpacing="8">
+        <thead>
+          <tr>
+            {Object.keys(data[0] || {}).map((key) => (
+              <th key={key}>{key}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((obj, index) => (
+            <tr key={index}>
+             {Object.entries(obj).map(([key, value], i) => (
+                <td key={i}>
+                  {(() => {
+                    // Controlliamo se la colonna si chiama 'id' per evitare conversioni errate
+                    if (key.toLowerCase().includes("id")) {
+                      return value;
+                    }
+                    
+                    // Controlliamo se è un timestamp realistico (> 1970)
+                    if (typeof value === "number" && value > 1000000000 && value < 9999999999999) {
+                      return new Date(value).toLocaleDateString();
+                    }
+
+                    // Controlliamo se è una stringa che rappresenta una data
+                    if (typeof value === "string" && !isNaN(Date.parse(value))) {
+                      return new Date(value).toLocaleDateString();
+                    }
+
+                    // Se non è una data, restituiamo il valore normale
+                    return value;
+                  })()}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};`,
       },
     ],
   },
@@ -519,6 +614,81 @@ export const ComplexForm = () => {
   );
 };
 `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Form con gestione dei file",
+        description: "Crea un form che permette agli utenti di caricare file.",
+        code: `import { useState } from 'react';
+
+export const FileUploadForm = () => {
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('File selezionato:', file);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Carica un file:
+        <input type="file" onChange={handleFileChange} />
+      </label>
+      <button type="submit">Carica</button>
+    </form>
+  );
+};`,
+      },
+      {
+        id: uuidv4(),
+        title: "Form con gestione dei checkbox",
+        description:
+          "Crea un form che permette la selezione di più opzioni con checkbox.",
+        code: `import { useState } from 'react';
+
+export const CheckboxForm = () => {
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const handleCheckboxChange = (event) => {
+    const { value } = event.target;
+    setSelectedOptions((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    alert('Opzioni selezionate: ' + selectedOptions.join(', '));
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        <input
+          type="checkbox"
+          value="Option 1"
+          onChange={handleCheckboxChange}
+        />
+        Opzione 1
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          value="Option 2"
+          onChange={handleCheckboxChange}
+        />
+        Opzione 2
+      </label>
+      <button type="submit">Invia</button>
+    </form>
+  );
+};`,
       },
     ],
   },
@@ -810,6 +980,364 @@ class ErrorBoundary extends Component {
 
 export default ErrorBoundary;
 `,
+      },
+    ],
+  },
+  {
+    category: "State Management",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Gestione stato globale con Redux",
+        description:
+          "Imposta una store Redux per gestire lo stato di una lista di oggetti.",
+        code: `import { createStore } from 'redux';
+
+// Reducer
+const initialState = { items: [] };
+function reducer(state = initialState, action) {
+  switch (action.type) {
+    case 'ADD_ITEM':
+      return { ...state, items: [...state.items, action.payload] };
+    default:
+      return state;
+  }
+}
+
+// Store
+const store = createStore(reducer);
+
+store.dispatch({ type: 'ADD_ITEM', payload: 'Elemento 1' });
+console.log(store.getState());`,
+      },
+      {
+        id: uuidv4(),
+        title: "Gestione stato con Context API",
+        description:
+          "Crea un contesto globale per gestire un tema scuro/chiaro in tutta l'app.",
+        code: `import { createContext, useContext, useState } from 'react';
+
+const ThemeContext = createContext();
+
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('light');
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+export const useTheme = () => useContext(ThemeContext);`,
+      },
+    ],
+  },
+  {
+    category: "Performance",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Memorizzazione del componente con React.memo",
+        description:
+          "Usa React.memo per ottimizzare il rendering di un componente.",
+        code: `import React, { useState } from 'react';
+
+const Button = React.memo(({ onClick }) => {
+  console.log('Rendering Button');
+  return <button onClick={onClick}>Clicca</button>;
+});
+
+export const Counter = () => {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <Button onClick={() => setCount(count + 1)} />
+      <p>Contatore: {count}</p>
+    </div>
+  );
+};`,
+      },
+      {
+        id: uuidv4(),
+        title: "Lazy Loading dei componenti",
+        description:
+          "Implementa il caricamento ritardato di un componente usando React.lazy.",
+        code: `import React, { Suspense } from 'react';
+
+const LazyComponent = React.lazy(() => import('./LazyComponent'));
+
+export const App = () => {
+  return (
+    <Suspense fallback={<div>Caricamento...</div>}>
+      <LazyComponent />
+    </Suspense>
+  );
+};`,
+      },
+    ],
+  },
+  {
+    category: "Testing",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Test di un componente con Jest",
+        description: "Scrivi un test unitario per un componente Counter.",
+        code: `import { render, screen, fireEvent } from '@testing-library/react';
+import { Counter } from './Counter';
+
+test('renders the counter and increments on button click', () => {
+  render(<Counter />);
+  const button = screen.getByText(/Incrementa/i);
+  const counter = screen.getByText(/Contatore: 0/i);
+  fireEvent.click(button);
+  expect(screen.getByText(/Contatore: 1/i)).toBeInTheDocument();
+});`,
+      },
+      {
+        id: uuidv4(),
+        title: "Test di un hook personalizzato con Jest",
+        description: "Scrivi un test per un hook personalizzato useCounter.",
+        code: `import { renderHook, act } from '@testing-library/react-hooks';
+import { useCounter } from './useCounter';
+
+test('should increment counter', () => {
+  const { result } = renderHook(() => useCounter());
+  expect(result.current.count).toBe(0);
+  act(() => {
+    result.current.increment();
+  });
+  expect(result.current.count).toBe(1);
+});`,
+      },
+    ],
+  },
+  {
+    category: "Routing",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Gestione delle rotte con React Router",
+        description: "Crea una navigazione con React Router tra due pagine.",
+        code: `import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+
+const Home = () => <h2>Home</h2>;
+const About = () => <h2>About</h2>;
+
+export const App = () => {
+  return (
+    <Router>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+      </nav>
+      <Route path="/" exact component={Home} />
+      <Route path="/about" component={About} />
+    </Router>
+  );
+};`,
+      },
+    ],
+  },
+
+  {
+    category: "Advanced Concepts",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Gestione di errori con Error Boundaries",
+        description:
+          "Crea un componente che gestisce gli errori in modo elegante usando Error Boundaries.",
+        code: `import React, { Component } from 'react';
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, info) {
+    console.log(error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Qualcosa è andato storto.</h1>;
+    }
+    return this.props.children;
+  }
+}
+
+export const App = () => {
+  return (
+    <ErrorBoundary>
+      <ComponentThatMayThrow />
+    </ErrorBoundary>
+  );
+};`,
+      },
+      {
+        id: uuidv4(),
+        title: "Memoizzazione delle funzioni con useCallback",
+        description:
+          "Usa useCallback per ottimizzare la memoizzazione delle funzioni in un componente.",
+        code: `import { useState, useCallback } from 'react';
+
+export const ParentComponent = () => {
+  const [count, setCount] = useState(0);
+
+  const increment = useCallback(() => setCount(count + 1), [count]);
+
+  return (
+    <div>
+      <ChildComponent increment={increment} />
+      <p>Contatore: {count}</p>
+    </div>
+  );
+};
+
+const ChildComponent = React.memo(({ increment }) => {
+  console.log('Rendering Child');
+  return <button onClick={increment}>Incrementa</button>;
+});`,
+      },
+    ],
+  },
+  {
+    category: "Performance",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Ottimizzazione del rendering con React.memo e useCallback",
+        description:
+          "Usa React.memo e useCallback per evitare rendering non necessari.",
+        code: `import React, { useState, useCallback } from 'react';
+
+const ChildComponent = React.memo(({ onClick }) => {
+  console.log('Rendering Child');
+  return <button onClick={onClick}>Incrementa</button>;
+});
+
+export const ParentComponent = () => {
+  const [count, setCount] = useState(0);
+
+  const increment = useCallback(() => setCount(count + 1), [count]);
+
+  return (
+    <div>
+      <ChildComponent onClick={increment} />
+      <p>Contatore: {count}</p>
+    </div>
+  );
+};`,
+      },
+    ],
+  },
+  {
+    category: "Routing",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Routing dinamico con React Router",
+        description:
+          "Crea un'app che gestisce le rotte dinamiche con React Router.",
+        code: `import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+
+const Home = () => <h2>Home</h2>;
+const Profile = ({ match }) => <h2>Profilo di {match.params.username}</h2>;
+
+export const App = () => {
+  return (
+    <Router>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/profile/johndoe">Profilo di John</Link>
+      </nav>
+      <Route path="/" exact component={Home} />
+      <Route path="/profile/:username" component={Profile} />
+    </Router>
+  );
+};`,
+      },
+    ],
+  },
+  {
+    category: "Component Design",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Componente di lista riutilizzabile",
+        description:
+          "Crea un componente che renderizza una lista di elementi e supporta l'ordinamento.",
+        code: `import { useState } from 'react';
+
+export const SortableList = ({ items }) => {
+  const [sortedItems, setSortedItems] = useState(items);
+
+  const sortItems = () => {
+    setSortedItems((prevItems) =>
+      [...prevItems].sort((a, b) => a.localeCompare(b))
+    );
+  };
+
+  return (
+    <div>
+      <button onClick={sortItems}>Ordina</button>
+      <ul>
+        {sortedItems.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};`,
+      },
+    ],
+  },
+  {
+    category: "TypeScript",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Componenti in TypeScript con props",
+        description:
+          "Crea un componente in TypeScript che accetta delle props fortemente tipizzate.",
+        code: `import React from 'react';
+
+interface Props {
+  name: string;
+  age: number;
+}
+
+const Person: React.FC<Props> = ({ name, age }) => {
+  return <div>{name} ha {age} anni</div>;
+};
+
+export default Person;`,
+      },
+      {
+        id: uuidv4(),
+        title: "Gestione dello stato con useState in TypeScript",
+        description:
+          "Usa useState con TypeScript per tipizzare lo stato di un contatore.",
+        code: `import { useState } from 'react';
+
+export const Counter = () => {
+  const [count, setCount] = useState<number>(0);
+
+  return (
+    <div>
+      <p>Contatore: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Incrementa</button>
+    </div>
+  );
+};`,
       },
     ],
   },
