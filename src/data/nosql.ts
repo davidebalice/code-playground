@@ -10,21 +10,27 @@ export const exercises: Exercise[] = [
     id: "1",
     title: "Ottenere tutti gli utenti",
     description: "Recupera tutti gli utenti dalla collezione MongoDB.",
-    code: `const users = await User.find();\n  console.log(users);`,
+    code: `const users = await User.find();
+    console.log(users);`,
   },
 
   {
     id: "2",
     title: "Filtrare utenti per età superiore a 25",
     description: "Seleziona gli utenti con un'età superiore a 25 anni.",
-    code: `const users = await User.find({ age: { $gt: 25 } });
-      console.log(users);`,
+    code: `
+const users = await User.find({ age: { $gt: 25 } });
+console.log(users);`,
   },
   {
     id: "3",
     title: "Cercare un utente per nome",
     description: "Trova un utente specifico cercandolo per nome.",
-    code: `async function getUserByName(name) {\n  const user = await User.findOne({ name });\n  console.log(user);\n}\n\ngetUserByName('Alice');`,
+    code: `
+const user = await User.findOne({ name: "Alice" });
+console.log(user);`,
+
+    
   },
   {
     id: "4",

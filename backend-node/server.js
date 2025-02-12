@@ -78,7 +78,16 @@ async function runQuerySafely(code) {
       User,
       Product,
       Order,
-      console: { log: (...args) => logs.push(args.map(String).join(" ")) },
+      console: {
+        log: (...args) => {
+          const formattedLogs = args.map((arg) =>
+            typeof arg === "object"
+              ? JSON.stringify(arg, null, 2).replace(/\n/g, "")
+              : String(arg)
+          );
+          logs.push(...formattedLogs);
+        },
+      },
     };
 
     const asyncFunction = new Function(
@@ -106,25 +115,13 @@ app.use(cors());
 app.use(bodyParser.json());
 
 /*
-app.get("/test", async (req, res) => {
-  try {
-    const users = await User.find();
-    console.log(users);
-    res.send(users);
-  } catch (error) {
-    res.status(500).send("Errore: " + error.message);
-  }
-});
-*/
-
-/*
 app.get("/seed", async (req, res) => {
   try {
     const newUser = new User({
-      name: "Alice",
-      surname: "Bianchi",
-      email: "alice@bianchi.it",
-      age: 30,
+      name: "Mario",
+      surname: "Rossi",
+      email: "mario@rossi.it",
+      age: 32,
     });
     await newUser.save();
     res.send("User inserito");
@@ -133,7 +130,6 @@ app.get("/seed", async (req, res) => {
   }
 });
 */
-
 app.post("/execute", async (req, res) => {
   const { code } = req.body;
 
@@ -157,11 +153,8 @@ app.post("/query", async (req, res) => {
   }
 
   const result = await runQuerySafely(code);
-  console.log("result / ");
   console.log(result);
-  console.log("end result / ");
-
-  res.send(result);
+  res.json(result);
 });
 
 app.listen(PORT, () =>

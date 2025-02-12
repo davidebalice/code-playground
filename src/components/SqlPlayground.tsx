@@ -96,10 +96,18 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
       width: 100%;
       border:1px solid #ddd;
     }
+    .output{
+      font-size:18px;
+      border-bottom:1px solid #ddd;
+      padding-bottom:10px;
+      margin-bottom:16px
+    }
    </style>
  </head>
  <body>
-  <h5>Data Output</h5>
+  <div className="flex items-center gap-2">
+    <h1 class="output">Output</h1>
+  </div>
   <table cellpadding="4" cellspacing="4" border="1" class="border">
     <thead>
       <tr>
@@ -117,13 +125,17 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
             .map(([key, value], i) => {
               if (
                 typeof key === "string" &&
-                ["id", "quantity", "num_products",	"total_units_sold"].some((substring) => key.toLowerCase().includes(substring))
+                ["id", "quantity", "num_products", "total_units_sold"].some(
+                  (substring) => key.toLowerCase().includes(substring)
+                )
               ) {
                 return `<td>${value}</td>`;
               }
               if (
                 typeof key === "string" &&
-                ["price", "total"].some((substring) => key.toLowerCase().includes(substring))
+                ["price", "total"].some((substring) =>
+                  key.toLowerCase().includes(substring)
+                )
               ) {
                 return `<td>€ ${value}</td>`;
               }
@@ -324,7 +336,7 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
         style={{ display: modal ? "flex" : "none" }}
       >
         <div onClick={() => setModal(false)} className={classes.close}>
-          <IoMdCloseCircle />
+          <IoMdCloseCircle style={{fontSize:"32px"}}/>
         </div>
         <iframe ref={iframeRef} title="Output" className={classes.output} />
       </div>

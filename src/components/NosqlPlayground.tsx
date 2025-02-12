@@ -27,6 +27,7 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
   const [modal, setModal] = useState(false);
   const [code, setCode] = useState("");
   const [output, setOutput] = useState<string | null>(null);
+  const [output2, setOutput2] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const exercisesPerPage = 12;
 
@@ -44,28 +45,8 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
       const data = await response.json();
 
       if (data.logs) {
-        const formattedLogs = data.logs.map((log: string) => {
-          // Pulizia dei log ricevuti
-          let cleanedLog = log;
-          cleanedLog = cleanedLog
-            .trim()
-            .replace(/\n/g, " ")
-            .replace(/\\/g, "")
-            .replace(/\\n/g, " ")
-            .replace(/\\/g, " ")
-            .replace(/\\t/g, " ")
-            .replace(/\\"/g, '"')
-            .replace(/\\'/g, "'")
-            .replace(/\\+/g, "");
-
-          try {
-            return JSON.parse(cleanedLog);
-          } catch {
-            return cleanedLog;
-          }
-        });
-
-        setOutput(JSON.stringify(formattedLogs, null, 2));
+        setOutput(JSON.stringify(data.logs, null, 2));
+        setOutput2(data.logs);
         setModal(true);
       } else {
         setOutput("Nessun output disponibile.");
@@ -101,7 +82,7 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
       </div>
       <div className="p-4 grid grid-cols-7 gap-4">
         <div className="col-span-2 bg-gray-100 p-4 rounded-lg">
-          <h2 className="text-[16px] font-bold">Esercizi Nosql</h2>
+          <h2 className="text-[16px] font-bold">Nosql</h2>
 
           <div className="border-t-1 border-dashed border-gray-300 h-1 mt-4"></div>
 
@@ -199,10 +180,12 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
             <IoMdCodeWorking className="text-[25px] font-bold" />
             <h3 className="text-lg font-bold">Output</h3>
           </div>
-          {output && <div>{output}</div>}
+          {output && <div>{output.replace(/\\/g, "")}</div>}
         </div>
       </div>
-      {modal && output && <Modal output={output} setModal={setModal} />}
+      {modal && output && (
+        <Modal output={output} output2={output2} setModal={setModal} />
+      )}
     </>
   );
 };
