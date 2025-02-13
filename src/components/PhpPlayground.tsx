@@ -233,7 +233,7 @@ const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
                 onClick={runCode}
               >
                 <VscRunAll />
-                <span className="text-[13px]">Esegui Codice</span>
+                <span className="text-[13px]">Run code</span>
               </button>
             </div>
 

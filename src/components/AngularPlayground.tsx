@@ -181,7 +181,7 @@ const AngularPlayground: React.FC<AngularPlaygroundProps> = ({ demo }) => {
                 className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
                 onClick={runCode}
               >
-                <VscRunAll /> Esegui
+                <VscRunAll /> Run code
               </button>
 
               {modal && (

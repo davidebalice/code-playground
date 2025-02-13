@@ -1,13 +1,13 @@
 import { GoCodeSquare } from "react-icons/go";
+import { HiMiniCog6Tooth } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import jsIcon from "../assets/images/js.jpg";
-import reactIcon from "../assets/images/react.png";
-import tsIcon from "../assets/images/ts.jpg";
-import { HiMiniCog6Tooth } from "react-icons/hi2";
 import nodeIcon from "../assets/images/node.png";
 import nosqlIcon from "../assets/images/nosql2.png";
 import phpIcon from "../assets/images/php.png";
+import reactIcon from "../assets/images/react.png";
 import sqlIcon from "../assets/images/sql2.png";
+import tsIcon from "../assets/images/ts.jpg";
 
 import classes from "../css/home.module.css";
 
@@ -22,8 +22,8 @@ const Home = () => {
         </h1>
         <div className="border-t-[2px] border-dashed border-gray-300 h-6 mt-4"></div>
         <p className="text-md text-justify leading-relaxed">
-          Code Playground is an interactive application ideal for testing code
-          and practicing programming.
+          <b>Code Playground</b> is an interactive application ideal for testing
+          code and practicing programming.
           <br />
           It supports several languages/tecnologies, including React,
           JavaScript, TypeScript, PHP and Node.js, offering a simple and
@@ -45,18 +45,20 @@ const Home = () => {
           >
             <div>
               <h2 className="text-m font-bold mb-2 mt-2 flex items-center justify-center gap-4 ">
-                <HiMiniCog6Tooth className="text-[24px]" /> <span className="text-[27px]">How works</span>
+                <HiMiniCog6Tooth className="text-[24px]" />{" "}
+                <span className="text-[27px]">How works</span>
               </h2>
               <div className="border-t-[2px] border-dashed border-gray-300 h-1 mt-1"></div>
               <p className="pl-4 pr-4 text-justify mt-2">
-                This app uses Monaco Editor (the same engine as Visual Studio
-                Code) to manage and edit code. React is compiled with Babel,
-                which transforms JSX code (used in React) into JavaScript.
-                TypeScript is transpiled into JavaScript using the
-                ts.transpileModule() function and executed in a secure
-                environment. Both PHP and Node.js communicate with their
-                respective servers and receive the results of the executed code
-                or queries.
+                This app uses <b>Monaco Editor</b> (the same engine as Visual
+                Studio Code) to manage and edit code. <b>React</b> is compiled
+                with <b>Babel</b>, which transforms JSX code (used in React)
+                into JavaScript.{" "}
+                <b>TypeScript</b> is transpiled into JavaScript using the{" "}
+                <b>ts.transpileModule()</b> function and executed in a secure
+                environment. Both <b>PHP</b> and <b>Node.js</b> communicate with
+                their respective servers and receive the results of the executed
+                code or queries.
               </p>
             </div>
           </div>

@@ -16,27 +16,27 @@ export const exercises: Exercise[] = [
 
   {
     id: "2",
-    title: "Filtrare utenti per età superiore a 25",
-    description: "Seleziona gli utenti con un'età superiore a 25 anni.",
+    title: "Filtrare utenti per età superiore a 35",
+    description: "Seleziona gli utenti con un'età superiore a 35 anni.",
     code: `
-const users = await User.find({ age: { $gt: 25 } });
+const users = await User.find({ age: { $gt: 35 } });
 console.log(users);`,
   },
   {
     id: "3",
     title: "Cercare un utente per nome",
-    description: "Trova un utente specifico cercandolo per nome.",
+    description: "Trova utenti per nome.",
     code: `
-const user = await User.findOne({ name: "Alice" });
+const user = await User.find({ name: "Mario" });
 console.log(user);`,
-
-    
   },
   {
     id: "4",
     title: "Selezionare solo alcuni campi",
     description: "Recupera solo i campi nome ed età degli utenti.",
-    code: `async function getUsersWithSelectedFields() {\n  const users = await User.find().select('name age');\n  console.log(users);\n}\n\ngetUsersWithSelectedFields();`,
+    code: `
+const users = await User.find().select('name age');
+console.log(users);`,
   },
   {
     id: "5",

@@ -91,16 +91,20 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
    />
    <style>
-    .border{
+    .border {
       border-collapse: collapse;
       width: 100%;
       border:1px solid #ddd;
     }
-    .output{
+    .output {
       font-size:18px;
       border-bottom:1px solid #ddd;
       padding-bottom:10px;
       margin-bottom:16px
+    }
+    th {
+    background-color: #444;
+    color:#fff
     }
    </style>
  </head>
@@ -290,7 +294,7 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
                 onClick={runCode}
               >
                 <VscRunAll />
-                <span className="text-[13px]">Esegui Codice</span>
+                <span className="text-[13px]">Run code</span>
               </button>
             </div>
 
@@ -336,7 +340,7 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
         style={{ display: modal ? "flex" : "none" }}
       >
         <div onClick={() => setModal(false)} className={classes.close}>
-          <IoMdCloseCircle style={{fontSize:"32px"}}/>
+          <IoMdCloseCircle style={{ fontSize: "32px" }} />
         </div>
         <iframe ref={iframeRef} title="Output" className={classes.output} />
       </div>
