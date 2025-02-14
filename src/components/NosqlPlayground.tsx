@@ -1,7 +1,12 @@
 import Editor from "@monaco-editor/react";
 import { useState } from "react";
+import { AiFillUnlock } from "react-icons/ai";
 import { GoCodeSquare } from "react-icons/go";
-import { IoMdArrowDropright, IoMdCodeWorking } from "react-icons/io";
+import {
+  IoMdArrowDropright,
+  IoMdCloseCircle,
+  IoMdCodeWorking,
+} from "react-icons/io";
 import { IoCaretBackCircle, IoCaretForwardCircle } from "react-icons/io5";
 import { VscRunAll } from "react-icons/vsc";
 import nosql from "../assets/images/nosql.png";
@@ -13,6 +18,7 @@ interface Exercise {
   title: string;
   description: string;
   code: string;
+  executable: boolean;
 }
 
 interface NosqlPlaygroundProps {
@@ -26,6 +32,8 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
   );
   const [modal, setModal] = useState(false);
   const [code, setCode] = useState("");
+  const [executable, setExecutable] = useState<boolean>(true);
+  const [viewAlert, setViewAlert] = useState<boolean>(false);
   const [output, setOutput] = useState<string | null>(null);
   const [output2, setOutput2] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,26 +41,30 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
 
   // Funzione per eseguire il codice
   const runCode = async () => {
-    try {
-      setOutput(`Code execution...`);
+    if (!executable) {
+      setViewAlert(true);
+    } else {
+      try {
+        setOutput(`Code execution...`);
 
-      const response = await fetch(`${backend}/query`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
+        const response = await fetch(`${backend}/query`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code }),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (data.logs) {
-        setOutput(JSON.stringify(data.logs, null, 2));
-        setOutput2(data.logs);
-        setModal(true);
-      } else {
-        setOutput("Nessun output disponibile.");
+        if (data.logs) {
+          setOutput(JSON.stringify(data.logs, null, 2));
+          setOutput2(data.logs);
+          setModal(true);
+        } else {
+          setOutput("Nessun output disponibile.");
+        }
+      } catch (error: unknown) {
+        setOutput("Error: " + (error as Error).message);
       }
-    } catch (error: unknown) {
-      setOutput("Error: " + (error as Error).message);
     }
   };
 
@@ -77,6 +89,21 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
 
   return (
     <>
+      {viewAlert && (
+        <div className={classes.overlay}>
+          <div className={classes.output} style={{ height: "200px" }}>
+            <div onClick={() => setViewAlert(false)} className={classes.close2}>
+              <IoMdCloseCircle style={{ fontSize: "32px" }} />
+            </div>
+            <p className="font-bold text-[#ff0000] mt-5">
+              Code not executable for security reasons
+            </p>
+            <p className="text-[#444] mt-5">
+              Insert, update and delete operations are disabled
+            </p>
+          </div>
+        </div>
+      )}
       <div className="flex gap-4 p-1 bg-[#0079d6] text-white flex items-center h-[50px]">
         <img src={nosql} className="w-[122px]" />
       </div>
@@ -121,6 +148,7 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
                   setSelectedExercise(exercise);
                   setCode(exercise.code);
                   setOutput("");
+                  setExecutable(exercise.executable);
                 }}
               >
                 <h4 className="flex items-center gap-1">

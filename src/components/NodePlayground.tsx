@@ -1,5 +1,6 @@
 import Editor from "@monaco-editor/react";
 import { useState } from "react";
+import { AiFillUnlock } from "react-icons/ai";
 import { GoCodeSquare } from "react-icons/go";
 import {
   IoMdArrowDropright,
@@ -128,11 +129,17 @@ const NodePlayground: React.FC<NodePlaygroundProps> = ({ demo }) => {
     <>
       {viewAlert && (
         <div className={classes.overlay}>
-          <div className={classes.output}>
+          <div className={classes.output} style={{ height: "200px" }}>
             <div onClick={() => setViewAlert(false)} className={classes.close2}>
               <IoMdCloseCircle style={{ fontSize: "32px" }} />
             </div>
-            <p className="font-bold text-[#ff0000] mt-5">Code not executable for security reasons</p>
+            <p className="font-bold text-[#ff0000] mt-5">
+              Code not executable for security reasons
+            </p>
+            <p className="text-[#444] mt-5">
+              The Node sandbox with vm2 does not allow executing code like
+              fetch, accessing the filesystem, or running other system commands.
+            </p>
           </div>
         </div>
       )}

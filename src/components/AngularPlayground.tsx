@@ -1,4 +1,5 @@
 import Editor from "@monaco-editor/react";
+import { AiFillUnlock } from "react-icons/ai";
 import { WebContainer } from "@webcontainer/api";
 import { useEffect, useRef, useState } from "react";
 import { VscRunAll } from "react-icons/vsc";

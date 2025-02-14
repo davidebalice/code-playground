@@ -5,7 +5,7 @@ import { Key } from "react";
 interface ModalProps {
   setModal: (value: boolean) => void;
   output: string;
-  output2: string; // Qui è una stringa JSON
+  output2: string;
 }
 
 const Modal: React.FC<ModalProps> = ({ setModal, output, output2 }) => {

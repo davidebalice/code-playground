@@ -37,6 +37,27 @@ console.log(pariDispari(4));`,
 }
 console.log(numeroCasuale(1, 10));`,
       },
+      {
+        id: uuidv4(),
+        title: "Fattoriale di un numero",
+        executable: true,
+        description: "Crea una funzione che calcoli il fattoriale di un numero.",
+        code: `function fattoriale(n) {
+  if (n === 0) return 1;
+  return n * fattoriale(n - 1);
+}
+console.log(fattoriale(5));`,
+      },
+      {
+        id: uuidv4(),
+        title: "Contare vocali in una stringa",
+        executable: true,
+        description: "Crea una funzione che conti le vocali in una stringa.",
+        code: `function contaVocali(str) {
+  return str.match(/[aeiou]/gi)?.length || 0;
+}
+console.log(contaVocali("Hello World"));`,
+      },
     ],
   },
   {
@@ -72,6 +93,24 @@ console.log(p.nome, p.eta);`,
 }
 const q = new Quadrato(5);
 console.log(q.area());`,
+      },
+      {
+        id: uuidv4(),
+        title: "Classe Automobile",
+        executable: true,
+        description: "Crea una classe 'Automobile' con marca, modello e metodo 'dettagli'",
+        code: `class Automobile {
+  constructor(marca, modello) {
+    this.marca = marca;
+    this.modello = modello;
+  }
+
+  dettagli() {
+    return \`\${this.marca} \${this.modello}\`;
+  }
+}
+const auto = new Automobile('Toyota', 'Yaris');
+console.log(auto.dettagli());`,
       },
     ],
   },
@@ -124,7 +163,7 @@ delay(2000).then(() => console.log('2 secondi dopo...'));`,
       {
         id: uuidv4(),
         title: "Fetch dati da API fittizia",
-        executable: true,
+        executable: false,
         description: "Utilizza fetch per recuperare dati da una API fittizia.",
         code: `async function fetchData() {
   const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
@@ -233,3 +272,116 @@ server.listen(3000, () => {
     ],
   },
 ];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+
+
+
+
+
+
+
+
+
+
+
+import { v4 as uuidv4 } from "uuid";
+
+export const exercises = [
+  {
+    category: "Functions",
+    exercises: [
+    
+    ],
+  },
+  {
+    category: "Classi e OOP",
+    exercises: [
+     
+    ],
+  },
+  {
+    category: "Array e Oggetti",
+    exercises: [
+     
+    ],
+  },
+  {
+    category: "Async / Promises",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Chiamata API con gestione errori",
+        executable: true,
+        description: "Esegui una chiamata fetch con gestione degli errori.",
+        code: `async function fetchConErrori() {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
+    if (!response.ok) throw new Error('Errore nella richiesta');
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+fetchConErrori();`,
+      },
+    ],
+  },
+  {
+    category: "Filesystem",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Leggere JSON da file",
+        executable: false,
+        description: "Leggi e parse un file JSON usando fs.",
+        code: `const fs = require('fs');
+fs.readFile('data.json', 'utf8', (err, data) => {
+  if (err) throw err;
+  const json = JSON.parse(data);
+  console.log(json);
+});`,
+      },
+    ],
+  },
+  {
+    category: "Server HTTP",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Server con Express",
+        executable: false,
+        description: "Crea un server HTTP con Express.js",
+        code: `const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send('Hello, Express!');
+});
+
+app.listen(3000, () => {
+  console.log('Server in ascolto su http://localhost:3000');
+});`,
+      },
+    ],
+  },
+];
+*/

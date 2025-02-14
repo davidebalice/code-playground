@@ -1,5 +1,6 @@
 import Editor from "@monaco-editor/react";
 import { useState } from "react";
+import { AiFillUnlock } from "react-icons/ai";
 import { GoCodeSquare } from "react-icons/go";
 import { IoMdArrowDropright, IoMdCodeWorking } from "react-icons/io";
 import { IoCaretBackCircle, IoCaretForwardCircle } from "react-icons/io5";

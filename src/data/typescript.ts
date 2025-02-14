@@ -83,6 +83,150 @@ console.log(numeroCasuale(1, 10));`,
 }
 console.log(sommaArray([1, 2, 3, 4]));`,
       },
+
+      {
+        id: uuidv4(),
+        title: "Sequenza di Fibonacci",
+        description:
+          "Crea una funzione che generi i primi N numeri della sequenza di Fibonacci.",
+        code: `
+  function fibonacci(n: number): number[] {
+    const sequence: number[] = [0, 1];
+    for (let i = 2; i < n; i++) {
+      sequence.push(sequence[i - 1] + sequence[i - 2]);
+    }
+    return sequence;
+  }
+  console.log(fibonacci(10));
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Massimo Comune Divisore (MCD)",
+        description:
+          "Crea una funzione che calcoli il massimo comune divisore (MCD) di due numeri.",
+        code: `
+function mcd(a: number, b: number): number {
+  while (b !== 0) {
+    let temp = b;
+    b = a % b;
+    a = temp;
+  }
+  return a;
+}
+
+console.log(mcd(48, 18));
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Minimo Comune Multiplo (MCM)",
+        description:
+          "Crea una funzione che calcoli il minimo comune multiplo (MCM) di due numeri.",
+        code: `
+function mcd(a: number, b: number): number {
+  while (b !== 0) {
+    let temp = b;
+    b = a % b;
+    a = temp;
+  }
+  return a;
+}
+
+function mcm(a: number, b: number): number {
+  return (a * b) / mcd(a, b);
+}
+console.log(mcm(4, 6));
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Numero primo",
+        description: "Crea una funzione che verifichi se un numero è primo.",
+        code: `
+  function isPrimo(n: number): boolean {
+    if (n < 2) return false;
+    for (let i = 2; i <= Math.sqrt(n); i++) {
+      if (n % i === 0) return false;
+    }
+    return true;
+  }
+  console.log(isPrimo(7));
+  console.log(isPrimo(10));
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Scomposizione in fattori primi",
+        description:
+          "Crea una funzione che restituisca i fattori primi di un numero.",
+        code: `
+  function fattoriPrimi(n: number): number[] {
+    let fattori: number[] = [];
+    let divisore = 2;
+    while (n > 1) {
+      while (n % divisore === 0) {
+        fattori.push(divisore);
+        n = n / divisore;
+      }
+      divisore++;
+    }
+    return fattori;
+  }
+  console.log(fattoriPrimi(56));
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Verifica numero perfetto",
+        description: "Crea una funzione che verifichi se un numero è perfetto.",
+        code: `
+  function isPerfetto(n: number): boolean {
+    let sommaDivisori = 0;
+    for (let i = 1; i < n; i++) {
+      if (n % i === 0) {
+        sommaDivisori += i;
+      }
+    }
+    return sommaDivisori === n;
+  }
+  console.log(isPerfetto(6));
+  console.log(isPerfetto(28));
+  console.log(isPerfetto(10));
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Radice quadrata approssimata",
+        description:
+          "Crea una funzione che calcoli la radice quadrata di un numero con il metodo di Newton.",
+        code: `
+  function radiceQuadrata(n: number, precisione: number = 0.00001): number {
+    let x = n;
+    let y = (x + n / x) / 2;
+    while (Math.abs(x - y) > precisione) {
+      x = y;
+      y = (x + n / x) / 2;
+    }
+    return x;
+  }
+  console.log(radiceQuadrata(25));
+  console.log(radiceQuadrata(2));
+        `,
+      },
+      {
+        id: uuidv4(),
+        title: "Potenza di un numero",
+        description:
+          "Crea una funzione che calcoli la potenza di un numero usando la ricorsione.",
+        code: `
+  function potenza(base: number, esponente: number): number {
+    if (esponente === 0) return 1;
+    return base * potenza(base, esponente - 1);
+  }
+  console.log(potenza(2, 3));
+        `,
+      },
     ],
   },
 
@@ -330,8 +474,8 @@ console.log(sumArray([1, 2, 3, 4, 5]));
         description: "Rimuove il primo elemento da un array e lo restituisce.",
         code: `
     const numeri = [1, 2, 3, 4, 5];
-    console.log(numeri.shift()); // 1
-    console.log(numeri); // [2, 3, 4, 5]
+    console.log(numeri.shift());
+    console.log(numeri);
         `,
       },
       {
@@ -341,8 +485,8 @@ console.log(sumArray([1, 2, 3, 4, 5]));
         code: `
     const nomi = ["Alice", "Bob", "Charlie"];
     const primo = nomi.shift();
-    console.log(primo); // "Alice"
-    console.log(nomi); // ["Bob", "Charlie"]
+    console.log(primo);
+    console.log(nomi);
         `,
       },
       {
@@ -466,8 +610,6 @@ console.log(sumArray([1, 2, 3, 4, 5]));
             `,
       },
 
-      
-     
       {
         id: uuidv4(),
         title: "Splice - Esempio 2",
@@ -490,281 +632,6 @@ console.log(sumArray([1, 2, 3, 4, 5]));
       },
     ],
   },
-
-  /*
-      category: "Array",
-    exercises: [
-      {
-        id: uuidv4(),
-        title: "Numero più grande",
-        description:
-          "Crea una funzione che prenda un array di numeri e restituisca il più grande",
-        code: `
-const numeri = [3, 7, 2, 10, 5];
-
-function trovaMassimo(numeri: number[]): number | null {
-    if (numeri.length === 0) return null;
-    return Math.max(...numeri);
-}
-
-console.log(trovaMassimo(numeri));
-`,
-      },
-      {
-        id: uuidv4(),
-        title: "Somma numeri in array",
-        description: "Crea una funzione che somma tutti i numeri in array",
-        code: `
-function sum(numbers: number[]): number {
-  return numbers.reduce((acc, num) => acc + num, 0);
-}
-
-console.log(sum([1, 2, 3, 4]));
-`,
-      },
-      {
-        id: uuidv4(),
-        title: "Filtrare numeri pari",
-        description:
-          "Crea una funzione che restituisca solo i numeri pari di un array",
-        code: `
-function numeriPari(numbers: number[]): number[] {
-  return numbers.filter(num => num % 2 === 0);
-}
-
-console.log(numeriPari([1, 2, 3, 4, 5, 6]));
-`,
-      },
-      {
-        id: uuidv4(),
-        title: "Invertire un array",
-        description: "Crea una funzione che inverta un array",
-        code: `
-function invertiArray(arr: any[]): any[] {
-  return arr.reverse();
-}
-
-console.log(invertiArray([1, 2, 3, 4, 5]));
-`,
-      },
-      {
-        id: uuidv4(),
-        title: "Prodotto dei numeri",
-        description:
-          "Crea una funzione che restituisca il prodotto di tutti i numeri in un array",
-        code: `
-function product(numbers: number[]): number {
-  return numbers.reduce((acc, num) => acc * num, 1);
-}
-
-console.log(product([1, 2, 3, 4]));
-`,
-      },
-      {
-        id: uuidv4(),
-        title: "Mescolare un array",
-        description:
-          "Crea una funzione che mescoli casualmente gli elementi di un array",
-        code: `
-function shuffleArray(arr: any[]): any[] {
-  return arr.sort(() => Math.random() - 0.5);
-}
-
-console.log(shuffleArray([1, 2, 3, 4, 5]));
-`,
-      },
-      {
-        id: uuidv4(),
-        title: "Rimuovere elementi falsy",
-        description:
-          "Crea una funzione che rimuova tutti i valori falsy da un array",
-        code: `
-function rimuoviFalsy(arr: any[]): any[] {
-  return arr.filter(Boolean);
-}
-
-console.log(rimuoviFalsy([0, 1, false, 2, '', 3, null, 'ciao']));
-`,
-      },
-      {
-        id: uuidv4(),
-        title: "Flatten di un array annidato",
-        description:
-          "Crea una funzione che appiattisca un array annidato di qualsiasi profondità",
-        code: `
-function flattenArray(arr: any[]): any[] {
-  return arr.flat(Infinity);
-}
-
-console.log(flattenArray([1, [2, [3, 4]], 5]));
-`,
-      },
-      {
-        id: uuidv4(),
-        title: "Trova gli elementi comuni in due array",
-        description:
-          "Crea una funzione che trovi gli elementi comuni tra due array",
-        code: `
-function trovaComuni(arr1: any[], arr2: any[]): any[] {
-  return arr1.filter(value => arr2.includes(value));
-}
-
-console.log(trovaComuni([1, 2, 3], [2, 3, 4]));
-`,
-      },
-      {
-        id: uuidv4(),
-        title: "Dividere un array in chunk",
-        description:
-          "Crea una funzione che divida un array in sotto-array di una data dimensione",
-        code: `
-function chunkArray(arr: any[], size: number): any[][] {
-  let result = [];
-  for (let i = 0; i < arr.length; i += size) {
-    result.push(arr.slice(i, i + size));
-  }
-  return result;
-}
-
-console.log(chunkArray([1, 2, 3, 4, 5, 6, 7], 3));
-`,
-      },
-    ],
-
-  */
-
-  /*
-category: "Array",
-exercises: [
-  {
-    id: uuidv4(),
-    title: "Metodo pop",
-    description: "Rimuove l'ultimo elemento da un array e lo restituisce.",
-    code: `
-const numeri = [1, 2, 3, 4, 5];
-console.log(numeri.pop()); // 5
-console.log(numeri); // [1, 2, 3, 4]
-    `,
-  },
-  {
-    id: uuidv4(),
-    title: "Metodo shift",
-    description: "Rimuove il primo elemento da un array e lo restituisce.",
-    code: `
-const numeri = [1, 2, 3, 4, 5];
-console.log(numeri.shift()); // 1
-console.log(numeri); // [2, 3, 4, 5]
-    `,
-  },
-  {
-    id: uuidv4(),
-    title: "Metodo splice",
-    description: "Rimuove o sostituisce elementi in un array.",
-    code: `
-const numeri = [1, 2, 3, 4, 5];
-numeri.splice(2, 1); // Rimuove il numero in posizione 2
-console.log(numeri); // [1, 2, 4, 5]
-    `,
-  },
-  {
-    id: uuidv4(),
-    title: "Metodo push",
-    description: "Aggiunge uno o più elementi alla fine di un array.",
-    code: `
-const numeri = [1, 2, 3];
-numeri.push(4, 5);
-console.log(numeri); // [1, 2, 3, 4, 5]
-    `,
-  },
-  {
-    id: uuidv4(),
-    title: "Metodo unshift",
-    description: "Aggiunge uno o più elementi all'inizio di un array.",
-    code: `
-const numeri = [2, 3, 4];
-numeri.unshift(0, 1);
-console.log(numeri); // [0, 1, 2, 3, 4]
-    `,
-  },
-  {
-    id: uuidv4(),
-    title: "Metodo slice",
-    description: "Restituisce una porzione di un array senza modificarlo.",
-    code: `
-const numeri = [1, 2, 3, 4, 5];
-const parte = numeri.slice(1, 4);
-console.log(parte); // [2, 3, 4]
-console.log(numeri); // [1, 2, 3, 4, 5]
-    `,
-  },
-  {
-    id: uuidv4(),
-    title: "Metodo concat",
-    description: "Unisce due o più array in uno nuovo.",
-    code: `
-const arr1 = [1, 2];
-const arr2 = [3, 4];
-const arr3 = arr1.concat(arr2);
-console.log(arr3); // [1, 2, 3, 4]
-    `,
-  },
-  {
-    id: uuidv4(),
-    title: "Metodo map",
-    description: "Applica una funzione a ogni elemento dell'array restituendo un nuovo array.",
-    code: `
-const numeri = [1, 2, 3, 4];
-const quadrati = numeri.map(num => num * num);
-console.log(quadrati); // [1, 4, 9, 16]
-    `,
-  },
-  {
-    id: uuidv4(),
-    title: "Metodo filter",
-    description: "Restituisce un nuovo array contenente solo gli elementi che soddisfano una condizione.",
-    code: `
-const numeri = [1, 2, 3, 4, 5];
-const pari = numeri.filter(num => num % 2 === 0);
-console.log(pari); // [2, 4]
-    `,
-  },
-  {
-    id: uuidv4(),
-    title: "Metodo reduce",
-    description: "Riduce l'array a un singolo valore tramite una funzione di accumulo.",
-    code: `
-const numeri = [1, 2, 3, 4];
-const somma = numeri.reduce((acc, num) => acc + num, 0);
-console.log(somma); // 10
-    `,
-  },
-],
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-*/
-
   {
     category: "Strings",
     exercises: [
@@ -1086,6 +953,110 @@ const carrello = new Carrello();
 carrello.aggiungiProdotto('Cappuccino');
 console.log(carrello.visualizzaProdotti());`,
       },
+
+      {
+        id: uuidv4(),
+        title: "Ereditarietà con la classe Veicolo",
+        description:
+          "Crea una classe 'Veicolo' e una sottoclasse 'Bicicletta' che estende 'Veicolo'.",
+        code: `class Vehicle {
+           brand: string;
+           constructor(brand: string) {
+             this.brand = brand;
+           }
+         }
+         class Bicycle extends Vehicle {
+           type: string;
+           constructor(brand: string, type: string) {
+             super(brand);
+             this.type = type;
+           }
+         }`,
+      },
+      {
+        id: uuidv4(),
+        title: "Classe Conto Bancario",
+        description:
+          "Crea una classe 'ContoBancario' con metodi per depositare e prelevare denaro.",
+        code: `class BankAccount {
+           balance: number;
+           constructor() {
+             this.balance = 0;
+           }
+           deposit(amount: number) {
+             this.balance += amount;
+           }
+           withdraw(amount: number) {
+             this.balance -= amount;
+           }
+         }`,
+      },
+      {
+        id: uuidv4(),
+        title: "Classe Rettangolo con metodi",
+        description:
+          "Crea una classe 'Rettangolo' che calcoli il perimetro e l'area.",
+        code: `class Rectangle {
+           width: number;
+           height: number;
+           constructor(width: number, height: number) {
+             this.width = width;
+             this.height = height;
+           }
+           getArea() {
+             return this.width * this.height;
+           }
+           getPerimeter() {
+             return 2 * (this.width + this.height);
+           }
+         }`,
+      },
+      {
+        id: uuidv4(),
+        title: "Classe Libro",
+        description:
+          "Crea una classe 'Libro' con proprietà come titolo, autore e anno di pubblicazione.",
+        code: `class Book {
+           title: string;
+           author: string;
+           year: number;
+           constructor(title: string, author: string, year: number) {
+             this.title = title;
+             this.author = author;
+             this.year = year;
+           }
+         }`,
+      },
+      {
+        id: uuidv4(),
+        title: "Interfaccia Animale",
+        description: "Crea un'interfaccia 'Animale' con un metodo 'makeSound'.",
+        code: `interface Animal {
+           makeSound(): void;
+         }
+         class Dog implements Animal {
+           makeSound() {
+             console.log('Bau');
+           }
+         }`,
+      },
+      {
+        id: uuidv4(),
+        title: "Classe Punto con metodi",
+        description:
+          "Crea una classe 'Punto' con metodi per ottenere la distanza tra due punti.",
+        code: `class Point {
+           x: number;
+           y: number;
+           constructor(x: number, y: number) {
+             this.x = x;
+             this.y = y;
+           }
+           distanceTo(other: Point): number {
+             return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+           }
+         }`,
+      },
     ],
   },
 
@@ -1097,7 +1068,7 @@ console.log(carrello.visualizzaProdotti());`,
         title: "Utilizzo di keyof e Record",
         description:
           "Crea un tipo che mappi una chiave di un oggetto ai suoi valori.",
-        code: `type UserKeys = keyof User; // "id" | "name" | "email"
+        code: `type UserKeys = keyof User;
         type UserRecord = Record<UserKeys, string | number>;`,
       },
       {
@@ -1113,7 +1084,6 @@ console.log(carrello.visualizzaProdotti());`,
           };
         }
         
-        // Test
         console.log(completeUser({ name: "Luca" }));`,
       },
     ],
@@ -1129,7 +1099,6 @@ console.log(carrello.visualizzaProdotti());`,
           return obj.id;
         }
         
-        // Test
         console.log(getId({ id: 42, name: "Test" }));`,
       },
     ],
@@ -1238,7 +1207,7 @@ leggiDati((errore, dati) => {
 
         myPromise
           .then(result => {
-            console.log(result);  // "Operazione completata!"
+            console.log(result);"
           })
           .catch(error => {
             console.error(error);
@@ -1262,7 +1231,7 @@ leggiDati((errore, dati) => {
             console.log(result);
           })
           .catch(error => {
-            console.error(error);  // "Errore nell'operazione."
+            console.error(error);"
           });
         `,
       },
@@ -1281,11 +1250,11 @@ leggiDati((errore, dati) => {
 
         firstPromise
           .then(result => {
-            console.log(result);  // "Prima operazione completata"
+            console.log(result);"
             return secondPromise;
           })
           .then(result => {
-            console.log(result);  // "Seconda operazione completata"
+            console.log(result);"
           })
           .catch(error => {
             console.error(error);
@@ -1310,7 +1279,7 @@ leggiDati((errore, dati) => {
 
           try {
             const result = await myPromise;
-            console.log(result);  // "Operazione completata!"
+            console.log(result);"
           } catch (error) {
             console.error(error);
           }
@@ -1333,7 +1302,7 @@ leggiDati((errore, dati) => {
             const result = await myPromise;
             console.log(result);
           } catch (error) {
-            console.error(error);  // "Errore nell'operazione."
+            console.error(error);"
           }
         }
 
@@ -1356,9 +1325,9 @@ leggiDati((errore, dati) => {
 
           try {
             const firstResult = await firstOperation;
-            console.log(firstResult);  // "Prima operazione completata"
+            console.log(firstResult);"
             const secondResult = await secondOperation;
-            console.log(secondResult);  // "Seconda operazione completata"
+            console.log(secondResult);"
           } catch (error) {
             console.error(error);
           }
@@ -1370,281 +1339,3 @@ leggiDati((errore, dati) => {
     ],
   },
 ];
-
-/*
-
-// src/data/typescript.ts
-export const exercises = [
-  {
-    category: "Funzioni",
-    exercises: [
-     
-
-      {
-       id: uuidv4(),
-        title: "Calcolo dell'area del cerchio",
-        description: "Scrivi una funzione che calcoli l'area di un cerchio dato il raggio.",
-        code: "function circleArea(radius: number): number { return Math.PI * radius * radius; }",
-      },
-      {
-        id: uuidv4(),
-        title: "Contare le vocali",
-        description: "Scrivi una funzione che conti quante vocali ci sono in una stringa.",
-        code: "function countVowels(str: string): number { return str.match(/[aeiou]/gi)?.length || 0; }",
-      },
-      {
-        id: uuidv4(),
-        title: "Factorial",
-        description: "Scrivi una funzione che calcoli il fattoriale di un numero.",
-        code: "function factorial(n: number): number { return n <= 1 ? 1 : n * factorial(n - 1); }",
-      },
-      {
-        id: uuidv4(),
-        title: "Concatenare array",
-        description: "Scrivi una funzione che concatena due array.",
-        code: "function concatenateArrays(arr1: number[], arr2: number[]): number[] { return arr1.concat(arr2); }",
-      },
-      {
-       id: uuidv4(),
-        title: "Verifica se una stringa è palindroma",
-        description: "Scrivi una funzione che verifichi se una stringa è una palindroma.",
-        code: "function isPalindrome(str: string): boolean { return str === str.split('').reverse().join(''); }",
-      },
-      {
-        id: uuidv4(),
-        title: "Trova il massimo tra tre numeri",
-        description: "Scrivi una funzione che restituisca il massimo di tre numeri.",
-        code: "function maxOfThree(a: number, b: number, c: number): number { return Math.max(a, b, c); }",
-      },
-      {
-       id: uuidv4(),
-        title: "Restituire l'elemento più grande di un array",
-        description: "Scrivi una funzione che restituisca l'elemento più grande di un array.",
-        code: "function largestNumber(arr: number[]): number { return Math.max(...arr); }",
-      },
-      {
-       id: uuidv4(),
-        title: "Converto una stringa in maiuscolo",
-        description: "Scrivi una funzione che converta una stringa in maiuscolo.",
-        code: "function toUpperCase(str: string): string { return str.toUpperCase(); }",
-      },
-    ],
-  },
-  {
-    category: "Oggetti",
-    exercises: [
-      {
-        id: uuidv4(),
-        title: "Copiare un oggetto",
-        description: "Scrivi una funzione che faccia una copia di un oggetto.",
-        code: "function copyObject(obj: object): object { return {...obj}; }",
-      },
-      {
-       id: uuidv4(),
-        title: "Combinare due oggetti",
-        description: "Scrivi una funzione che combini due oggetti in un unico oggetto.",
-        code: "function mergeObjects(obj1: object, obj2: object): object { return {...obj1, ...obj2}; }",
-      },
-      {
-       id: uuidv4(),
-        title: "Verificare se una chiave esiste in un oggetto",
-        description: "Scrivi una funzione che verifichi se una chiave esiste in un oggetto.",
-        code: "function hasKey(obj: object, key: string): boolean { return key in obj; }",
-      },
-      {
-       id: uuidv4(),
-        title: "Ottieni i valori di un oggetto",
-        description: "Scrivi una funzione che restituisca i valori di un oggetto.",
-        code: "function getObjectValues(obj: object): any[] { return Object.values(obj); }",
-      },
-      {
-       id: uuidv4(),
-        title: "Filtrare un oggetto per valore",
-        description: "Scrivi una funzione che filtri un oggetto in base ai valori.",
-        code: "function filterObject(obj: object, value: any): object { return Object.fromEntries(Object.entries(obj).filter(([key, val]) => val === value)); }",
-      },
-      {
-       id: uuidv4(),
-        title: "Clonare un oggetto profondo",
-        description: "Scrivi una funzione che clonasse un oggetto profondamente.",
-        code: "function deepClone(obj: any): any { return JSON.parse(JSON.stringify(obj)); }",
-      },
-      {
-       id: uuidv4(),
-        title: "Contare le proprietà di un oggetto",
-        description: "Scrivi una funzione che restituisca il numero di proprietà di un oggetto.",
-        code: "function countObjectProperties(obj: object): number { return Object.keys(obj).length; }",
-      },
-      {
-       id: uuidv4(),
-        title: "Unire oggetti con lo spread operator",
-        description: "Scrivi una funzione che unisca due oggetti utilizzando lo spread operator.",
-        code: "function mergeUsingSpread(obj1: object, obj2: object): object { return { ...obj1, ...obj2 }; }",
-      },
-      {
-      id: uuidv4(),
-        title: "Verifica se un oggetto è vuoto",
-        description: "Scrivi una funzione che verifichi se un oggetto è vuoto.",
-        code: "function isEmptyObject(obj: object): boolean { return Object.keys(obj).length === 0; }",
-      },
-      {
-      id: uuidv4(),
-        title: "Creare un oggetto con una lista di chiavi e valori",
-        description: "Scrivi una funzione che prenda due array, uno con le chiavi e uno con i valori, e crei un oggetto.",
-        code: "function createObject(keys: string[], values: any[]): object { return keys.reduce((acc, key, index) => ({ ...acc, [key]: values[index] }), {}); }",
-      },
-    ],
-  },
-  {
-    category: "Classi e Oggetti",
-    exercises: [
-      {
-        id: uuidv4(),
-        title: "Classe Persona",
-        description: "Crea una classe 'Persona' con proprietà come nome e età.",
-        code: `class Person { 
-          name: string;
-          age: number;
-          constructor(name: string, age: number) {
-            this.name = name;
-            this.age = age;
-          }
-        }`,
-      },
-      {
-       id: uuidv4(),
-        title: "Classe Auto con metodi",
-        description: "Crea una classe 'Auto' che ha proprietà come modello e anno di produzione, con un metodo che descrive l'auto.",
-        code: `class Car { 
-          model: string;
-          year: number;
-          constructor(model: string, year: number) {
-            this.model = model;
-            this.year = year;
-          }
-          describe() {
-            return \`\${this.model} del \${this.year}\`;
-          }
-        }`,
-      },
-      {
-       id: uuidv4(),
-        title: "Classe Quadrato con metodo area",
-        description: "Crea una classe 'Quadrato' che calcoli l'area di un quadrato dato il lato.",
-        code: `class Square { 
-          side: number;
-          constructor(side: number) {
-            this.side = side;
-          }
-          getArea() {
-            return this.side * this.side;
-          }
-        }`,
-      },
-      {
-       id: uuidv4(),
-        title: "Ereditarietà con la classe Veicolo",
-        description: "Crea una classe 'Veicolo' e una sottoclasse 'Bicicletta' che estende 'Veicolo'.",
-        code: `class Vehicle {
-          brand: string;
-          constructor(brand: string) {
-            this.brand = brand;
-          }
-        }
-        class Bicycle extends Vehicle {
-          type: string;
-          constructor(brand: string, type: string) {
-            super(brand);
-            this.type = type;
-          }
-        }`,
-      },
-      {
-       id: uuidv4(),
-        title: "Classe Conto Bancario",
-        description: "Crea una classe 'ContoBancario' con metodi per depositare e prelevare denaro.",
-        code: `class BankAccount {
-          balance: number;
-          constructor() {
-            this.balance = 0;
-          }
-          deposit(amount: number) {
-            this.balance += amount;
-          }
-          withdraw(amount: number) {
-            this.balance -= amount;
-          }
-        }`,
-      },
-      {
-        id: uuidv4(),
-        title: "Classe Rettangolo con metodi",
-        description: "Crea una classe 'Rettangolo' che calcoli il perimetro e l'area.",
-        code: `class Rectangle {
-          width: number;
-          height: number;
-          constructor(width: number, height: number) {
-            this.width = width;
-            this.height = height;
-          }
-          getArea() {
-            return this.width * this.height;
-          }
-          getPerimeter() {
-            return 2 * (this.width + this.height);
-          }
-        }`,
-      },
-      {
-      id: uuidv4(),
-        title: "Classe Libro",
-        description: "Crea una classe 'Libro' con proprietà come titolo, autore e anno di pubblicazione.",
-        code: `class Book {
-          title: string;
-          author: string;
-          year: number;
-          constructor(title: string, author: string, year: number) {
-            this.title = title;
-            this.author = author;
-            this.year = year;
-          }
-        }`,
-      },
-      {
-        id: uuidv4(),
-        title: "Interfaccia Animale",
-        description: "Crea un'interfaccia 'Animale' con un metodo 'makeSound'.",
-        code: `interface Animal {
-          makeSound(): void;
-        }
-        class Dog implements Animal {
-          makeSound() {
-            console.log('Bau');
-          }
-        }`,
-      },
-      {
-       id: uuidv4(),
-        title: "Classe Punto con metodi",
-        description: "Crea una classe 'Punto' con metodi per ottenere la distanza tra due punti.",
-        code: `class Point {
-          x: number;
-          y: number;
-          constructor(x: number, y: number) {
-            this.x = x;
-            this.y = y;
-          }
-          distanceTo(other: Point): number {
-            return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
-          }
-        }`,
-      },
-     
-    ],
-  },
-];
-
-export default exercises;
-
-
-*/

@@ -1,5 +1,6 @@
 import Editor from "@monaco-editor/react";
 import { useRef, useState } from "react";
+import { AiFillUnlock } from "react-icons/ai";
 import { GoCodeSquare } from "react-icons/go";
 import {
   IoMdArrowDropright,
@@ -14,10 +15,14 @@ import { exercises } from "../data/react";
 
 interface ReactPlaygroundProps {
   demo: boolean;
+  setShowSecret: (value: boolean) => void;
 }
 
 //Componente principale
-const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
+const ReactPlayground: React.FC<ReactPlaygroundProps> = ({
+  demo,
+  setShowSecret,
+}) => {
   // Stati del componente
   const [selectedCategory, setSelectedCategory] = useState<{
     category: string;
@@ -286,13 +291,25 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({ demo }) => {
                   {selectedExercise.description}
                 </p>
               </div>
-              <button
-                className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-                onClick={runCode}
-              >
-                <VscRunAll />
-                <span className="text-[13px]">Run code</span>
-              </button>
+              <div className="flex gap-2">
+                {demo && (
+                  <button
+                    className="flex gap-2 items-center mt-2 px-4 py-2 bg-red-500 text-white rounded"
+                    onClick={() => setShowSecret(true)}
+                  >
+                    <AiFillUnlock />
+                    <span className="text-[13px]">Unlock editor</span>
+                  </button>
+                )}
+
+                <button
+                  className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+                  onClick={runCode}
+                >
+                  <VscRunAll />
+                  <span className="text-[13px]">Run code</span>
+                </button>
+              </div>
             </div>
 
             <Editor

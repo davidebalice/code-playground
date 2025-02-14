@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import AngularPlayground from "./components/AngularPlayground";
@@ -11,21 +11,39 @@ import NodePlayground from "./components/NodePlayground";
 import NosqlPlayground from "./components/NosqlPlayground";
 import PhpPlayground from "./components/PhpPlayground";
 import ReactPlayground from "./components/ReactPlayground";
+import Secret from "./components/Secret";
 import SqlPlayground from "./components/SqlPlayground";
 import Todos from "./components/Todos";
 import TypescriptPlayground from "./components/TypescriptPlayground";
 import Wrapper from "./components/Wrapper";
 
 function App() {
-  const [demo, setDemo] = useState(false);
+  const [demo, setDemo] = useState(true);
+  const [secretKey, setSecretKey] = useState("");
+  const [error, setError] = useState(false);
+  const [showSecret, setShowSecret] = useState(false);
+  const secret = import.meta.env.VITE_SECRET_CODE;
+
+  useEffect(() => {
+    if (secret === secretKey) {
+      setDemo(false);
+      setError(false);
+    } else {
+      if (secretKey !== "") {
+        setError(true);
+      }
+      setDemo(true);
+    }
+  }, [secretKey]);
 
   return (
     <Router>
       <Navbar />
+      {showSecret && <Secret setSecretKey={setSecretKey} error={error} />}
       <Wrapper>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/react" element={<ReactPlayground demo={demo} />} />
+          <Route path="/react" element={<ReactPlayground demo={demo} setShowSecret={setShowSecret} />} />
           <Route
             path="/javascript"
             element={<JavascriptPlayground demo={demo} />}
