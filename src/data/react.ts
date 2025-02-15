@@ -7,6 +7,7 @@ export const exercises = [
       {
         id: uuidv4(),
         title: "Uso di useState",
+        executable: true,
         description:
           "Crea un componente che utilizza useState per gestire un contatore.",
         code: `import { useState } from 'react';
@@ -25,6 +26,7 @@ export const Counter = () => {
       {
         id: uuidv4(),
         title: "Uso di useEffect",
+        executable: true,
         description:
           "Crea un componente che esegue un'operazione al montaggio e aggiornamento.",
         code: `import { useState, useEffect } from 'react';
@@ -43,6 +45,7 @@ export const Timer = () => {
       {
         id: uuidv4(),
         title: "Uso di useContext",
+        executable: false,
         description:
           "Crea un contesto globale per gestire lo stato di autenticazione dell'utente.",
         code: `import { createContext, useContext, useState } from 'react';
@@ -64,6 +67,7 @@ export const useAuth = () => useContext(AuthContext);`,
       {
         id: uuidv4(),
         title: "Uso di useReducer",
+        executable: true,
         description:
           "Gestisci lo stato complesso usando useReducer invece di useState.",
         code: `import { useReducer } from 'react';
@@ -102,6 +106,7 @@ export const Counter = () => {
       {
         id: uuidv4(),
         title: "Todos",
+        executable: true,
         description: "Create a todo management app",
         code: `
       
@@ -314,6 +319,7 @@ export const Todos = () => {
       {
         id: uuidv4(),
         title: "Componente con props",
+        executable: true,
         description:
           "Crea un componente che accetta delle props per visualizzare un messaggio.",
         code: `
@@ -328,6 +334,7 @@ export const App = () => {
       {
         id: uuidv4(),
         title: "Lista dinamica",
+        executable: true,
         description:
           "Crea un componente che riceve un array di elementi e li visualizza.",
         code: `export const List = () => {
@@ -350,6 +357,7 @@ export const App = () => {
       {
         id: uuidv4(),
         title: "Uso di useReducer",
+        executable: true,
         description:
           "Implementa un contatore utilizzando useReducer invece di useState.",
         code: `import { useReducer } from 'react';
@@ -385,6 +393,7 @@ export const Counter = () => {
     exercises: [
       {
         id: uuidv4(),
+        executable: true,
         title: "Estrai i dati da un array",
         description:
           "Estrai i dati da un array senza conoscere chiavi o valori",
@@ -452,6 +461,7 @@ const data = [ { "user_id": "1", "username": "mariorossi", "order_id": "1", "ord
     exercises: [
       {
         id: uuidv4(),
+        executable: true,
         title: "Form Complesso con Validazione",
         description:
           "Crea un form complesso con numerosi campi (nome, email, password, telefono, indirizzo, città, CAP) e validazione dei dati.",
@@ -619,6 +629,7 @@ export const ComplexForm = () => {
       {
         id: uuidv4(),
         title: "Form con gestione dei file",
+        executable: true,
         description: "Crea un form che permette agli utenti di caricare file.",
         code: `import { useState } from 'react';
 
@@ -648,6 +659,7 @@ export const FileUploadForm = () => {
       {
         id: uuidv4(),
         title: "Form con gestione dei checkbox",
+        executable: true,
         description:
           "Crea un form che permette la selezione di più opzioni con checkbox.",
         code: `import { useState } from 'react';
@@ -698,6 +710,7 @@ export const CheckboxForm = () => {
     exercises: [
       {
         id: uuidv4(),
+        executable: true,
         title: "Custom Hook: useDebounce",
         description:
           "Crea un custom hook che debounce il valore di un input per evitare chiamate eccessive.",
@@ -730,6 +743,7 @@ export const DebounceExample = () => {
       },
       {
         id: uuidv4(),
+        executable: true,
         title: "Custom Hook: useFetch",
         description:
           "Crea un custom hook per effettuare richieste fetch con gestione di loading, error e caching.",
@@ -779,6 +793,7 @@ export const FetchExample = () => {
     exercises: [
       {
         id: uuidv4(),
+        executable: false,
         title: "Theme Context",
         description:
           "Implementa un contesto per gestire i temi (light/dark) nell'applicazione.",
@@ -816,6 +831,7 @@ export const ThemedComponent = () => {
       },
       {
         id: uuidv4(),
+        executable: false,
         title: "Redux-like State Management con useReducer",
         description:
           "Implementa una gestione dello stato simile a Redux utilizzando useReducer e Context.",
@@ -860,6 +876,7 @@ export const CounterComponent = () => {
     exercises: [
       {
         id: uuidv4(),
+        executable: false,
         title: "Routing Base con React Router",
         description:
           "Crea una semplice applicazione che utilizza React Router per navigare tra pagine.",
@@ -886,6 +903,7 @@ export const AppRouter = () => (
       },
       {
         id: uuidv4(),
+        executable: false,
         title: "Route Parametrizzati",
         description:
           "Crea una pagina che mostra dettagli in base al parametro passato nella rotta.",
@@ -909,6 +927,31 @@ export const UserRouter = () => (
 );
 `,
       },
+
+      {
+        id: uuidv4(),
+        executable: false,
+        title: "Routing dinamico con React Router",
+        description:
+          "Crea un'app che gestisce le rotte dinamiche con React Router.",
+        code: `import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+    
+    const Home = () => <h2>Home</h2>;
+    const Profile = ({ match }) => <h2>Profilo di {match.params.username}</h2>;
+    
+    export const App = () => {
+      return (
+        <Router>
+          <nav>
+            <Link to="/">Home</Link>
+            <Link to="/profile/johndoe">Profilo di John</Link>
+          </nav>
+          <Route path="/" exact component={Home} />
+          <Route path="/profile/:username" component={Profile} />
+        </Router>
+      );
+    };`,
+      },
     ],
   },
   {
@@ -916,6 +959,7 @@ export const UserRouter = () => (
     exercises: [
       {
         id: uuidv4(),
+        executable: true,
         title: "React.memo e useMemo",
         description:
           "Ottimizza un componente con React.memo e usa useMemo per evitare ricalcoli inutili in operazioni costose.",
@@ -951,6 +995,7 @@ export const MemoExample = () => {
     exercises: [
       {
         id: uuidv4(),
+        executable: true,
         title: "Error Boundary",
         description:
           "Crea un componente Error Boundary per catturare errori nel tree dei componenti e mostrarne un messaggio.",
@@ -988,6 +1033,7 @@ export default ErrorBoundary;
     exercises: [
       {
         id: uuidv4(),
+        executable: true,
         title: "Gestione stato globale con Redux",
         description:
           "Imposta una store Redux per gestire lo stato di una lista di oggetti.",
@@ -1012,6 +1058,7 @@ console.log(store.getState());`,
       },
       {
         id: uuidv4(),
+        executable: true,
         title: "Gestione stato con Context API",
         description:
           "Crea un contesto globale per gestire un tema scuro/chiaro in tutta l'app.",
@@ -1038,6 +1085,7 @@ export const useTheme = () => useContext(ThemeContext);`,
     exercises: [
       {
         id: uuidv4(),
+        executable: true,
         title: "Memorizzazione del componente con React.memo",
         description:
           "Usa React.memo per ottimizzare il rendering di un componente.",
@@ -1061,6 +1109,7 @@ export const Counter = () => {
       },
       {
         id: uuidv4(),
+        executable: true,
         title: "Lazy Loading dei componenti",
         description:
           "Implementa il caricamento ritardato di un componente usando React.lazy.",
@@ -1083,6 +1132,7 @@ export const App = () => {
     exercises: [
       {
         id: uuidv4(),
+        executable: true,
         title: "Test di un componente con Jest",
         description: "Scrivi un test unitario per un componente Counter.",
         code: `import { render, screen, fireEvent } from '@testing-library/react';
@@ -1098,6 +1148,7 @@ test('renders the counter and increments on button click', () => {
       },
       {
         id: uuidv4(),
+        executable: true,
         title: "Test di un hook personalizzato con Jest",
         description: "Scrivi un test per un hook personalizzato useCounter.",
         code: `import { renderHook, act } from '@testing-library/react-hooks';
@@ -1114,39 +1165,13 @@ test('should increment counter', () => {
       },
     ],
   },
-  {
-    category: "Routing",
-    exercises: [
-      {
-        id: uuidv4(),
-        title: "Gestione delle rotte con React Router",
-        description: "Crea una navigazione con React Router tra due pagine.",
-        code: `import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-
-const Home = () => <h2>Home</h2>;
-const About = () => <h2>About</h2>;
-
-export const App = () => {
-  return (
-    <Router>
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-      </nav>
-      <Route path="/" exact component={Home} />
-      <Route path="/about" component={About} />
-    </Router>
-  );
-};`,
-      },
-    ],
-  },
 
   {
     category: "Advanced Concepts",
     exercises: [
       {
         id: uuidv4(),
+        executable: true,
         title: "Gestione di errori con Error Boundaries",
         description:
           "Crea un componente che gestisce gli errori in modo elegante usando Error Boundaries.",
@@ -1184,6 +1209,7 @@ export const App = () => {
       },
       {
         id: uuidv4(),
+        executable: true,
         title: "Memoizzazione delle funzioni con useCallback",
         description:
           "Usa useCallback per ottimizzare la memoizzazione delle funzioni in un componente.",
@@ -1214,6 +1240,7 @@ const ChildComponent = React.memo(({ increment }) => {
     exercises: [
       {
         id: uuidv4(),
+        executable: true,
         title: "Ottimizzazione del rendering con React.memo e useCallback",
         description:
           "Usa React.memo e useCallback per evitare rendering non necessari.",
@@ -1239,39 +1266,13 @@ export const ParentComponent = () => {
       },
     ],
   },
-  {
-    category: "Routing",
-    exercises: [
-      {
-        id: uuidv4(),
-        title: "Routing dinamico con React Router",
-        description:
-          "Crea un'app che gestisce le rotte dinamiche con React Router.",
-        code: `import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
-const Home = () => <h2>Home</h2>;
-const Profile = ({ match }) => <h2>Profilo di {match.params.username}</h2>;
-
-export const App = () => {
-  return (
-    <Router>
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/profile/johndoe">Profilo di John</Link>
-      </nav>
-      <Route path="/" exact component={Home} />
-      <Route path="/profile/:username" component={Profile} />
-    </Router>
-  );
-};`,
-      },
-    ],
-  },
   {
     category: "Component Design",
     exercises: [
       {
         id: uuidv4(),
+        executable: true,
         title: "Componente di lista riutilizzabile",
         description:
           "Crea un componente che renderizza una lista di elementi e supporta l'ordinamento.",
@@ -1305,6 +1306,7 @@ export const SortableList = ({ items }) => {
     exercises: [
       {
         id: uuidv4(),
+        executable: true,
         title: "Componenti in TypeScript con props",
         description:
           "Crea un componente in TypeScript che accetta delle props fortemente tipizzate.",
@@ -1323,6 +1325,7 @@ export default Person;`,
       },
       {
         id: uuidv4(),
+        executable: true,
         title: "Gestione dello stato con useState in TypeScript",
         description:
           "Usa useState con TypeScript per tipizzare lo stato di un contatore.",

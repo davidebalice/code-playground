@@ -1338,4 +1338,420 @@ leggiDati((errore, dati) => {
       },
     ],
   },
+
+  {
+    category: "Algoritmi",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Bubble Sort",
+        description: "Implementa l'algoritmo di ordinamento Bubble Sort.",
+        code: `
+// Algoritmo di ordinamento Bubble Sort
+
+/*
+Primo ciclo (for i): controlla quante volte bisogna ripetere il processo. Dopo ogni iterazione,
+l'elemento più grande "sale" alla sua posizione finale.
+Secondo ciclo (for j): scorre l'array confrontando coppie di elementi adiacenti e li scambia se necessario.
+*/
+
+function bubbleSort(arr: number[]): number[] {
+  let n = arr.length;
+  for (let i = 0; i < n - 1; i++) {
+    for (let j = 0; j < n - i - 1; j++) {
+      if (arr[j] > arr[j + 1]) {
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]; // Scambia gli elementi se non sono in ordine
+      }
+    }
+  }
+  return arr;
+}
+
+console.log(bubbleSort([5, 3, 8, 4, 2]));`,
+      },
+      {
+        id: uuidv4(),
+        title: "Quick Sort",
+        description: "Implementa l'algoritmo di ordinamento Quick Sort.",
+        code: `
+// Algoritmo di ordinamento Quick Sort
+function quickSort(arr: number[]): number[] {
+  // Caso base: se l'array ha 0 o 1 elemento, è già ordinato
+  if (arr.length <= 1) return arr;
+
+  // Scegliamo l'ultimo elemento come pivot
+  let pivot = arr[arr.length - 1];
+
+  // Creiamo due sotto-array: uno con gli elementi minori del pivot e uno con quelli maggiori
+  let left = arr.filter((el) => el < pivot);  // Elementi minori del pivot
+  let right = arr.filter((el) => el > pivot); // Elementi maggiori del pivot
+
+  // Ordiniamo ricorsivamente i sotto-array e uniamo il risultato con il pivot
+  return [...quickSort(left), pivot, ...quickSort(right)];
+}
+
+// Eseguiamo l'algoritmo su un array di numeri
+console.log(quickSort([10, 7, 8, 9, 1, 5]));
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Merge Sort",
+        description: "Implementa l'algoritmo di ordinamento Merge Sort.",
+        code: `
+// Algoritmo di ordinamento Merge Sort
+function mergeSort(arr: number[]): number[] {
+  // Caso base: se l'array ha un solo elemento, è già ordinato
+  if (arr.length <= 1) return arr;
+  
+  // Trova il punto medio dell'array
+  let mid = Math.floor(arr.length / 2);
+  
+  // Divide l'array in due metà, ordinandole ricorsivamente
+  let left = mergeSort(arr.slice(0, mid)); // Parte sinistra
+  let right = mergeSort(arr.slice(mid));   // Parte destra
+  
+  // Unisce le due parti ordinate
+  return merge(left, right);
+}
+
+// Funzione di merge per unire due array ordinati
+function merge(left: number[], right: number[]): number[] {
+  let result: number[] = [];
+  
+  // Confronta i primi elementi di left e right e li unisce in un array ordinato
+  while (left.length && right.length) {
+    result.push(left[0] < right[0] ? left.shift()! : right.shift()!);
+  }
+
+  // Restituisce l'array risultante unendo gli elementi rimanenti di left e right
+  return [...result, ...left, ...right];
+}
+
+// Eseguiamo l'algoritmo di ordinamento su un array di numeri
+console.log(mergeSort([10, 3, 15, 7, 8, 23, 74, 18]));
+
+
+`,
+      },
+      {
+        id: uuidv4(),
+        title: "Selection Sort",
+        description:
+          "Algoritmo di ordinamento che trova il minimo e lo sposta in posizione.",
+        code: `
+       function selectionSort(arr: number[]): number[] {
+// Ciclo esterno per ogni elemento nell'array
+for (let i = 0; i < arr.length - 1; i++) {
+  let minIdx = i; // Assumi che l'elemento corrente sia il più piccolo
+  // Ciclo interno per confrontare l'elemento corrente con gli altri
+  for (let j = i + 1; j < arr.length; j++) {
+    // Se trovi un elemento più piccolo, aggiorna l'indice del minimo
+    if (arr[j] < arr[minIdx]) {
+      minIdx = j;
+    }
+  }
+  // Scambia l'elemento corrente con l'elemento più piccolo trovato
+  [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+}
+return arr; // Restituisci l'array ordinato
+}
+
+console.log(selectionSort([64, 25, 12, 22, 11]));
+      `,
+      },
+      {
+        id: uuidv4(),
+        title: "Radix Sort",
+        description:
+          "Algoritmo di ordinamento che utilizza la rappresentazione dei numeri in base.",
+        code: `
+// Funzione principale di Radix Sort
+function radixSort(arr: number[]): number[] {
+  // Trova il valore massimo nell'array per determinare il numero di passaggi
+  let max = Math.max(...arr);
+  let exp = 1; // Inizialmente ordiniamo per la cifra delle unità
+  // Continua fino a quando non ci sono più cifre da ordinare
+  while (Math.floor(max / exp) > 0) {
+    // Ordina l'array utilizzando il Counting Sort per la cifra corrente (exp)
+    arr = countingSort(arr, exp);
+    exp *= 10; // Passa alla cifra successiva (decine, centinaia, ecc.)
+  }
+  return arr; // Restituisce l'array ordinato
+}
+
+// Funzione di Counting Sort utilizzata per ogni cifra di Radix Sort
+function countingSort(arr: number[], exp: number): number[] {
+  const output = new Array(arr.length); // Array di output per memorizzare l'ordinamento temporaneo
+  const count = new Array(10).fill(0); // Array per tenere traccia delle occorrenze di ciascun valore
+
+  // Conta l'occorrenza di ciascuna cifra nell'array
+  for (let i = 0; i < arr.length; i++) {
+    count[Math.floor(arr[i] / exp) % 10]++; // Incrementa il conteggio per la cifra corrente
+  }
+
+  // Modifica l'array count per che contenga le posizioni finali di ciascun numero
+  for (let i = 1; i < 10; i++) {
+    count[i] += count[i - 1]; // Crea una somma cumulativa
+  }
+
+  // Costruisce l'array ordinato sulla base delle posizioni calcolate in count[]
+  for (let i = arr.length - 1; i >= 0; i--) {
+    output[count[Math.floor(arr[i] / exp) % 10] - 1] = arr[i]; // Posiziona l'elemento nell'array di output
+    count[Math.floor(arr[i] / exp) % 10]--; // Decrementa il conteggio per quella cifra
+  }
+
+  return output; // Restituisce l'array ordinato
+}
+
+// Esegui Radix Sort sull'array di esempio
+console.log(radixSort([170, 45, 75, 90, 802, 24, 2, 66]));
+
+      `,
+      },
+      {
+        id: uuidv4(),
+        title: "Anagrammi",
+        description:
+          "Crea una funzione che verifichi se due stringhe sono anagrammi.",
+        code: `
+// Controlla se due stringhe sono anagrammi
+function sonoAnagrammi(str1: string, str2: string): boolean {
+  // Converte le stringhe in array di caratteri, le ordina e le riconverte in stringa
+  // Infine, confronta le due stringhe ordinate
+  return str1.split('').sort().join('') === str2.split('').sort().join('');
+}
+  
+console.log(sonoAnagrammi("roma", "amor"));`,
+      },
+      {
+        id: uuidv4(),
+        title: "Ricerca Lineare",
+        description: "Implementa un algoritmo di ricerca lineare.",
+        code: `
+// Algoritmo di ricerca lineare
+function ricercaLineare(arr: number[], target: number): number {
+  // Scorre l'array da sinistra a destra
+  for (let i = 0; i < arr.length; i++) {
+    // Controlla se l'elemento corrente è uguale al target
+    if (arr[i] === target) return i; // Ritorna l'indice se trova l'elemento
+  }
+  // Ritorna -1 se l'elemento non è presente nell'array
+  return -1;
+}
+
+console.log(ricercaLineare([10, 20, 30, 40], 30));`,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Fibonacci Sequence",
+        description:
+          "Sequenza di Fibonacci calcolata sia con ricorsione che iterazione.",
+        code: `
+// Fibonacci (Ricorsivo)
+function fibonacciRecursive(n: number): number {
+  // Caso base: se n è 0 o 1, restituisci n
+  if (n <= 1) return n;
+  // Chiamata ricorsiva per calcolare il valore di Fibonacci
+  return fibonacciRecursive(n - 1) + fibonacciRecursive(n - 2);
+}
+
+console.log(fibonacciRecursive(6)); // Esegui il calcolo di Fibonacci con n = 6
+
+// Fibonacci (Iterativo)
+function fibonacciIterative(n: number): number {
+  let a = 0, b = 1;
+  // Ciclo per calcolare i numeri di Fibonacci in modo iterativo
+  for (let i = 2; i <= n; i++) {
+    let temp = a + b; // Calcola il prossimo numero di Fibonacci
+    a = b; // Aggiorna a con il valore precedente di b
+    b = temp; // Aggiorna b con il nuovo valore
+  }
+  // Se n è 0, restituisci a; altrimenti, restituisci b
+  return n === 0 ? a : b;
+}
+
+console.log(fibonacciIterative(6)); // Esegui il calcolo di Fibonacci con n = 6
+
+      `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "MCD (massimo comune divisore)",
+        description:
+          "Algoritmo di Euclide per calcolare il massimo comune divisore.",
+        code: `
+// Algoritmo per calcolare il massimo comune divisore (MCD) tra due numeri
+function mcd(a: number, b: number): number {
+  // Finché b non è zero, continua a calcolare il resto della divisione
+  while (b !== 0) {
+    let temp = b; // Salva b in una variabile temporanea
+    b = a % b; // Calcola il resto della divisione tra a e b
+    a = temp; // Assegna il valore di b a a
+  }
+  // Quando b diventa zero, a contiene il massimo comune divisore
+  return a;
+}
+
+console.log(mcd(56, 98));
+
+      `,
+      },
+      {
+        id: uuidv4(),
+        title: "MCM (minimo comune multiplo)",
+        description:
+          "Algoritmo di Euclide per calcolare il massimo comune divisore.",
+        code: `
+// Algoritmo per calcolare il minimo comune multiplo (MCM) tra due numeri
+function mcd(a: number, b: number): number {
+  // Finché b non è zero, continua a calcolare il resto della divisione
+  while (b !== 0) {
+    let temp = b; // Salva b in una variabile temporanea
+    b = a % b; // Calcola il resto della divisione tra a e b
+    a = temp; // Assegna il valore di b a a
+  }
+  // Quando b diventa zero, a contiene il massimo comune divisore
+  return a;
+}
+
+function mcm(a: number, b: number): number {
+  // MCM si calcola come il prodotto dei due numeri diviso il loro MCD
+  return (a * b) / mcd(a, b); // Usa la funzione mcd per calcolare il MCD e poi calcola il MCM
+}
+
+console.log(mcm(56, 98));
+
+      `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Torre di Hanoi",
+        description: "Risolvi il problema della Torre di Hanoi.",
+        code: `
+// Algoritmo per risolvere la Torre di Hanoi
+function torreDiHanoi(n: number, from: string, to: string, aux: string): void {
+  // Caso base: se c'è solo un disco, lo spostiamo direttamente dalla torre di origine alla torre di destinazione
+  if (n === 1) {
+    console.log(\`Sposta il disco 1 da \${from} a \${to}\`);
+    return;
+  }
+  
+  // Passaggio ricorsivo: spostiamo n-1 dischi dalla torre di origine alla torre ausiliaria
+  torreDiHanoi(n - 1, from, aux, to);
+  
+  // Spostiamo il disco n dalla torre di origine alla torre di destinazione
+  console.log(\`Sposta il disco \${n} da \${from} a \${to}\`);
+  
+  // Spostiamo i n-1 dischi dalla torre ausiliaria alla torre di destinazione
+  torreDiHanoi(n - 1, aux, to, from);
+}
+
+// Eseguiamo l'algoritmo per 3 dischi, con le torri denominate 'A', 'B', e 'C'
+torreDiHanoi(3, 'A', 'C', 'B');`,
+      },
+      {
+        id: uuidv4(),
+        title: "Ricerca Binaria",
+        description: "Implementa un algoritmo di ricerca binaria.",
+        code: `
+// Algoritmo di ricerca binaria
+function ricercaBinaria(arr: number[], target: number): number {
+  // Inizializza gli indici di inizio (left) e fine (right) dell'array
+  let left = 0, right = arr.length - 1;
+
+  // Continua a cercare finché l'indice left non supera l'indice right
+  while (left <= right) {
+    // Calcola l'indice centrale dell'array
+    let mid = Math.floor((left + right) / 2);
+    
+    // Se l'elemento centrale è uguale al target, restituisci l'indice
+    if (arr[mid] === target) return mid; 
+
+    // Se l'elemento centrale è minore del target, cerca nella metà destra
+    if (arr[mid] < target) left = mid + 1;
+    // Altrimenti, cerca nella metà sinistra
+    else right = mid - 1;
+  }
+
+  // Se il target non è presente nell'array, restituisci -1
+  return -1; 
+}
+
+// Eseguiamo la funzione di ricerca binaria su un array ordinato
+console.log(ricercaBinaria([1, 2, 3, 4, 5, 6, 7, 8, 9], 5));`,
+      },
+
+      {
+        id: uuidv4(),
+        title: "KMP String Matching Algorithm",
+        description:
+          "Algoritmo di ricerca di stringhe che utilizza la precomputazione del pattern.",
+        code: `
+// Funzione che implementa l'algoritmo di ricerca KMP (Knuth-Morris-Pratt)
+function KMPSearch(text: string, pattern: string): number {
+  // Costruisce l'array LPS (Longest Prefix Suffix) per il pattern
+  const lps = buildLPS(pattern);
+  let i = 0, j = 0;
+
+  // Scorre il testo per cercare il pattern
+  while (i < text.length) {
+    // Se i caratteri corrispondono, continua a confrontare
+    if (text[i] === pattern[j]) {
+      i++;
+      j++;
+    }
+    
+    // Se è stato trovato un match completo, ritorna l'indice
+    if (j === pattern.length) {
+      return i - j; // Trovato match
+    } else if (i < text.length && text[i] !== pattern[j]) {
+      // Se i caratteri non corrispondono, aggiorna l'indice j
+      // usando l'array LPS per evitare confronti inutili
+      if (j !== 0) {
+        j = lps[j - 1]; // Torna al valore precedente dell'array LPS
+      } else {
+        i++; // Avanza nel testo
+      }
+    }
+  }
+  return -1; // Nessun match trovato
+}
+
+// Funzione per costruire l'array LPS (Longest Prefix Suffix)
+function buildLPS(pattern: string): number[] {
+  const lps = new Array(pattern.length).fill(0);
+  let length = 0;
+  let i = 1;
+
+  // Costruisce l'array LPS scorrendo il pattern
+  while (i < pattern.length) {
+    // Se i caratteri corrispondono, incrementa la lunghezza del prefisso
+    if (pattern[i] === pattern[length]) {
+      length++;
+      lps[i] = length;
+      i++;
+    } else {
+      // Se i caratteri non corrispondono, aggiorna la lunghezza del prefisso
+      if (length !== 0) {
+        length = lps[length - 1];
+      } else {
+        lps[i] = 0;
+        i++;
+      }
+    }
+  }
+  return lps; // Ritorna l'array LPS costruito
+}
+
+
+  
+console.log(KMPSearch("ABABDABACDABABCABAB", "ABABCABAB"));
+      `,
+      },
+    ],
+  },
 ];

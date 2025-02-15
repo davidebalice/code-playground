@@ -24,10 +24,14 @@ interface Exercise {
 // Proprietà del componente SqlPlayground
 interface SqlPlaygroundProps {
   demo: boolean;
+  setShowSecret: (value: boolean) => void;
 }
 
 //Componente principale
-const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
+const SqlPlayground: React.FC<SqlPlaygroundProps> = ({
+  demo,
+  setShowSecret,
+}) => {
   // URL del backend
   const backend = import.meta.env.VITE_PHP_BACKEND;
 
@@ -290,13 +294,25 @@ const SqlPlayground: React.FC<SqlPlaygroundProps> = ({ demo }) => {
                   {selectedExercise.description}
                 </p>
               </div>
-              <button
-                className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-                onClick={runCode}
-              >
-                <VscRunAll />
-                <span className="text-[13px]">Run code</span>
-              </button>
+              <div className="flex gap-2">
+                {demo && (
+                  <button
+                    className="flex gap-2 items-center mt-2 px-4 py-2 bg-red-500 text-white rounded"
+                    onClick={() => setShowSecret(true)}
+                  >
+                    <AiFillUnlock />
+                    <span className="text-[13px]">Unlock editor</span>
+                  </button>
+                )}
+
+                <button
+                  className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+                  onClick={runCode}
+                >
+                  <VscRunAll />
+                  <span className="text-[13px]">Run code</span>
+                </button>
+              </div>
             </div>
 
             <Editor

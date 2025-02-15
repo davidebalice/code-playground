@@ -23,9 +23,13 @@ interface Exercise {
 
 interface NosqlPlaygroundProps {
   demo: boolean;
+  setShowSecret: (value: boolean) => void;
 }
 
-const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
+const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({
+  demo,
+  setShowSecret,
+}) => {
   const backend = import.meta.env.VITE_NODE_BACKEND;
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
     null
@@ -168,13 +172,24 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
                   {selectedExercise.description}
                 </p>
               </div>
-              <button
-                className="flex gap-2 items-center px-4 py-2 bg-blue-500 text-white rounded"
-                onClick={runCode}
-              >
-                <VscRunAll />
-                <span className="text-[13px]">Esegui Codice</span>
-              </button>
+              <div className="flex gap-2">
+                {demo && (
+                  <button
+                    className="flex gap-2 items-center mt-2 px-4 py-2 bg-red-500 text-white rounded"
+                    onClick={() => setShowSecret(true)}
+                  >
+                    <AiFillUnlock />
+                    <span className="text-[13px]">Unlock editor</span>
+                  </button>
+                )}
+                <button
+                  className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+                  onClick={runCode}
+                >
+                  <VscRunAll />
+                  <span className="text-[13px]">Run code</span>
+                </button>
+              </div>
             </div>
 
             <Editor
@@ -186,6 +201,7 @@ const NosqlPlayground: React.FC<NosqlPlaygroundProps> = ({ demo }) => {
               height={500}
               options={{ readOnly: demo, padding: { top: 20 } }}
             />
+
             <button
               className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
               onClick={runCode}

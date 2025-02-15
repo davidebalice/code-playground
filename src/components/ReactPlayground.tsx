@@ -31,6 +31,7 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({
       title: string;
       description: string;
       code: string;
+      executable: boolean;
     }[];
   } | null>(null);
   const [selectedExercise, setSelectedExercise] = useState<{
@@ -38,9 +39,12 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({
     title: string;
     description: string;
     code: string;
+    executable: boolean;
   } | null>(null);
   const [code, setCode] = useState("");
+  const [executable, setExecutable] = useState<boolean>(true);
   const [modal, setModal] = useState(false);
+  const [viewAlert, setViewAlert] = useState<boolean>(false);
   const [output, setOutput] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const exercisesPerPage = 12;
@@ -48,40 +52,43 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({
 
   // Funzione per eseguire il codice
   const runCode = () => {
-    try {
-      // Rimuove l'iframe esistente se presente
-      const existingIframe = document.getElementById("sandbox-iframe");
-      if (existingIframe) {
-        existingIframe.remove();
-      }
+    if (!executable) {
+      setViewAlert(true);
+    } else {
+      try {
+        // Rimuove l'iframe esistente se presente
+        const existingIframe = document.getElementById("sandbox-iframe");
+        if (existingIframe) {
+          existingIframe.remove();
+        }
 
-      // Trasforma il codice rimuovendo le importazioni e modificando l'export
-      let transformedCode = code
-        .replace(/import\s+.*?;[\n]?/g, "")
-        .replace(/export\s+const\s+(\w+)\s*=/, "const $1 =");
+        // Trasforma il codice rimuovendo le importazioni e modificando l'export
+        let transformedCode = code
+          .replace(/import\s+.*?;[\n]?/g, "")
+          .replace(/export\s+const\s+(\w+)\s*=/, "const $1 =");
 
-      const match = code.match(/export\s+const\s+(\w+)\s*=/);
-      const componentName = match ? match[1] : "Component";
+        const match = code.match(/export\s+const\s+(\w+)\s*=/);
+        const componentName = match ? match[1] : "Component";
 
-      console.log(componentName);
+        console.log(componentName);
 
-      transformedCode =
-        `const { useState, useEffect, useContext, useReducer, useRef, useMemo, useCallback } = React;\n` +
-        transformedCode;
+        transformedCode =
+          `const { useState, useEffect, useContext, useReducer, useRef, useMemo, useCallback } = React;\n` +
+          transformedCode;
 
-      transformedCode += `
+        transformedCode += `
   const root = ReactDOM.createRoot(document.getElementById("root"));
   root.render(<${componentName} />);
   `;
 
-      // Rimuove l'overlay esistente se presente
-      const existingOverlay = document.getElementById("sandbox-overlay");
-      if (existingOverlay) {
-        existingOverlay.remove();
-      }
+        // Rimuove l'overlay esistente se presente
+        const existingOverlay = document.getElementById("sandbox-overlay");
+        if (existingOverlay) {
+          existingOverlay.remove();
+        }
 
-      // HTML per l'iframe
-      const html = `
+        // HTML per l'iframe
+        const html = `
   <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -108,17 +115,18 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({
   </html>
   `;
 
-      // Imposta il contenuto dell'iframe
-      if (iframeRef.current) {
-        iframeRef.current.srcdoc = html;
-      }
-      setModal(true);
-      setOutput("Codice eseguito correttamente!");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setOutput("Errore nell'esecuzione: " + error.message);
-      } else {
-        setOutput("Errore sconosciuto");
+        // Imposta il contenuto dell'iframe
+        if (iframeRef.current) {
+          iframeRef.current.srcdoc = html;
+        }
+        setModal(true);
+        setOutput("Codice eseguito correttamente!");
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setOutput("Errore nell'esecuzione: " + error.message);
+        } else {
+          setOutput("Errore sconosciuto");
+        }
       }
     }
   };
@@ -129,6 +137,7 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({
     title: string;
     description: string;
     code: string;
+    executable: boolean;
   }
 
   interface Category {
@@ -186,6 +195,23 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({
   // Render del componente
   return (
     <>
+      {viewAlert && (
+        <div className={classes.overlay}>
+          <div className={classes.output} style={{ height: "200px" }}>
+            <div onClick={() => setViewAlert(false)} className={classes.close2}>
+              <IoMdCloseCircle style={{ fontSize: "32px" }} />
+            </div>
+            <p className="font-bold text-[#ff0000] mt-5">
+              Code not executable for security reasons
+            </p>
+            <p className="text-[#444] mt-5">
+              Route, fetching, and other sensitive operations are disabled in
+              this environment.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="flex gap-4 p-1 bg-[#17b6e9] text-white flex items-center h-[50px]">
         <img src={reactWhite} className="w-[150px]" />
       </div>
@@ -261,7 +287,7 @@ const ReactPlayground: React.FC<ReactPlaygroundProps> = ({
                       handleExerciseSelect(exercise);
                       setCode(exercise.code);
                       setOutput("");
-                      //setMessage("");
+                      setExecutable(exercise.executable);
                     }}
                     className={`cursor-pointer text-gray-700 p-1 pl-3 rounded-md text-[13px]
                           ${

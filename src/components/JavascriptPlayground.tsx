@@ -13,11 +13,13 @@ import { exercises } from "../data/javascript";
 // Definizione delle proprietà del componente
 interface JavascriptPlaygroundProps {
   demo: boolean;
+  setShowSecret: (value: boolean) => void;
 }
 
 // Definizione del componente principale
 const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
   demo,
+  setShowSecret,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<{
     category: string;
@@ -38,7 +40,7 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
   const [output, setOutput] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const exercisesPerPage = 12;
+  const exercisesPerPage = 10;
 
   // Funzione per eseguire il codice
   const runCode = () => {
@@ -254,14 +256,25 @@ const JavascriptPlayground: React.FC<JavascriptPlaygroundProps> = ({
                   {selectedExercise.description}
                 </p>
               </div>
+              <div className="flex gap-2">
+                {demo && (
+                  <button
+                    className="flex gap-2 items-center mt-2 px-4 py-2 bg-red-500 text-white rounded"
+                    onClick={() => setShowSecret(true)}
+                  >
+                    <AiFillUnlock />
+                    <span className="text-[13px]">Unlock editor</span>
+                  </button>
+                )}
 
-              <button
-                className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-                onClick={runCode}
-              >
-                <VscRunAll />
-                <span className="text-[13px]">Run code</span>
-              </button>
+                <button
+                  className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+                  onClick={runCode}
+                >
+                  <VscRunAll />
+                  <span className="text-[13px]">Run code</span>
+                </button>
+              </div>
             </div>
 
             <Editor

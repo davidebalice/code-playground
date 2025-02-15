@@ -12,10 +12,14 @@ import { exercises } from "../data/php";
 // Definizione delle proprietà del componente
 interface PhpPlaygroundProps {
   demo: boolean;
+  setShowSecret: (value: boolean) => void;
 }
 
 // Definizione del componente principale
-const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
+const PhpPlayground: React.FC<PhpPlaygroundProps> = ({
+  demo,
+  setShowSecret,
+}) => {
   // URL del backend
   const backend = import.meta.env.VITE_PHP_BACKEND;
 
@@ -38,7 +42,7 @@ const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const exercisesPerPage = 12;
+  const exercisesPerPage = 10;
 
   // Funzione per eseguire il codice
   const runCode = async () => {
@@ -229,13 +233,25 @@ const PhpPlayground: React.FC<PhpPlaygroundProps> = ({ demo }) => {
                   {selectedExercise.description}
                 </p>
               </div>
-              <button
-                className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-                onClick={runCode}
-              >
-                <VscRunAll />
-                <span className="text-[13px]">Run code</span>
-              </button>
+              <div className="flex gap-2">
+                {demo && (
+                  <button
+                    className="flex gap-2 items-center mt-2 px-4 py-2 bg-red-500 text-white rounded"
+                    onClick={() => setShowSecret(true)}
+                  >
+                    <AiFillUnlock />
+                    <span className="text-[13px]">Unlock editor</span>
+                  </button>
+                )}
+
+                <button
+                  className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+                  onClick={runCode}
+                >
+                  <VscRunAll />
+                  <span className="text-[13px]">Run code</span>
+                </button>
+              </div>
             </div>
 
             <Editor

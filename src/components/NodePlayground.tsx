@@ -14,9 +14,13 @@ import classes from "../css/editor.module.css";
 import { exercises } from "../data/node";
 interface NodePlaygroundProps {
   demo: boolean;
+  setShowSecret: (value: boolean) => void;
 }
 
-const NodePlayground: React.FC<NodePlaygroundProps> = ({ demo }) => {
+const NodePlayground: React.FC<NodePlaygroundProps> = ({
+  demo,
+  setShowSecret,
+}) => {
   const backend = import.meta.env.VITE_NODE_BACKEND;
   const [selectedCategory, setSelectedCategory] = useState<{
     category: string;
@@ -250,13 +254,25 @@ const NodePlayground: React.FC<NodePlaygroundProps> = ({ demo }) => {
                   {selectedExercise.description}
                 </p>
               </div>
-              <button
-                className="flex gap-2 items-center px-4 py-2 bg-blue-500 text-white rounded"
-                onClick={runCode}
-              >
-                <VscRunAll />
-                <span className="text-[13px]">Run code</span>
-              </button>
+              <div className="flex gap-2">
+                {demo && (
+                  <button
+                    className="flex gap-2 items-center mt-2 px-4 py-2 bg-red-500 text-white rounded"
+                    onClick={() => setShowSecret(true)}
+                  >
+                    <AiFillUnlock />
+                    <span className="text-[13px]">Unlock editor</span>
+                  </button>
+                )}
+
+                <button
+                  className="flex gap-2 items-center mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+                  onClick={runCode}
+                >
+                  <VscRunAll />
+                  <span className="text-[13px]">Run code</span>
+                </button>
+              </div>
             </div>
 
             <Editor

@@ -28,6 +28,7 @@ function App() {
     if (secret === secretKey) {
       setDemo(false);
       setError(false);
+      setShowSecret(false);
     } else {
       if (secretKey !== "") {
         setError(true);
@@ -39,24 +40,64 @@ function App() {
   return (
     <Router>
       <Navbar />
-      {showSecret && <Secret setSecretKey={setSecretKey} error={error} />}
+      {showSecret && (
+        <Secret
+          setSecretKey={setSecretKey}
+          error={error}
+          setShowSecret={setShowSecret}
+        />
+      )}
       <Wrapper>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/react" element={<ReactPlayground demo={demo} setShowSecret={setShowSecret} />} />
+          <Route
+            path="/react"
+            element={
+              <ReactPlayground demo={demo} setShowSecret={setShowSecret} />
+            }
+          />
           <Route
             path="/javascript"
-            element={<JavascriptPlayground demo={demo} />}
+            element={
+              <JavascriptPlayground demo={demo} setShowSecret={setShowSecret} />
+            }
           />
           <Route
             path="/typescript"
-            element={<TypescriptPlayground demo={demo} />}
+            element={
+              <TypescriptPlayground demo={demo} setShowSecret={setShowSecret} />
+            }
           />
-          <Route path="/angular" element={<AngularPlayground demo={demo} />} />
-          <Route path="/php" element={<PhpPlayground demo={demo} />} />
-          <Route path="/sql" element={<SqlPlayground demo={demo} />} />
-          <Route path="/node" element={<NodePlayground demo={demo} />} />
-          <Route path="/nosql" element={<NosqlPlayground demo={demo} />} />
+          <Route
+            path="/angular"
+            element={
+              <AngularPlayground demo={demo} setShowSecret={setShowSecret} />
+            }
+          />
+          <Route
+            path="/php"
+            element={
+              <PhpPlayground demo={demo} setShowSecret={setShowSecret} />
+            }
+          />
+          <Route
+            path="/sql"
+            element={
+              <SqlPlayground demo={demo} setShowSecret={setShowSecret} />
+            }
+          />
+          <Route
+            path="/node"
+            element={
+              <NodePlayground demo={demo} setShowSecret={setShowSecret} />
+            }
+          />
+          <Route
+            path="/nosql"
+            element={
+              <NosqlPlayground demo={demo} setShowSecret={setShowSecret} />
+            }
+          />
           <Route path="/todos" element={<Todos />} />
           <Route path="/dropdown" element={<Dropdown />} />
         </Routes>

@@ -872,4 +872,410 @@ print_r(mcm(12, 15));
       },
     ],
   },
+
+  {
+    category: "Algoritmi",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Bubble Sort",
+        description: "Implementa l'algoritmo di ordinamento Bubble Sort.",
+        code: `
+function bubbleSort($arr) {
+  $n = count($arr); // Ottiene la lunghezza dell'array
+
+  // Ciclo esterno: scorre l'intero array
+  for ($i = 0; $i < $n - 1; $i++) {
+      // Ciclo interno: confronta gli elementi adiacenti e li scambia se necessario
+      for ($j = 0; $j < $n - $i - 1; $j++) {
+          if ($arr[$j] > $arr[$j + 1]) { // Se l'elemento corrente è maggiore del successivo, scambia
+              list($arr[$j], $arr[$j + 1]) = [$arr[$j + 1], $arr[$j]];
+          }
+      }
+  }
+
+  return $arr; // Restituisce l'array ordinato
+}
+
+// Test della funzione con un array di esempio
+print_r(bubbleSort([5, 3, 8, 4, 2]));
+
+          `,
+      },
+      {
+        id: uuidv4(),
+        title: "Quick Sort",
+        description: "Implementa l'algoritmo di ordinamento Quick Sort.",
+        code: `
+function quickSort($arr) {
+  // Se l'array ha un solo elemento o è vuoto, è già ordinato
+  if (count($arr) <= 1) return $arr;
+
+  // Selezioniamo l'ultimo elemento come pivot
+  $pivot = array_pop($arr);
+
+  // Partizioniamo l'array:
+  // - Tutti gli elementi minori o uguali al pivot vanno a sinistra
+  // - Tutti gli elementi maggiori del pivot vanno a destra
+  $left = array_filter($arr, fn($el) => $el <= $pivot);
+  $right = array_filter($arr, fn($el) => $el > $pivot);
+
+  // Uniamo i sottoarray ordinati con il pivot al centro
+  return array_merge(quickSort($left), [$pivot], quickSort($right));
+}
+
+// Test con un array di numeri non ordinato
+print_r(quickSort([10, 7, 8, 9, 1, 5]));
+
+          `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Merge Sort",
+        description: "Implementa l'algoritmo di ordinamento Merge Sort.",
+        code: `
+function mergeSort($arr) {
+  // Se l'array ha un solo elemento o è vuoto, è già ordinato
+  if (count($arr) <= 1) return $arr;
+  
+  // Trova il punto medio dell'array
+  $mid = intdiv(count($arr), 2);
+  
+  // Divide ricorsivamente l'array in due metà e le unisce ordinatamente
+  return merge(
+      mergeSort(array_slice($arr, 0, $mid)),  // Ordina la prima metà
+      mergeSort(array_slice($arr, $mid))      // Ordina la seconda metà
+  );
+}
+
+function merge($left, $right) {
+  $result = [];
+
+  // Confronta gli elementi dei due array e li unisce in ordine
+  while (count($left) && count($right)) {
+      // Rimuove e aggiunge il più piccolo tra i due elementi iniziali
+      $result[] = $left[0] < $right[0] ? array_shift($left) : array_shift($right);
+  }
+
+  // Unisce eventuali elementi rimasti nei due array
+  return array_merge($result, $left, $right);
+}
+
+// Esempio di utilizzo
+print_r(mergeSort([10, 3, 15, 7, 8, 23, 74, 18]));
+          `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Selection Sort",
+        description:
+          "Algoritmo di ordinamento che trova il minimo e lo sposta in posizione.",
+        code: `
+function selectionSort(array $arr): array {
+  // Itera attraverso l'array fino al penultimo elemento
+  for ($i = 0; $i < count($arr) - 1; $i++) {
+      $minIdx = $i; // Assume che il primo elemento sia il più piccolo
+
+      // Cerca il minimo nella parte non ordinata dell'array
+      for ($j = $i + 1; $j < count($arr); $j++) {
+          if ($arr[$j] < $arr[$minIdx]) {
+              $minIdx = $j; // Aggiorna l'indice del minimo
+          }
+      }
+
+      // Scambia l'elemento corrente con il minimo trovato
+      list($arr[$i], $arr[$minIdx]) = [$arr[$minIdx], $arr[$i]];
+  }
+  return $arr; // Restituisce l'array ordinato
+}
+
+print_r(selectionSort([64, 25, 12, 22, 11]));
+
+            `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Anagrammi",
+        description:
+          "Crea una funzione che verifichi se due stringhe sono anagrammi.",
+        code: `
+function sonoAnagrammi($str1, $str2) {
+    // Confronta la frequenza dei caratteri nelle due stringhe
+    // count_chars($str, 1) restituisce un array associativo con la frequenza di ogni carattere nella stringa
+    return count_chars($str1, 1) == count_chars($str2, 1);
+}
+
+var_dump(sonoAnagrammi("roma", "amor"));
+          `,
+      },
+      {
+        id: uuidv4(),
+        title: "Ricerca Lineare",
+        description: "Implementa un algoritmo di ricerca lineare.",
+        code: `
+function ricercaLineare($arr, $target) {
+    // Scorriamo ogni elemento dell'array
+    foreach ($arr as $index => $value) {
+        // Se troviamo l'elemento cercato, restituiamo il suo indice
+        if ($value == $target) return $index;
+    }
+    // Se l'elemento non è presente, restituiamo -1
+    return -1;
+}
+
+// Test della funzione
+echo ricercaLineare([10, 20, 30, 40], 30);
+
+          `,
+      },
+      {
+        id: uuidv4(),
+        title: "Torre di Hanoi",
+        description: "Risolvi il problema della Torre di Hanoi.",
+        code: `
+function torreDiHanoi($n, $from, $to, $aux) {
+    // Caso base: se c'è un solo disco, lo spostiamo direttamente sulla destinazione
+    if ($n == 1) {
+        echo "Sposta il disco 1 da $from a $to\n";
+        return;
+    }
+    
+    // Sposta n-1 dischi dalla torre di partenza alla torre ausiliaria
+    torreDiHanoi($n - 1, $from, $aux, $to);
+    
+    // Sposta il disco più grande direttamente sulla torre di destinazione
+    echo "Sposta il disco $n da $from a $to\n";
+    
+    // Sposta i n-1 dischi dalla torre ausiliaria alla torre di destinazione
+    torreDiHanoi($n - 1, $aux, $to, $from);
+}
+
+// Esegui l'algoritmo per 3 dischi, dalle torre A a C usando B come torre di appoggio
+torreDiHanoi(3, 'A', 'C', 'B');
+          `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Fibonacci Sequence",
+        description:
+          "Sequenza di Fibonacci calcolata sia con ricorsione che iterazione.",
+        code: `
+// Calcola il numero di Fibonacci usando la ricorsione
+function fibonacciRecursive(int $n): int {
+    // Caso base: se n è 0 o 1, restituisce n
+    if ($n <= 1) return $n;
+    
+    // Chiamate ricorsive per calcolare il valore di Fibonacci
+    return fibonacciRecursive($n - 1) + fibonacciRecursive($n - 2);
+}
+
+// Calcola il numero di Fibonacci usando un ciclo for
+function fibonacciIterative(int $n): int {
+    $a = 0;
+    $b = 1;
+    
+    // Itera fino a trovare il valore richiesto
+    for ($i = 2; $i <= $n; $i++) {
+        $temp = $a + $b; // Somma dei due precedenti
+        $a = $b; // Aggiorna il primo valore
+        $b = $temp; // Aggiorna il secondo valore
+    }
+    
+    // Restituisce il valore corretto
+    return $n === 0 ? $a : $b;
+}
+
+echo fibonacciIterative(6);
+`,
+      },
+
+      {
+        id: uuidv4(),
+        title: "MCD (Massimo comun divisore)",
+        description:
+          "Algoritmo di Euclide per calcolare il massimo comune divisore.",
+        code: `
+// Calcola il MCD tra due numeri con l'algoritmo di Euclide
+function mcd(int $a, int $b): int {
+    // Esegui il calcolo finché b non è zero
+    while ($b !== 0) {
+        // Salva il valore di b temporaneamente
+        $temp = $b;
+        
+        // Calcola il resto della divisione tra a e b
+        $b = $a % $b;
+        
+        // Aggiorna a con il valore di b
+        $a = $temp;
+    }
+    // Restituisce il MCD
+    return $a;
+}
+
+// Esempio: calcola il MCD tra 56 e 98 (restituirà 14)
+echo mcd(56, 98);
+
+            `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "MCM (Minimo comune multiplo)",
+        description:
+          "Algoritmo di Euclide per calcolare il massimo comune divisore.",
+        code: `
+// Calcola il MCM tra due numeri usando la formula MCM(a, b) = (a * b) / MCD(a, b)
+function mcd(int $a, int $b): int {
+    // Esegui il calcolo finché b non è zero
+    while ($b !== 0) {
+        // Salva il valore di b temporaneamente
+        $temp = $b;
+        
+        // Calcola il resto della divisione tra a e b
+        $b = $a % $b;
+        
+        // Aggiorna a con il valore di b
+        $a = $temp;
+    }
+    // Restituisce il MCD
+    return $a;
+}
+
+function mcm(int $a, int $b): int {
+  // Usa la funzione mcd per ottenere il massimo comune divisore
+  return abs($a * $b) / mcd($a, $b);
+}
+
+// Esempio: calcola il MCM tra 56 e 98 (restituirà 392)
+echo mcm(56, 98);
+
+            `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Ricerca Binaria",
+        description: "Implementa un algoritmo di ricerca binaria.",
+        code: `
+function ricercaBinaria($arr, $target) {
+    $left = 0; // Inizializziamo l'indice sinistro
+    $right = count($arr) - 1; // Inizializziamo l'indice destro
+
+    while ($left <= $right) {
+        // Calcoliamo l'indice centrale
+        $mid = intdiv($left + $right, 2);
+
+        // Se l'elemento centrale è il target, restituiamo l'indice
+        if ($arr[$mid] == $target) return $mid;
+
+        // Se il target è maggiore, cerchiamo nella metà destra
+        if ($arr[$mid] < $target) {
+            $left = $mid + 1;
+        } 
+        // Altrimenti, cerchiamo nella metà sinistra
+        else {
+            $right = $mid - 1;
+        }
+    }
+
+    return -1; // Se l'elemento non è trovato, restituiamo -1
+}
+
+// Test della funzione con un array ordinato
+echo ricercaBinaria([1, 2, 3, 4, 5, 6, 7, 8, 9], 5);
+          `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "KMP String Matching Algorithm",
+        description:
+          "Algoritmo di ricerca di stringhe che utilizza la precomputazione del pattern.",
+        code: `
+function KMPSearch(string $text, string $pattern): int {
+  // Costruisce l'array LPS per il pattern
+  $lps = buildLPS($pattern);
+  $i = 0; // Puntatore per il testo
+  $j = 0; // Puntatore per il pattern
+
+  // Ciclo per scorrere il testo
+  while ($i < strlen($text)) {
+      // Se i caratteri corrispondono
+      if ($text[$i] === $pattern[$j]) {
+          $i++;  // Incrementa il puntatore del testo
+          $j++;  // Incrementa il puntatore del pattern
+      }
+
+      // Se l'intero pattern è stato trovato
+      if ($j === strlen($pattern)) {
+          return $i - $j; // Restituisce l'indice di inizio del match
+      } 
+      // Se c'è un mismatch
+      else if ($i < strlen($text) && $text[$i] !== $pattern[$j]) {
+          // Se j > 0, usa l'array LPS per evitare di ripetere comparazioni inutili
+          if ($j !== 0) {
+              $j = $lps[$j - 1];  // Sposta indietro il puntatore del pattern secondo LPS
+          } else {
+              $i++;  // Incrementa il puntatore del testo
+          }
+      }
+  }
+
+  return -1; // Se non è stato trovato alcun match
+}
+            `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Radix Sort",
+        description:
+          "Algoritmo di ordinamento che utilizza la rappresentazione dei numeri in base.",
+        code: `
+function countingSort(array $arr, int $exp): array {
+    $output = array_fill(0, count($arr), 0);  // Array di output che contiene gli elementi ordinati
+    $count = array_fill(0, 10, 0);  // Array che conta le occorrenze di ciascuna cifra (0-9)
+
+    // Conta le occorrenze delle cifre nell'array
+    foreach ($arr as $num) {
+        $count[floor($num / $exp) % 10]++;  // Incrementa il contatore della cifra corrente
+    }
+
+    // Calcola le posizioni finali delle cifre nell'array ordinato
+    for ($i = 1; $i < 10; $i++) {
+        $count[$i] += $count[$i - 1];  // Somma cumulativa per ottenere la posizione corretta
+    }
+
+    // Costruisce l'array ordinato partendo da destra per mantenere la stabilità dell'ordinamento
+    for ($i = count($arr) - 1; $i >= 0; $i--) {
+        $output[$count[floor($arr[$i] / $exp) % 10] - 1] = $arr[$i];
+        $count[floor($arr[$i] / $exp) % 10]--;  // Decrementa il contatore della cifra
+    }
+
+    return $output;  // Restituisce l'array ordinato
+}
+
+function radixSort(array $arr): array {
+    $max = max($arr);  // Trova il valore massimo dell'array
+    $exp = 1;  // Imposta il valore iniziale dell'esponente (per ordinare per la cifra meno significativa)
+
+    // Continua finché il massimo numero non ha più cifre
+    while (floor($max / $exp) > 0) {
+        $arr = countingSort($arr, $exp);  // Ordina l'array in base alla cifra corrente
+        $exp *= 10;  // Passa alla cifra successiva (incrementa l'esponente)
+    }
+
+    return $arr;  // Restituisce l'array ordinato
+}
+
+print_r(radixSort([170, 45, 75, 90, 802, 24, 2, 66]));
+
+            `,
+      },
+    ],
+  },
 ];

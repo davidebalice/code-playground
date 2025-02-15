@@ -1,16 +1,20 @@
 import Editor from "@monaco-editor/react";
-import { AiFillUnlock } from "react-icons/ai";
 import { WebContainer } from "@webcontainer/api";
 import { useEffect, useRef, useState } from "react";
+import { AiFillUnlock } from "react-icons/ai";
 import { VscRunAll } from "react-icons/vsc";
 import angularWhite from "../assets/images/angular-white.png";
 import exercises from "../data/angular";
 
 interface AngularPlaygroundProps {
   demo: boolean;
+  setShowSecret: (value: boolean) => void;
 }
 
-const AngularPlayground: React.FC<AngularPlaygroundProps> = ({ demo }) => {
+const AngularPlayground: React.FC<AngularPlaygroundProps> = ({
+  demo,
+  setShowSecret,
+}) => {
   const [selectedExercise, setSelectedExercise] = useState<{
     id: string;
     title: string;
@@ -178,12 +182,24 @@ const AngularPlayground: React.FC<AngularPlaygroundProps> = ({ demo }) => {
                 }
               />
 
-              <button
-                className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
-                onClick={runCode}
-              >
-                <VscRunAll /> Run code
-              </button>
+              <div className="flex gap-2">
+                {demo && (
+                  <button
+                    className="flex gap-2 items-center mt-2 px-4 py-2 bg-red-500 text-white rounded"
+                    onClick={() => setShowSecret(true)}
+                  >
+                    <AiFillUnlock />
+                    <span className="text-[13px]">Unlock editor</span>
+                  </button>
+                )}
+
+                <button
+                  className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
+                  onClick={runCode}
+                >
+                  <VscRunAll /> Run code
+                </button>
+              </div>
 
               {modal && (
                 <div className="mt-4">
