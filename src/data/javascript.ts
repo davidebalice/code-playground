@@ -814,6 +814,51 @@ console.log(toCamelCase("PascalCase Example"));
   },
 
   {
+    category: "Form",
+    exercises: [
+      {
+        id: uuidv4(),
+        title: "Validazione di un form",
+        description: "Validazione email e password.",
+        code: `
+// Funzione per validare l'email
+function validaEmail(email) {
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;
+  return regex.test(email);
+}
+
+// Funzione per validare la password
+function validaPassword(password) {
+  // La password deve contenere almeno 8 caratteri, una lettera (maiuscola o minuscola), e un numero
+  const regex = /^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$/;
+  return regex.test(password);
+}
+
+// Funzione per eseguire la validazione del form
+function validaForm(email, password) {
+  if (!validaEmail(email)) {
+    return "Email non valida.";
+  }
+  
+  if (!validaPassword(password)) {
+    return "La password deve contenere almeno 8 caratteri, una lettera e un numero.";
+  }
+
+  return "Form validato correttamente!";
+}
+
+// Esempio di utilizzo
+const email = "esempio@dominio.com";
+const password = "password123";
+
+const risultato = validaForm(email, password);
+console.log(risultato);
+  `,
+      },
+    ],
+  },
+
+  {
     category: "Classi",
     exercises: [
       {

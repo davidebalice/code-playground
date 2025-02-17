@@ -6,7 +6,7 @@ export const exercises = [
     exercises: [
       {
         id: uuidv4(),
-        title: "Uso di useState",
+        title: "useState",
         executable: true,
         description:
           "Crea un componente che utilizza useState per gestire un contatore.",
@@ -25,7 +25,7 @@ export const Counter = () => {
       },
       {
         id: uuidv4(),
-        title: "Uso di useEffect",
+        title: "useEffect",
         executable: true,
         description:
           "Crea un componente che esegue un'operazione al montaggio e aggiornamento.",
@@ -42,9 +42,125 @@ export const Timer = () => {
   return <p>Tempo trascorso: {time}s</p>;
 };`,
       },
+
       {
         id: uuidv4(),
-        title: "Uso di useContext",
+        title: "useMemo",
+        executable: true,
+        description:
+          "Ottimizza le prestazioni calcolando un valore memorizzato in cache.",
+        code: `import { useState, useMemo } from "react";
+
+// Funzione per simulare un calcolo complesso
+const expensiveCalculation = (num) => {
+  console.log("Calcolo in corso...");
+  return num * 2;
+};
+
+export const UseMemoExample = () => {
+  const [count, setCount] = useState(0);
+  const [number, setNumber] = useState(5);
+
+  const computedValue = useMemo(() => expensiveCalculation(number), [number]);
+
+  return (
+    <div>
+      <input
+        type="number"
+        value={number}
+        onChange={(e) => setNumber(parseInt(e.target.value))}
+      />
+      <p>Risultato calcolato: {computedValue}</p>
+      <button onClick={() => setCount(count + 1)}>Ricalcola ({count})</button>
+    </div>
+  );
+};`,
+      },
+
+      {
+        id: uuidv4(),
+        title: "useRef",
+        executable: true,
+        description:
+          "Utilizza useRef per mantenere un riferimento a un elemento DOM.",
+        code: `
+import React, { useState, useRef, useEffect } from "react";
+
+export const FocusAndClickDetector = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const inputRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  // Gestisce l'apertura e chiusura del menu
+  const toggleDropdown = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  // Detect click fuori dal dropdown o dall'input per chiuderlo
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target) && inputRef.current && !inputRef.current.contains(event.target)) {
+      setIsOpen(false); // Chiudi il menu se cliccato fuori
+    }
+  };
+
+  // Aggiunge l'event listener per rilevare i click fuori
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div style={{ position: "relative", padding: "20px" }}>
+      <h4>Focus and Click Outside Detector</h4>
+      <br />
+      <div style={{ marginBottom: "10px" }}>
+        {/* Input con gestione del focus */}
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Focalizzati su di me"
+          style={{
+            padding: "8px",
+            border: "1px solid",
+            borderColor: inputRef.current && document.activeElement === inputRef.current ? "blue" : "gray",
+          }}
+        />
+      </div>
+
+      <button onClick={toggleDropdown}>Toggle Dropdown</button>
+
+      {/* Menu a discesa che si apre e si chiude */}
+      {isOpen && (
+        <div
+          ref={dropdownRef}
+          style={{
+            position: "absolute",
+            top: "50px",
+            left: "0",
+            padding: "10px",
+            backgroundColor: "lightgray",
+            border: "1px solid #ccc",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <p>Menu a discesa</p>
+          <p>Opzione 1</p>
+          <p>Opzione 2</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+
+`,
+      },
+
+      {
+        id: uuidv4(),
+        title: "useContext",
         executable: false,
         description:
           "Crea un contesto globale per gestire lo stato di autenticazione dell'utente.",
@@ -66,7 +182,7 @@ export const useAuth = () => useContext(AuthContext);`,
       },
       {
         id: uuidv4(),
-        title: "Uso di useReducer",
+        title: "useReducer",
         executable: true,
         description:
           "Gestisci lo stato complesso usando useReducer invece di useState.",
@@ -96,6 +212,173 @@ export const Counter = () => {
     </div>
   );
 };`,
+      },
+
+      {
+        id: uuidv4(),
+        executable: true,
+        title: "Custom Hook: useDebounce",
+        description:
+          "Crea un custom hook che debounce il valore di un input per evitare chiamate eccessive.",
+        code: `import { useState, useEffect } from 'react';
+
+/*
+Il custom hook useDebounce serve per ritardare l'aggiornamento di un valore fino a quando l'utente smette
+di modificarlo per un certo periodo di tempo (delay).
+Questo è utile per ottimizzare operazioni costose come richieste API o filtri in tempo reale,
+evitando esecuzioni inutili mentre l'utente sta ancora digitando.
+*/
+const useDebounce = (value, delay) => {
+  // Stato per memorizzare il valore con debounce
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  
+  useEffect(() => {
+    // Imposta un timeout per aggiornare il valore dopo il ritardo specificato
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+
+    // Pulisce il timeout precedente se il valore cambia prima della scadenza del timer
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue; // Restituisce il valore aggiornato dopo il ritardo
+};
+
+// Esempio di utilizzo del custom hook useDebounce
+export const DebounceExample = () => {
+  const [text, setText] = useState(""); // Stato per il testo dell'input
+  const debouncedText = useDebounce(text, 500); // Applica debounce con un ritardo di 500ms
+  
+  return (
+    <div>
+      {/* Input per digitare il testo */}
+      <input 
+        value={text} 
+        onChange={e => setText(e.target.value)} 
+        placeholder="Digita qualcosa..." 
+      />
+      
+      {/* Mostra il valore dopo il debounce */}
+      <p>Valore debounce: {debouncedText}</p>
+    </div>
+  );
+};
+
+`,
+      },
+      {
+        id: uuidv4(),
+        executable: false,
+        title: "Custom Hook: useFetch",
+        description:
+          "Crea un custom hook per effettuare richieste fetch con gestione di loading, error e caching.",
+        code: `import { useState, useEffect } from 'react';
+
+export const useFetch = (url) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    fetch(url)
+      .then(response => response.json())
+      .then(json => {
+        if (isMounted) {
+          setData(json);
+          setLoading(false);
+        }
+      })
+      .catch(err => {
+        if (isMounted) {
+          setError(err);
+          setLoading(false);
+        }
+      });
+    return () => { isMounted = false; };
+  }, [url]);
+
+  return { data, loading, error };
+};
+
+// Esempio di utilizzo
+export const FetchExample = () => {
+  const { data, loading, error } = useFetch('https://jsonplaceholder.typicode.com/todos/1');
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  return <pre>{JSON.stringify(data, null, 2)}</pre>;
+};
+`,
+      },
+
+      {
+        id: uuidv4(),
+        executable: false,
+        title: "Custom Hook: useLocalStorage",
+        description: "Crea un custom hook per gestire i dati in localStorage.",
+        code: `import { useState, useEffect } from "react";
+
+// Custom Hook per gestire localStorage
+const useLocalStorage = (key, initialValue) => {
+  const [value, setValue] = useState(() => {
+    const storedValue = localStorage.getItem(key);
+    return storedValue ? JSON.parse(storedValue) : initialValue;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue];
+};
+
+// Esempio di utilizzo
+export const LocalStorageExample = () => {
+  const [name, setName] = useLocalStorage("username", "");
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Inserisci il tuo nome"
+      />
+      <p>Nome salvato: {name}</p>
+    </div>
+  );
+};
+`,
+      },
+
+      {
+        id: uuidv4(),
+        executable: true,
+        title: "Custom Hook: useToggle",
+        description: "Gestisce lo stato di toggle (true/false).",
+        code: `import { useState } from "react";
+
+// Custom Hook per gestire toggle
+const useToggle = (initialValue = false) => {
+  const [state, setState] = useState(initialValue);
+  const toggle = () => setState((prev) => !prev);
+  return [state, toggle];
+};
+
+// Esempio di utilizzo
+export const ToggleExample = () => {
+  const [isVisible, toggleVisibility] = useToggle();
+
+  return (
+    <div>
+      <button onClick={toggleVisibility}>
+        {isVisible ? "Nascondi" : "Mostra"} Testo
+      </button>
+      {isVisible && <p>Questo testo appare e scompare!</p>}
+    </div>
+  );
+};
+`,
       },
     ],
   },
@@ -310,9 +593,84 @@ export const Todos = () => {
         
         `,
       },
+      {
+        id: uuidv4(),
+        title: "Cronometro",
+        executable: true,
+        description:
+          "Utilizza useRef per mantenere un riferimento a un elemento DOM.",
+        code: `import { useRef, useState } from "react";
+
+export const AdvancedTimer = () => {
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const isRunningRef = useRef(false);
+  const startTimeRef = useRef(0);
+  const animationFrameRef = useRef(null);
+  const buttonPressStartRef = useRef(null);
+  const buttonHoldTimeRef = useRef(0);
+
+  // Avvia il cronometro
+  const startTimer = () => {
+    if (!isRunningRef.current) {
+      isRunningRef.current = true;
+      startTimeRef.current = performance.now() - elapsedTime;
+      runTimer();
+    }
+  };
+
+  // Ferma il cronometro
+  const stopTimer = () => {
+    isRunningRef.current = false;
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+  };
+
+  // Resetta il cronometro
+  const resetTimer = () => {
+    stopTimer();
+    setElapsedTime(0);
+  };
+
+  // Funzione che aggiorna il tempo
+  const runTimer = () => {
+    animationFrameRef.current = requestAnimationFrame(() => {
+      if (isRunningRef.current) {
+        setElapsedTime(performance.now() - startTimeRef.current);
+        runTimer();
+      }
+    });
+  };
+
+  // Registra il tempo di pressione del pulsante
+  const handleButtonDown = () => {
+    buttonPressStartRef.current = performance.now();
+  };
+
+  const handleButtonUp = () => {
+    buttonHoldTimeRef.current = performance.now() - buttonPressStartRef.current;
+  };
+
+  return (
+    <div style={{ textAlign: "center" }}>
+      <h4>Cronometro</h4>
+      <p>⏱️ Tempo trascorso: <strong>{(elapsedTime / 1000).toFixed(2)}s</strong></p>
+      <br />
+      <button onMouseDown={handleButtonDown} onMouseUp={handleButtonUp} onClick={startTimer}>
+        Start
+      </button>
+      <button onClick={stopTimer}>Stop</button>
+      <button onClick={resetTimer}>Reset</button>
+      <br /><br />
+      <p>⏳ Hai tenuto premuto il pulsante per: <strong>{(buttonHoldTimeRef.current / 1000).toFixed(2)}s</strong></p>
+    </div>
+  );
+};
+
+`,
+      },
     ],
   },
-
   {
     category: "Components",
     exercises: [
@@ -351,39 +709,161 @@ export const App = () => {
       },
     ],
   },
+
   {
-    category: "Gestione dello stato",
+    category: "Lift State Up",
     exercises: [
       {
         id: uuidv4(),
-        title: "Uso di useReducer",
+        title: "Contatore",
         executable: true,
         description:
-          "Implementa un contatore utilizzando useReducer invece di useState.",
-        code: `import { useReducer } from 'react';
- 
-function reducer(state, action) {
-  switch (action.type) {
-    case 'increment':
-      return { count: state.count + 1 };
-    case 'decrement':
-      return { count: state.count - 1 };
-    default:
-      throw new Error();
-  }
-}
+          "Condividi lo stato di un contatore tra due componenti figlio sollevandolo nel componente padre.",
+        code: `
+import { useState } from "react";
 
-export const Counter = () => {
-  const [state, dispatch] = useReducer(reducer, { count: 0 });
+export const Parent = () => { //  PARENT
+  const [count, setCount] = useState(0);
 
   return (
     <div>
-      <p>Contatore: {state.count}</p>
-      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
-      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+      <h2>Contatore: {count}</h2>
+      <IncrementButton onIncrement={() => setCount(count + 1)} />
+      <DecrementButton onDecrement={() => setCount(count - 1)} />
     </div>
   );
-};`,
+}
+
+function IncrementButton({ onIncrement }) { //  CHILD
+  return <button onClick={onIncrement}>+</button>;
+}
+
+function DecrementButton({ onDecrement }) { //  CHILD
+  return <button onClick={onDecrement}>-</button>;
+}
+
+`,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Selezione Colore",
+        executable: true,
+        description:
+          "Condividi la selezione di un colore tra più componenti figlio sollevandolo nel componente padre.",
+        code: `
+import { useState } from "react";
+
+export const Parent = () => { //  PARENT
+  const [bgColor, setBgColor] = useState("white");
+
+  return (
+    <div style={{ backgroundColor: bgColor, padding: "20px" }}>
+      <h2>Seleziona un colore</h2>
+      <ColorPicker onColorChange={setBgColor} />
+    </div>
+  );
+}
+
+function ColorPicker({ onColorChange }) { //  CHILD
+  const colors = ["red", "blue", "green"];
+
+  return (
+    <div>
+      {colors.map((color) => (
+        <button key={color} onClick={() => onColorChange(color)}>
+          {color}
+        </button>
+      ))}
+    </div>
+  );
+}
+  
+        `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Form con anteprima testo",
+        executable: true,
+        description:
+          "Crea un form di ricerca che aggiorna lo stato nel componente genitore e lo passa a un componente figlio per visualizzare l'anteprima.",
+        code: `
+import { useState } from "react";
+
+export const Parent = () => { //  PARENT
+  const [text, setText] = useState("");
+
+  return (
+    <div>
+      <h4>Anteprima:</h4>
+      <br />
+      <p>{text}</p>
+      <TextInput onTextChange={setText} />
+    </div>
+  );
+}
+
+function TextInput({ onTextChange }) { //  CHILD
+  return (
+    <textarea
+      onChange={(e) => onTextChange(e.target.value)}
+      placeholder="Scrivi qui..."
+    />
+  );
+}
+       
+        `,
+      },
+
+      {
+        id: uuidv4(),
+        title: "Lista dinamica",
+        executable: true,
+        description:
+          "Crea un componente lista dinamica, il child aggiorna lo stato della lista presente nel parent.",
+        code: `
+import { useState } from "react";
+
+export const Parent = () => { //  PARENT
+  const [items, setItems] = useState([]);
+
+  const addItem = (newItem) => {
+    setItems([...items, newItem]);
+  };
+
+  return (
+    <div>
+      <h2>Lista:</h2>
+      <br />
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+      <ItemInput onAddItem={addItem} />
+    </div>
+  );
+}
+
+function ItemInput({ onAddItem }) { //  CHILD
+  const [inputValue, setInputValue] = useState("");
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+      />
+      <button onClick={() => { onAddItem(inputValue); setInputValue(""); }}>
+        Aggiungi
+      </button>
+    </div>
+  );
+}
+        
+        `,
       },
     ],
   },
@@ -410,7 +890,6 @@ const data = [ { "user_id": "1", "username": "mariorossi", "order_id": "1", "ord
 
   return (
     <div>
-      <h2>Data Output</h2>
       <table cellPadding="8" cellSpacing="8">
         <thead>
           <tr>
@@ -452,6 +931,87 @@ const data = [ { "user_id": "1", "username": "mariorossi", "order_id": "1", "ord
     </div>
   );
 };`,
+      },
+      {
+        id: uuidv4(),
+        executable: true,
+        title: "Filtra gli utenti con più ordini",
+        description:
+          "Mostra solo gli utenti che hanno effettuato più di un ordine.",
+        code: `
+    import React from "react";
+    
+    export const FilterUsers = () => {
+      const orders = [
+        { user_id: "1", username: "mariorossi", order_id: "1" },
+        { user_id: "2", username: "luigiverdi", order_id: "2" },
+        { user_id: "1", username: "mariorossi", order_id: "3" },
+        { user_id: "3", username: "giuseppeneri", order_id: "4" },
+        { user_id: "4", username: "marcobianchi", order_id: "5" },
+        { user_id: "1", username: "mariorossi", order_id: "6" }
+      ];
+    
+      const userOrderCount = orders.reduce((acc, order) => {
+        acc[order.user_id] = (acc[order.user_id] || 0) + 1;
+        return acc;
+      }, {});
+    
+      const filteredUsers = orders.filter(
+        (order) => userOrderCount[order.user_id] > 1
+      );
+    
+      return (
+        <div>
+          <h4>Utenti con più di un ordini</h4>
+          <br />
+          <ul>
+            {[...new Set(filteredUsers.map((order) => order.username))].map(
+              (user, index) => (
+                <li key={index}>{user}</li>
+              )
+            )}
+          </ul>
+        </div>
+      );
+    };
+    `,
+      },
+      {
+        id: uuidv4(),
+        executable: true,
+        title: "Ordina gli ordini per data",
+        description:
+          "Ordina gli ordini in base alla data in ordine decrescente.",
+        code: `
+    import React from "react";
+    
+    export const SortOrders = () => {
+      const orders = [
+        { order_id: "1", order_date: "2025-02-01 18:30:00" },
+        { order_id: "2", order_date: "2025-02-01 20:27:30" },
+        { order_id: "3", order_date: "2025-02-01 19:15:45" },
+        { order_id: "4", order_date: "2025-02-01 21:00:00" }
+      ];
+    
+      const sortedOrders = [...orders].sort(
+        (a, b) => new Date(b.order_date) - new Date(a.order_date)
+      );
+    
+      return (
+        <div>
+          <h4>Ordini ordinati per data</h4>
+          <br />
+          <ul>
+            {sortedOrders.map((order) => (
+              <li key={order.order_id}>
+                ID Ordine: {order.order_id} - Data: {new Date(order.order_date).toLocaleString()}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    };
+    `,
       },
     ],
   },
@@ -520,42 +1080,42 @@ export const ComplexForm = () => {
 
       <div className="form-group">
         <label htmlFor="name">Nome</label>
-        <input 
-          type="text" 
-          name="name" 
+        <input
+          type="text"
+          name="name"
           id="name"
-          value={formData.name} 
+          value={formData.name}
           onChange={handleChange}
           className="form-control"
-          placeholder="Inserisci il nome" 
+          placeholder="Inserisci il nome"
         />
         {errors.name && <small className="text-danger">{errors.name}</small>}
       </div>
 
       <div className="form-group">
         <label htmlFor="email">Email</label>
-        <input 
-          type="email" 
-          name="email" 
+        <input
+          type="email"
+          name="email"
           id="email"
-          value={formData.email} 
+          value={formData.email}
           onChange={handleChange}
           className="form-control"
-          placeholder="Inserisci l'email" 
+          placeholder="Inserisci l'email"
         />
         {errors.email && <small className="text-danger">{errors.email}</small>}
       </div>
 
       <div className="form-group">
         <label htmlFor="password">Password</label>
-        <input 
-          type="password" 
-          name="password" 
+        <input
+          type="password"
+          name="password"
           id="password"
-          value={formData.password} 
+          value={formData.password}
           onChange={handleChange}
           className="form-control"
-          placeholder="Inserisci la password" 
+          placeholder="Inserisci la password"
         />
         {errors.password && <small className="text-danger">{errors.password}</small>}
       </div>
@@ -629,7 +1189,7 @@ export const ComplexForm = () => {
       {
         id: uuidv4(),
         title: "Form con gestione dei file",
-        executable: true,
+        executable: false,
         description: "Crea un form che permette agli utenti di caricare file.",
         code: `import { useState } from 'react';
 
@@ -646,7 +1206,7 @@ export const FileUploadForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="container mt-4 p-4">
       <label>
         Carica un file:
         <input type="file" onChange={handleFileChange} />
@@ -666,6 +1226,7 @@ export const FileUploadForm = () => {
 
 export const CheckboxForm = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [message, setMessage] = useState("");
 
   const handleCheckboxChange = (event) => {
     const { value } = event.target;
@@ -676,28 +1237,44 @@ export const CheckboxForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert('Opzioni selezionate: ' + selectedOptions.join(', '));
+      {selectedOptions && selectedOptions.length > 0 ? setMessage('Opzioni selezionate: ' + selectedOptions.join(', ')) : setMessage('Nessuna opzione selezionata')}
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        <input
-          type="checkbox"
-          value="Option 1"
-          onChange={handleCheckboxChange}
-        />
-        Opzione 1
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="Option 2"
-          onChange={handleCheckboxChange}
-        />
-        Opzione 2
-      </label>
+    <form onSubmit={handleSubmit} className="p-4">
+     
+      <div className="container row" style={{gap:"100px"}}>
+        <label className="row" style={{gap:"10px"}}>
+          <input
+            type="checkbox"
+            value="Option 1"
+            onChange={handleCheckboxChange}
+          />
+          <span>Opzione 1</span>
+        </label>
+
+        <label className="row" style={{gap:"10px"}}>
+          <input
+            type="checkbox"
+            value="Option 2"
+            onChange={handleCheckboxChange}
+          />
+          <span>Opzione 2</span>
+        </label>
+
+        <label className="row" style={{gap:"10px"}}>
+          <input
+            type="checkbox"
+            value="Option 3"
+            onChange={handleCheckboxChange}
+          />
+          <span>Opzione 3</span>
+        </label>
+      </div>
+      <br />
       <button type="submit">Invia</button>
+      <br /><br />
+      {message && <p>{message}</p>}
     </form>
   );
 };`,
@@ -705,89 +1282,6 @@ export const CheckboxForm = () => {
     ],
   },
 
-  {
-    category: "Hooks Avanzati",
-    exercises: [
-      {
-        id: uuidv4(),
-        executable: true,
-        title: "Custom Hook: useDebounce",
-        description:
-          "Crea un custom hook che debounce il valore di un input per evitare chiamate eccessive.",
-        code: `import { useState, useEffect } from 'react';
-
-export const useDebounce = (value, delay) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-  
-  useEffect(() => {
-    const handler = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(handler);
-  }, [value, delay]);
-
-  return debouncedValue;
-};
-
-// Esempio di utilizzo
-export const DebounceExample = () => {
-  const [text, setText] = useState("");
-  const debouncedText = useDebounce(text, 500);
-  
-  return (
-    <div>
-      <input value={text} onChange={e => setText(e.target.value)} placeholder="Digita qualcosa..." />
-      <p>Valore debounce: {debouncedText}</p>
-    </div>
-  );
-};
-`,
-      },
-      {
-        id: uuidv4(),
-        executable: true,
-        title: "Custom Hook: useFetch",
-        description:
-          "Crea un custom hook per effettuare richieste fetch con gestione di loading, error e caching.",
-        code: `import { useState, useEffect } from 'react';
-
-export const useFetch = (url) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-    fetch(url)
-      .then(response => response.json())
-      .then(json => {
-        if (isMounted) {
-          setData(json);
-          setLoading(false);
-        }
-      })
-      .catch(err => {
-        if (isMounted) {
-          setError(err);
-          setLoading(false);
-        }
-      });
-    return () => { isMounted = false; };
-  }, [url]);
-
-  return { data, loading, error };
-};
-
-// Esempio di utilizzo
-export const FetchExample = () => {
-  const { data, loading, error } = useFetch('https://jsonplaceholder.typicode.com/todos/1');
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-  return <pre>{JSON.stringify(data, null, 2)}</pre>;
-};
-`,
-      },
-    ],
-  },
   {
     category: "Context e State Management",
     exercises: [
@@ -1345,86 +1839,3 @@ export const Counter = () => {
     ],
   },
 ];
-
-/*
-
-
-
-
-
-// Esercizio 5: useMemo per calcoli costosi
-export const ExpensiveCalculation = () => {
-  const [num, setNum] = useState(2);
-  const squared = useMemo(() => num * num, [num]);
-  return <div>Quadrato di {num}: {squared}</div>;
-};
-
-// Esercizio 6: useCallback per memorizzare funzioni
-export const CallbackExample = () => {
-  const handleClick = useCallback(() => alert("Cliccato!"), []);
-  return <button onClick={handleClick}>Click Me</button>;
-};
-
-// Esercizio 7: Toggle visibilità
-export const ToggleVisibility = () => {
-  const [visible, setVisible] = useState(true);
-  return (
-    <div>
-      <button onClick={() => setVisible(!visible)}>Toggle</button>
-      {visible && <p>Mostrato!</p>}
-    </div>
-  );
-};
-
-// Esercizio 8: Contatore con passo personalizzato
-export const StepCounter = () => {
-  const [count, setCount] = useState(0);
-  const step = 5;
-  return <button onClick={() => setCount(count + step)}>Conta: {count}</button>;
-};
-
-// Esercizio 9: Lista dinamica
-export const DynamicList = () => {
-  const [items, setItems] = useState<string[]>([]);
-  return (
-    <div>
-      <button onClick={() => setItems([...items, \`Item \${items.length + 1}\`])}>Aggiungi</button>
-      <ul>{items.map((item, i) => <li key={i}>{item}</li>)}</ul>
-    </div>
-  );
-};
-
-// Esercizio 10: Cambio di tema
-export const ThemeToggle = () => {
-  const [dark, setDark] = useState(false);
-  return (
-    <div className={dark ? "bg-black text-white" : "bg-white text-black"}>
-      <button onClick={() => setDark(!dark)}>Cambia Tema</button>
-    </div>
-  );
-};
-
-
-
-
-export default `
-import { useState, useEffect, useRef, useMemo, useCallback } from "react";
-
-// Esercizio 1: Contatore con useState
-export const Counter = () => {
-  const [count, setCount] = useState(0);
-  return <button onClick={() => setCount(count + 1)}>Conta: {count}</button>;
-};
-
-// Esercizio 2: Effetto collaterale con useEffect
-export const Timer = () => {
-  const [seconds, setSeconds] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => setSeconds((s) => s + 1), 1000);
-    return () => clearInterval(interval);
-  }, []);
-  return <div>Secondi: {seconds}</div>;
-};
-
-`
-*/
